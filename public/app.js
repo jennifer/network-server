@@ -50,10 +50,66 @@ const MOCK_SITE_DATA = {
 	]
 };
 
+function getDataFromApi(callback) {
+
+}
+
+function renderWebsiteGallery() {
+  console.log('renderWebsiteGallery ran');
+  // map Site array and run renderEachWebsite func for each
+}
 
 
+function renderEachWebsite(website) {
+  console.log('renderEachWebsite ran');
+  document.getElementById('each-website').insertAdjacentHTML('beforeend', 
     `<div>
       <h1 class='website-title'>${MOCK_SITE_DATA.siteData.title}</h1>
       <img src='./test-images/sample-site.png' alt='screenshot of website' />
       <h1 class='website-tags'>${MOCK_SITE_DATA.siteData.tags}</h1>
     </div>`
+  );
+}
+
+function renderFilters() {
+  // call tags db collection for values
+}
+
+function handleFilterClick() {
+  // check against sites db collection
+}
+
+function handleAddWebsiteClick() {
+  // renderNewUrlScreen
+}
+
+function renderNewUrlScreen() {
+  // hide website gallery, show new url form
+}
+
+function handleNewUrlSubmit() {
+  // get, store, and render title
+  // get, store, and render screenshots
+  // get, store, and render tags
+  // get and store notes field
+}
+
+function handleThumbnailClick() {
+  // renderEditScreen
+}
+
+function renderDetailScreen() {
+  // hide website gallery
+  // show large screenshot, notes, tags
+  // show visit and edit links
+}
+
+function renderEditScreen() {
+  // show tag editor and notes field
+  // show submit button
+}
+
+function handleEditSubmit() {
+  // get, store, and render tags
+  // get and store notes field
+}
