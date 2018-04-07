@@ -10,59 +10,39 @@
   <header>Site Bank</header>
   <!-- Menu section filter/edit -->
   <main>
-    <section class='menu'>
+    <section id='menu'>
       <p>Click an element to filter</p>
-      <ul class='filters'></ul>
-      <p>Click <a >here</a> to add a new website</p>
+      <div class='filters'></div>
+      <p>Click <a onclick='renderNewUrlScreen()'>here</a> to add a new website</p>
     </section>
 
-    <!-- Website collage, divs to repeat for each array element -->
-    <section class='gallery' id='gallery'></section> 
-
   	<!-- Screen to interact with website (visit website, edit tags, or delete website) -->
-    <section class='add-website'>
+    <section id='add-website'>
       <form class='new-website'>
+        <a onclick='renderWebsiteGallery()'>Close</a>
         <fieldset name='new-url'>
           <legend>Paste a URL</legend>
           <input type='text' class='url-input' />
         </fieldset>
-
-        <fieldset>
+        <fieldset class='edit-tags'>
           <legend>Tag website elements</legend>
-            <div>
-              <input type='checkbox' id='color' value='color' />
-              <label for='color'>Color</label>
-            </div>
-            <div>
-              <input type='checkbox' id='font' value='font' />
-              <label for='font'>Font</label>
-            </div>
-            <div>
-              <input type='checkbox' id='layout' value='layout' />
-              <label for='layout'>Layout</label>
-            </div>
-            <div>
-              <input type='checkbox' id='images' value='images' />
-              <label for='images'>Images</label>
-            </div>
-            <div>
-              <input type='checkbox' id='responsiveness' value='responsiveness' />
-              <label for='responsiveness'>Responsiveness</label>
-            </div>
-            <div>
-              <input type='checkbox' id='usability' value='usability' />
-              <label for='usability'>Usability</label>
-            </div>
+          <div class='tag-checkboxes'></div>
         </fieldset>
-
+        <!-- 
         <fieldset name='new-url'>
           <legend>Add a custom tag</legend>
           <input type='text' class='custom-tag' /><span>
             <button type='submit' class='add-tag-button'>+</button>
           </span>
-        </fieldset>
+        </fieldset> -->
+
       </form>
+      <a onclick='handleNewUrlSubmit()'>Submit</a>
     </section> 
+
+    <!-- Website collage, divs to repeat for each array element -->
+    <section class='gallery' id='gallery'></section> 
+
   </main>
   <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
   <script type='text/javascript' src='app.js'></script>

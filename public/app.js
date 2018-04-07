@@ -51,35 +51,38 @@ const MOCK_SITE_DATA = {
   "tags": ['color', 'font', 'layout', 'images', 'responsiveness', 'usability']
 };
 
-console.log(MOCK_SITE_DATA.tags.length);
-
 function getDataFromApi(callback) {
   // Get data from mongo db
 };
 
 function renderWebsiteGallery(MOCK_SITE_DATA) {
   console.log('renderWebsiteGallery ran');
+  document.getElementById('gallery').style.display = 'block';
+  document.getElementById('menu').style.display = 'block';
+  document.getElementById('add-website').style.display = 'none';
   for (let i = 0; i < MOCK_SITE_DATA.siteData.length; i++) {
     let eachWebsite = 
-      `<div>
-        <p>TEST</p>
+      `<div class='each-website'>
         <h1 class='website-title'>${MOCK_SITE_DATA.siteData[i].title}</h1>
-        <img src='./test-images/sample-site.png' alt='screenshot of website' />
+        <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
         <h1 class='website-tags'>${MOCK_SITE_DATA.siteData[i].tags}</h1>
       </div>`;
-    console.log(eachWebsite);
     $('.gallery').append(eachWebsite);
     // let gallery = document.getElementById('gallery');
     // document.gallery.insertAdjacentHTML('afterend', eachWebsite);
   };
+  renderTagFilters();
 };
-
 
 function renderTagFilters() {
   console.log('renderTagFilters ran');
   for (let i = 0; i < MOCK_SITE_DATA.tags.length; i++) {
-    $('.filters').append(`<li>${MOCK_SITE_DATA.tags[i]}</li>`);
-    console.log(MOCK_SITE_DATA.tags[i]);
+    $('.filters').append(
+      `<div>
+        <input type='checkbox' id='${MOCK_SITE_DATA.tags[i]}' value='${MOCK_SITE_DATA.tags[i]}' />
+        <label for='${MOCK_SITE_DATA.tags[i]}'>${MOCK_SITE_DATA.tags[i]}</label>
+      </div>`
+    );
   }
 };
 
@@ -92,10 +95,24 @@ function handleAddWebsiteClick() {
 };
 
 function renderNewUrlScreen() {
-  // hide website gallery, show new url form
+  document.getElementById('add-website').style.display = 'block';
+  document.getElementById('gallery').style.display = "none";
+  document.getElementById('menu').style.display = "none";
+};
+
+function renderTagEditor() {
+  console.log('renderTagEdit ran');
+  for (let i = 0; i < MOCK_SITE_DATA.tags.length; i++) {
+  $('.tag-checkboxes').append(
+    `<div>
+      <input type='checkbox' id='${MOCK_SITE_DATA.tags[i]}' value='${MOCK_SITE_DATA.tags[i]}' />
+      <label for='${MOCK_SITE_DATA.tags[i]}'>${MOCK_SITE_DATA.tags[i]}</label>
+    </div>`
+  )}
 };
 
 function handleNewUrlSubmit() {
+  console.log('handleNewUrlSubmit ran')
   // get, store, and render title
   // get, store, and render screenshots
   // get, store, and render tags
@@ -112,13 +129,6 @@ function renderDetailScreen() {
   // show visit and edit links
 };
 
-function renderTagCheckboxes() {
-  `<div>
-    <input type='checkbox' id='color' value='color' />
-    <label for='color'>Color</label>
-  </div>`
-};
-
 function handleEditSubmit() {
   // get, store, and render tags
   // get and store notes field
@@ -126,4 +136,5 @@ function handleEditSubmit() {
 
 
 renderWebsiteGallery(MOCK_SITE_DATA);
-renderTagFilters(MOCK_SITE_DATA);
+// renderTagFilters(MOCK_SITE_DATA);
+renderTagEditor(MOCK_SITE_DATA);

@@ -1,0 +1,12 @@
+html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main, header, p, section {
+	margin: 0;
+	padding: 0;
+	border: 0;
+  box-sizing: border-box;
+}
+
+.each-website, section {
+  border: 1px black solid;
+  margin: 10px;
+}
+
