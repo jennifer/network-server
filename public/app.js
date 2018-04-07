@@ -62,7 +62,7 @@ function renderWebsiteGallery(MOCK_SITE_DATA) {
   document.getElementById('add-website').style.display = 'none';
   for (let i = 0; i < MOCK_SITE_DATA.siteData.length; i++) {
     let eachWebsite = 
-      `<div class='each-website'>
+      `<div class='each-website' onclick='handleThumbnailClick(${[i]})'>
         <h1 class='website-title'>${MOCK_SITE_DATA.siteData[i].title}</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
         <h1 class='website-tags'>${MOCK_SITE_DATA.siteData[i].tags}</h1>
@@ -119,7 +119,9 @@ function handleNewUrlSubmit() {
   // get and store notes field
 };
 
-function handleThumbnailClick() {
+function handleThumbnailClick(index) {
+  console.log('handleThumbnailClick ran');
+  console.log(index)
   // renderEditScreen
 };
 
