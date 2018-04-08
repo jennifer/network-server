@@ -10,3 +10,15 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
   margin: 10px;
 }
 
+.website-image {
+  height: 200px;
+}
+
+.my-link {
+  color: blue;
+  text-decoration: underline;
+}
+
+.my-link:hover {
+  cursor: pointer;
+}
