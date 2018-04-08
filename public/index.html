@@ -7,41 +7,12 @@
   <link rel='stylesheet' type='text/css' href='style.css'>
 </head>
 <body>
-  <header>Site Bank</header>
-  <!-- Menu section filter/edit -->
+  <header onclick='renderWebsiteGallery(MOCK_SITE_DATA)'>Site Bank</header>
   <main>
-    <section id='menu'>
-      <p>Click an element to filter</p>
-      <div class='filters'></div>
-      <p>Click <a onclick='renderNewUrlScreen()'>here</a> to add a new website</p>
-    </section>
-
-  	<!-- Screen to interact with website (visit website, edit tags, or delete website) -->
-    <section id='add-website'>
-      <form class='new-website'>
-        <a onclick='renderWebsiteGallery()'>Close</a>
-        <fieldset name='new-url'>
-          <legend>Add a new website</legend>
-          <label for='url-input'>Enter a URL</label>
-          <input type='text' class='url-input' />
-          <label for='tag-checkboxes'>Tag website elements</label>
-          <div class='tag-checkboxes'></div>
-        </fieldset>
-        <!-- 
-        <fieldset name='new-url'>
-          <legend>Add a custom tag</legend>
-          <input type='text' class='custom-tag' /><span>
-            <button type='submit' class='add-tag-button'>+</button>
-          </span>
-        </fieldset> -->
-
-      </form>
-      <a onclick='handleNewUrlSubmit()'>Submit</a>
-    </section> 
-
-    <!-- Website collage, divs to repeat for each array element -->
-    <section class='gallery' id='gallery'></section> 
-
+    <section id='menu'></section>
+    <section id='gallery'></section> 
+    <section id='add-website'></section> 
+    <section id='website-detail'></section>
   </main>
   <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
   <script type='text/javascript' src='app.js'></script>

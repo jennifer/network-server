@@ -57,32 +57,44 @@ function getDataFromApi(callback) {
 
 function renderWebsiteGallery(MOCK_SITE_DATA) {
   console.log('renderWebsiteGallery ran');
-  document.getElementById('gallery').style.display = 'block';
   document.getElementById('menu').style.display = 'block';
+  document.getElementById('gallery').style.display = 'block';
   document.getElementById('add-website').style.display = 'none';
+  document.getElementById('website-detail').style.display = 'none';
   for (let i = 0; i < MOCK_SITE_DATA.siteData.length; i++) {
-    let eachWebsite = 
-      `<div class='each-website' onclick='handleThumbnailClick(${[i]})'>
+    let eachWebsite = `
+      <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <h1 class='website-title'>${MOCK_SITE_DATA.siteData[i].title}</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
         <h1 class='website-tags'>${MOCK_SITE_DATA.siteData[i].tags}</h1>
-      </div>`;
-    $('.gallery').append(eachWebsite);
+      </div>
+    `;
+    $('#gallery').append(eachWebsite);
     // let gallery = document.getElementById('gallery');
     // document.gallery.insertAdjacentHTML('afterend', eachWebsite);
   };
-  renderTagFilters();
+  renderMenu();
 };
+
+function renderMenu() {
+  console.log('renderMenu ran')
+  $('#menu').append(`
+    <p>Click an element to filter</p>
+    <div id='filters'></div>
+    <p>Click <a onclick='renderAddWebsiteScreen()'>here</a> to add a new website</p>
+  `);
+  renderTagFilters();
+}
 
 function renderTagFilters() {
   console.log('renderTagFilters ran');
   for (let i = 0; i < MOCK_SITE_DATA.tags.length; i++) {
-    $('.filters').append(
-      `<div>
+    $('#filters').append(`
+      <div>
         <input type='checkbox' id='${MOCK_SITE_DATA.tags[i]}' value='${MOCK_SITE_DATA.tags[i]}' />
         <label for='${MOCK_SITE_DATA.tags[i]}'>${MOCK_SITE_DATA.tags[i]}</label>
-      </div>`
-    );
+      </div>
+    `);
   }
 };
 
@@ -90,25 +102,36 @@ function handleFilterClick() {
   // check against sites db collection
 };
 
-function handleAddWebsiteClick() {
-  // renderNewUrlScreen
-};
-
-function renderNewUrlScreen() {
+function renderAddWebsiteScreen() {
+  document.getElementById('menu').style.display = 'none';
+  document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'block';
-  document.getElementById('gallery').style.display = "none";
-  document.getElementById('menu').style.display = "none";
+  document.getElementById('website-detail').style.display = 'none';
+  $('#add-website').append(`
+    <a onclick='renderWebsiteGallery(MOCK_SITE_DATA)'>Close</a>
+    <form class='new-website'>
+      <fieldset name='new-url'>
+        <legend>Add a new website</legend>
+        <label for='url-input'>Enter a URL</label>
+        <input type='text' class='url-input' />
+        <label for='tag-checkboxes'>Tag website elements</label>
+        <div id='tag-checkboxes'></div>
+      </fieldset>
+    </form>
+    <a onclick='handleNewUrlSubmit()'>Submit</a>
+  `);
+  renderTagEditor()
 };
 
 function renderTagEditor() {
   console.log('renderTagEdit ran');
   for (let i = 0; i < MOCK_SITE_DATA.tags.length; i++) {
-  $('.tag-checkboxes').append(
-    `<div>
+  $('#tag-checkboxes').append(`
+    <div>
       <input type='checkbox' id='${MOCK_SITE_DATA.tags[i]}' value='${MOCK_SITE_DATA.tags[i]}' />
       <label for='${MOCK_SITE_DATA.tags[i]}'>${MOCK_SITE_DATA.tags[i]}</label>
-    </div>`
-  )}
+    </div>
+  `)}
 };
 
 function handleNewUrlSubmit() {
@@ -119,24 +142,40 @@ function handleNewUrlSubmit() {
   // get and store notes field
 };
 
-function handleThumbnailClick(index) {
+function renderDetailScreen(i) {
   console.log('handleThumbnailClick ran');
-  console.log(index)
-  // renderEditScreen
+  document.getElementById('menu').style.display = 'none';
+  document.getElementById('gallery').style.display = 'none';
+  document.getElementById('add-website').style.display = 'none';
+  document.getElementById('website-detail').style.display = 'block';
+   $('#website-detail').append(`
+      <div class='each-website' onclick=''>
+        <a onclick='renderWebsiteGallery()'>Close</a>
+        <h1 class='website-title'>${MOCK_SITE_DATA.siteData[i].title}</h1><a href='${MOCK_SITE_DATA.siteData[i].URL}' target="_blank">Visit</h1>
+        <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
+        <h1 class='website-tags'>${MOCK_SITE_DATA.siteData[i].tags}</h1><a onclick='renderEditScreen(${i})'>Edit</a>
+      </div>
+    `);
 };
 
-function renderDetailScreen() {
-  // hide website gallery
-  // show large screenshot, notes, tags
-  // show visit and edit links
-};
+function renderEditScreen(i) {
+  $('#website-detail').append(`<a onclick='parentNode.remove()'>Close</a>`);
+  for (let i = 0; i < MOCK_SITE_DATA.tags.length; i++) {
+    $('#website-detail').append(`
+      <div id='edit-tags'>
+        <input type='checkbox' id='${MOCK_SITE_DATA.tags[i]}' value='${MOCK_SITE_DATA.tags[i]}' />
+        <label for='${MOCK_SITE_DATA.tags[i]}'>${MOCK_SITE_DATA.tags[i]}</label>
+      </div>
+    `)
+  }
+  $('#website-detail').append(`<a onclick='handleEditSubmit()'>Submit</a>`);
+}
 
 function handleEditSubmit() {
+  console.log('handleEditSubmit ran')
   // get, store, and render tags
   // get and store notes field
 };
 
 
 renderWebsiteGallery(MOCK_SITE_DATA);
-// renderTagFilters(MOCK_SITE_DATA);
-renderTagEditor(MOCK_SITE_DATA);
