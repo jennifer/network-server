@@ -150,9 +150,9 @@ function renderDetailScreen(i) {
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'block';
-   $('#website-detail').append(`
+   $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
-        <a onclick='renderWebsiteGallery()' class='my-link'>Close</a>
+        <a onclick='renderWebsiteGallery(MOCK_SITE_DATA)' class='my-link'>Close</a>
         <h1 class='website-title'>${MOCK_SITE_DATA.siteData[i].title}</h1><a href='${MOCK_SITE_DATA.siteData[i].URL}' target="_blank">Visit</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
         <h1 class='website-tags'>${MOCK_SITE_DATA.siteData[i].tags}</h1><a onclick='renderEditScreen(${i})' class='my-link'>Edit</a>
