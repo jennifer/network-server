@@ -1,5 +1,6 @@
 'use strict';
 
+/*
 const MOCK_SITE_DATA = {
   "siteData": [
 		{
@@ -50,6 +51,7 @@ const MOCK_SITE_DATA = {
 	],
   "tags": ['color', 'font', 'layout', 'images', 'responsiveness', 'usability']
 };
+*/
 
 function getDataFromApi(callback) {
   // Get data from mongo db
