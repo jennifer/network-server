@@ -15,6 +15,6 @@ const siteDataSchema = mongoose.Schema({
   created: {type: Date, default: Date.now}
 });
 
-const Website = mongoose.model('site', siteDataSchema);
+const Website = mongoose.model('website', siteDataSchema);
 
 module.exports = {Website};
