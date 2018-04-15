@@ -53,9 +53,9 @@ const MOCK_SITE_DATA = {
 };
 */
 
-function getDataFromApi(callback) {
-  // Get data from mongo db
-};
+function getDataFromApi() {
+  $.getJSON(DATABASE_URL, query, callback);
+}
 
 function renderWebsiteGallery(MOCK_SITE_DATA) {
   console.log('renderWebsiteGallery ran');
@@ -183,4 +183,4 @@ function handleEditSubmit() {
 };
 
 
-renderWebsiteGallery(MOCK_SITE_DATA);
+getDataFromApi();
