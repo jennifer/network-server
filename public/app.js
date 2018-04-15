@@ -53,50 +53,54 @@ const MOCK_SITE_DATA = {
 };
 */
 
-function getDataFromApi() {
-  $.getJSON(DATABASE_URL, query, callback);
-}
+function getDataFromApi(callback) {
+  $.getJSON('/websites', callback);
+};
 
-function renderWebsiteGallery(MOCK_SITE_DATA) {
+function renderWebsites(data) {
+  console.log(data)
+};
+
+function renderWebsiteGallery(data) {
   console.log('renderWebsiteGallery ran');
   document.getElementById('menu').style.display = 'block';
   document.getElementById('gallery').style.display = 'block';
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
   $('#gallery').empty();
-  for (let i = 0; i < MOCK_SITE_DATA.siteData.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
-        <h1 class='website-title'>${MOCK_SITE_DATA.siteData[i].title}</h1>
+        <h1 class='website-title'>${data[i].title}</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
-        <h1 class='website-tags'>${MOCK_SITE_DATA.siteData[i].tags}</h1>
+        <h1 class='website-tags'>${data[i].tags}</h1>
       </div>
     `;
     $('#gallery').append(eachWebsite);
     // let gallery = document.getElementById('gallery');
     // document.gallery.insertAdjacentHTML('afterend', eachWebsite);
   };
-  renderMenu();
+  renderMenu(data);
 };
 
-function renderMenu() {
+function renderMenu(data) {
   console.log('renderMenu ran')
   $('#menu').html(`
     <p>Click an element to filter</p>
     <div id='filters'></div>
     <p>Click <a onclick='renderAddWebsiteScreen()'>here</a> to add a new website</p>
   `);
-  renderTagFilters();
+  renderTagFilters(data);
 }
 
-function renderTagFilters() {
+function renderTagFilters(data) {
   console.log('renderTagFilters ran');
   $('#filters').empty();
-  for (let i = 0; i < MOCK_SITE_DATA.tags.length; i++) {
+  for (let i = 0; i < data.tags.length; i++) {
     $('#filters').append(`
       <div>
-        <input type='checkbox' id='${MOCK_SITE_DATA.tags[i]}' value='${MOCK_SITE_DATA.tags[i]}' />
-        <label for='${MOCK_SITE_DATA.tags[i]}'>${MOCK_SITE_DATA.tags[i]}</label>
+        <input type='checkbox' id='${data.tags[i]}' value='${data.tags[i]}' />
+        <label for='${data.tags[i]}'>${data.tags[i]}</label>
       </div>
     `);
   }
@@ -183,4 +187,4 @@ function handleEditSubmit() {
 };
 
 
-getDataFromApi();
+getDataFromApi(renderWebsiteGallery);
