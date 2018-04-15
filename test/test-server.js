@@ -4,7 +4,6 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 const faker = require('faker');
-const app = require('../server.js');
 
 const should = chai.should();
 const expect = chai.expect();
@@ -49,7 +48,6 @@ function seedWebsiteData() {
     created: faker.date.past()
     };
   }
-  // this will return a promise
   return Website.insertMany(seedData);
 }
 
@@ -79,31 +77,21 @@ describe('website API resource', function () {
   describe('GET endpoint', function () {
 
     it('should return all existing websites', function () {
-      // strategy:
-      //    1. get back all posts returned by by GET request to `/websites`
-      //    2. prove res has right status, data type
-      //    3. prove the number of posts we got back is equal to number
-      //       in db.
       let res;
       return chai.request(app)
         .get('/websites')
         .then(_res => {
           res = _res;
           res.should.have.status(200);
-          // otherwise our db seeding didn't work
           res.body.should.have.length.of.at.least(1);
-
           return Website.count();
         })
         .then(count => {
-          // the number of returned posts should be same
-          // as number of posts in DB
           res.body.should.have.length.of(count);
         });
     });
 
     it('should return websites with right fields', function () {
-      // Strategy: Get back all posts, and ensure they have expected keys
       let resPost;
       return chai.request(app)
         .get('/websites')
@@ -128,7 +116,7 @@ describe('website API resource', function () {
         });
     });
   });
-
+/*
   describe('POST endpoint', function () {
     // strategy: make a POST request with data,
     // then prove that the post we get back has
@@ -162,7 +150,7 @@ describe('website API resource', function () {
           res.body.tags.should.equal(newSite.tags);
           return Website.findById(res.body.id);
         })
-        .then(function (post) {
+        .then(function (site) {
           site.userId.should.equal(newSite.userId);
           site.title.should.equal(newSite.title);
           site.desktopImg.should.equal(newSite.desktopImg);
@@ -172,70 +160,56 @@ describe('website API resource', function () {
   });
 
   describe('PUT endpoint', function () {
-
-    // strategy:
-    //  1. Get an existing post from db
-    //  2. Make a PUT request to update that post
-    //  4. Prove post in db is correctly updated
     it('should update fields you send over', function () {
       const updateData = {
-        title: 'cats cats cats',
-        content: 'dogs dogs dogs',
-        author: {
-          firstName: 'foo',
-          lastName: 'bar'
+        url: faker.internet.url(),
+        title: faker.lorem.sentence(),
+        desktopImg: faker.image.abstract(),
+        mobileImg: faker.image.abstract(),
+        tags: faker.lorem.words()
         }
       };
 
-      return BlogPost
+      return Website
         .findOne()
-        .then(post => {
-          updateData.id = post.id;
+        .then(site => {
+          updateData.id = site.id;
 
           return chai.request(app)
-            .put(`/posts/${post.id}`)
+            .put(`/websites/${site.id}`)
             .send(updateData);
         })
         .then(res => {
           res.should.have.status(204);
           return BlogPost.findById(updateData.id);
         })
-        .then(post => {
-          post.title.should.equal(updateData.title);
-          post.content.should.equal(updateData.content);
-          post.author.firstName.should.equal(updateData.author.firstName);
-          post.author.lastName.should.equal(updateData.author.lastName);
+        .then(site => {
+          site.url.should.equal(updateData.url);
+          site.title.should.equal(updateData.title);
+          site.desktopImg.should.equal(updateData.desktopImg);
+          site.mobileImg.should.equal(updateData.mobileImg);
+          site.tags.should.equal(updateData.tags)
         });
     });
   });
 
   describe('DELETE endpoint', function () {
-    // strategy:
-    //  1. get a post
-    //  2. make a DELETE request for that post's id
-    //  3. assert that response has right status code
-    //  4. prove that post with the id doesn't exist in db anymore
-    it('should delete a post by id', function () {
-
-      let post;
-
-      return BlogPost
+      it('should delete a site by id', function () {
+      let site;
+      return Website
         .findOne()
-        .then(_post => {
-          post = _post;
-          return chai.request(app).delete(`/posts/${post.id}`);
+        .then(_site => {
+          site = _site;
+          return chai.request(app).delete(`/websites/${site.id}`);
         })
         .then(res => {
           res.should.have.status(204);
-          return BlogPost.findById(post.id);
+          return Website.findById(site.id);
         })
-        .then(_post => {
-          // when a variable's value is null, chaining `should`
-          // doesn't work. so `_post.should.be.null` would raise
-          // an error. `should.be.null(_post)` is how we can
-          // make assertions about a null value.
-          should.not.exist(_post);
+        .then(_site => {
+          should.not.exist(_site);
         });
     });
   });
+  */
 });
