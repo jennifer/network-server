@@ -14,11 +14,11 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
   height: 200px;
 }
 
-.my-link {
+.text-link {
   color: blue;
   text-decoration: underline;
 }
 
-.my-link:hover {
+.text-link:hover {
   cursor: pointer;
 }

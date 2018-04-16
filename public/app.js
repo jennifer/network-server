@@ -61,6 +61,7 @@ function getDataFromApi(response) {
     return response.json();
   })
   .then(function(data) {
+    console.log(data);
     renderWebsiteGallery(data);
   })
   .catch(function() {
@@ -100,8 +101,8 @@ function renderMenu(data) {
   console.log('renderMenu ran')
   $('#menu').html(`
     <p>Click an element to filter</p>
-    <div id='filters'></div>
-    <p>Click <a onclick='renderAddWebsiteScreen()'>here</a> to add a new website</p>
+    <form id='filters'></form>
+    <p>Click <a onclick='renderAddWebsiteScreen()' class='text-link'>here</a> to add a new website</p>
   `);
   renderTagFilters(data);
 }
@@ -111,17 +112,28 @@ function renderTagFilters(data) {
   $('#filters').empty();
   for (let i = 0; i < data.length; i++) {
     $('#filters').append(`
-      <div>
         <input type='checkbox' id='${tags[i]}' value='${tags[i]}' />
         <label for='${tags[i]}'>${tags[i]}</label>
-      </div>
     `);
   }
+  $('#filters').append(`
+    <a onclick='handleFilterClick()' class='text-link'>Submit</a>
+  `)
 };
 
 function handleFilterClick() {
+  console.log('handleFilterClick ran')
   // check against sites db collection
+  let checkbox = document.forms[0];
+  let clickedFilter = [];
+  for (let i = 0; i < checkbox.length; i++) {
+    if (checkbox[i].checked) {
+      clickedFilter.push(checkbox[i].value);
+    }
+  };
+  console.log(clickedFilter);
 };
+
 
 function renderAddWebsiteScreen() {
   document.getElementById('menu').style.display = 'none';
@@ -171,19 +183,19 @@ function renderDetailScreen(i) {
   document.getElementById('website-detail').style.display = 'block';
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
-        <a onclick='renderWebsiteGallery(data)' class='my-link'>Close</a>
+        <a onclick='renderWebsiteGallery(data)' class='text-link'>Close</a>
         <h1 class='website-title'>${data[i].title}</h1><a href='${data[i].url}' target="_blank">Visit</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
-        <h1 class='website-tags'>${data[i].tags}</h1><a onclick='renderEditScreen(${i})' class='my-link'>Edit</a>
+        <h1 class='website-tags'>${data[i].tags}</h1><a onclick='renderEditScreen(${i})' class='text-link'>Edit</a>
       </div>
     `);
 };
 
 function renderEditScreen(i) {
   $('#website-detail').append(`
-    <a onclick='renderWebsiteGallery(data)' class='my-link'>Close</a>
+    <a onclick='renderWebsiteGallery(data)' class='text-link'>Close</a>
     <div id='edit-tags'></div>
-    <a onclick='handleEditSubmit()' class='my-link'>Submit</a>
+    <a onclick='handleEditSubmit()' class='text-link'>Submit</a>
   `);
   for (let i = 0; i < data.tags.length; i++) {
     $('#edit-tags').append(`

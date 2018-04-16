@@ -42,10 +42,9 @@ app.get('/websites/:id', (req, res) => {
 });
 
 // GET websites by tag
-/*
-app.get('/websites/filter', (req, res) => {
+app.get('/websites/filter/:tag', (req, res) => {
   Website
-    .find({tags: ${input}}
+    .find({tags: req.params.tag})
     .then(websites => {
       res.json(websites)})
     .catch(err => {
@@ -53,7 +52,7 @@ app.get('/websites/filter', (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     });
 });
-*/
+
 
 // POST a new webiste
 app.post('/websites', (req, res) => {
