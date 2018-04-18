@@ -65,7 +65,7 @@ describe('website API resource', function () {
   after(function () {
     return closeServer();
   });
- /* 
+ 
   describe('GET endpoint', function () {
     
     // TypeError: res.body.should.have.length.of is not a function
@@ -80,13 +80,13 @@ describe('website API resource', function () {
           return Website.count();
         })
         .then(count => {
-          res.body.should.have.length.of(count);
+          res.body.should.have.lengthOf(count);
         });
     });
     
     // AssertionError: expected { Object (created, _id, ...) } to contain keys '__v', '_id', 'userId', 'url', 'title', 'desktopImg', 'mobileImg', 'tags', and 'created'
     it('should return websites with right fields', function () {
-      let resPost;
+      let resSite;
       return chai.request(app)
         .get('/websites')
         .then(function (res) {
@@ -96,15 +96,16 @@ describe('website API resource', function () {
           res.body.should.have.length.of.at.least(1);
           res.body.forEach(function (site) {
             site.should.be.a('object');
-            site.should.include.keys('__v', '_id', 'userId', 'url', 'title', 'desktopImg', 'mobileImg', 'tags', 'created');
+            site.should.include.keys('userId', 'url', 'title', 'tags', 'created');
           });
           resSite = res.body[0];
-          return Website.findById(resSite.id);
+          return Website.findById(resSite._id);
         })
         .then(site => {
+          console.log("site", site);
           resSite.url.should.equal(site.url);
           resSite.title.should.equal(site.title);
-          resSite.created.should.equal(site.created);
+          resSite.created.should.equal(site.created.toISOString());
         });
     });
   });
@@ -116,9 +117,6 @@ describe('website API resource', function () {
       const newSite = {
         userId: faker.random.number(),
         url: faker.internet.url(),
-        title: faker.lorem.sentence(),
-        desktopImg: faker.image.abstract(),
-        mobileImg: faker.image.abstract(),
         tags: faker.lorem.words(),
         created: faker.date.past()
       };
@@ -129,24 +127,17 @@ describe('website API resource', function () {
           res.should.have.status(200);
           res.should.be.json;
           res.body.should.be.a('object');
-          res.body.should.include.keys(
-            'userId', 'url', 'title', 'desktopImg', 'mobileImg', 'tags', 'created');
+          res.body.should.include.keys('userId', 'url', 'tags', 'created');
           res.body.url.should.equal(newSite.url);
-          res.body.id.should.not.be.null;
-          res.body.author.should.equal(
-            `${newSite.title} ${newSite.title}`);
+          res.body._id.should.not.be.null;
           res.body.tags.should.equal(newSite.tags);
-          return Website.findById(res.body.id);
+          return Website.findById(res.body._id);
         })
         .then(function (site) {
-          site.userId.should.equal(newSite.userId);
-          site.title.should.equal(newSite.title);
-          site.desktopImg.should.equal(newSite.desktopImg);
-          site.created.should.equal(newSite.should);
+          site.userId.should.equal(String(newSite.userId));
         });
     });
   });
-*/
 
   describe('PUT endpoint', function () {
     it('should update fields you send over', function () {

@@ -76,6 +76,7 @@ function renderWebsiteGallery(data) {
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
   $('#gallery').empty();
+  // if clickedFilters.length === 0;
   for (let i = 0; i < data.length; i++) {
     // check to see if tags match
     // do tags from array 1 match tags from array 2
@@ -125,13 +126,14 @@ function handleFilterClick() {
   console.log('handleFilterClick ran')
   // check against sites db collection
   let checkbox = document.forms[0];
-  let clickedFilter = [];
+  let clickedFilters = [];
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
-      clickedFilter.push(checkbox[i].value);
+      clickedFilters.push(checkbox[i].value);
     }
   };
-  console.log(clickedFilter);
+  console.log(clickedFilters);
+  renderWebsiteGallery(clickedFilters);
 };
 
 
