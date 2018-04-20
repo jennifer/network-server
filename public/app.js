@@ -61,12 +61,23 @@ function getDataFromApi(response) {
     return response.json();
   })
   .then(function(data) {
-    console.log(data);
     renderWebsiteGallery(data);
   })
   .catch(function() {
       console.log('API request error');
   });
+};
+
+const clickedFilters = [];
+function handleFilterClick() {
+  console.log('handleFilterClick ran')
+  let checkbox = document.forms[0];
+  for (let i = 0; i < checkbox.length; i++) {
+    if (checkbox[i].checked) {
+      clickedFilters.push(checkbox[i].value);
+    }
+  };
+  renderWebsiteGallery();
 };
 
 function renderWebsiteGallery(data) {
@@ -76,14 +87,25 @@ function renderWebsiteGallery(data) {
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
   $('#gallery').empty();
-  // if clickedFilters.length === 0;
+  if (clickedFilters.length === 0) {
+    renderWebsites(data);
+  }
+  else {
+    for (let i = 0; i < allWebsites.length; i++) {
+      if (allWebsites[i].tags.includes(clickedFilters)) {
+      console.log(allWebsites[i]);
+      }
+    }
+  };
+  renderMenu(data);
+};
+
+// clickedFilters.every(r=> allWebsites[i].tags.indexOf(r) >= 0);
+
+const allWebsites = [];
+function renderWebsites(data) {
   for (let i = 0; i < data.length; i++) {
-    // check to see if tags match
-    // do tags from array 1 match tags from array 2
-    // 'some()' method for OR condition
-    // let found = arr1.some(r=> arr2.indexOf(r) >= 0)
-    // 'every()' for AND conditions
-    // if (filters.some(r=> data.indexOf(r) >= 0)) {
+    allWebsites.push(data[i]);
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <h1 class='website-title'>${data[i].title}</h1>
@@ -92,11 +114,9 @@ function renderWebsiteGallery(data) {
       </div>
     `;
     $('#gallery').append(eachWebsite);
-    // let gallery = document.getElementById('gallery');
-    // document.gallery.insertAdjacentHTML('afterend', eachWebsite);
-  };
-  renderMenu(data);
+  }
 };
+console.log(allWebsites);
 
 function renderMenu(data) {
   console.log('renderMenu ran')
@@ -121,21 +141,6 @@ function renderTagFilters(data) {
     <a onclick='handleFilterClick()' class='text-link'>Submit</a>
   `)
 };
-
-function handleFilterClick() {
-  console.log('handleFilterClick ran')
-  // check against sites db collection
-  let checkbox = document.forms[0];
-  let clickedFilters = [];
-  for (let i = 0; i < checkbox.length; i++) {
-    if (checkbox[i].checked) {
-      clickedFilters.push(checkbox[i].value);
-    }
-  };
-  console.log(clickedFilters);
-  renderWebsiteGallery(clickedFilters);
-};
-
 
 function renderAddWebsiteScreen() {
   document.getElementById('menu').style.display = 'none';
