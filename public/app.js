@@ -62,10 +62,19 @@ function getDataFromApi(response) {
   })
   .then(function(data) {
     renderWebsiteGallery(data);
+    createWebsiteArray(data);
+    console.log(data);
   })
   .catch(function() {
       console.log('API request error');
   });
+};
+
+const allWebsites = [];
+function createWebsiteArray(data) {
+  for (let i = 0; i < data.length; i++) {
+    allWebsites.push(data[i]);
+  }
 };
 
 const clickedFilters = [];
@@ -91,21 +100,24 @@ function renderWebsiteGallery(data) {
     renderWebsites(data);
   }
   else {
+    const filteredWebsites = [];
     for (let i = 0; i < allWebsites.length; i++) {
       if (allWebsites[i].tags.includes(clickedFilters)) {
-      console.log(allWebsites[i]);
+        filteredWebsites.push(allWebsites[i]);
       }
     }
+    console.log(filteredWebsites);
+    renderWebsites(filteredWebsites);
   };
   renderMenu(data);
 };
 
 // clickedFilters.every(r=> allWebsites[i].tags.indexOf(r) >= 0);
 
-const allWebsites = [];
-function renderWebsites(data) {
+// const allWebsites = [];
+function renderWebsites(data, filteredWebsites) {
   for (let i = 0; i < data.length; i++) {
-    allWebsites.push(data[i]);
+    // allWebsites.push(data[i]);
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <h1 class='website-title'>${data[i].title}</h1>
@@ -116,7 +128,6 @@ function renderWebsites(data) {
     $('#gallery').append(eachWebsite);
   }
 };
-console.log(allWebsites);
 
 function renderMenu(data) {
   console.log('renderMenu ran')
