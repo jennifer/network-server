@@ -61,65 +61,79 @@ function getDataFromApi(response) {
     return response.json();
   })
   .then(function(data) {
-    renderWebsiteGallery(data);
-    createWebsiteArray(data);
-    console.log(data);
+    renderGallery(data);
+    createGalleryArray(data);
   })
   .catch(function() {
       console.log('API request error');
   });
 };
 
-const allWebsites = [];
-function createWebsiteArray(data) {
+const gallerySites = [];
+function createGalleryArray(data) {
   for (let i = 0; i < data.length; i++) {
-    allWebsites.push(data[i]);
+    gallerySites.push(data[i]);
   }
+  renderMenu(data);
+  renderFilters(data);
 };
 
 const clickedFilters = [];
 function handleFilterClick() {
   console.log('handleFilterClick ran')
+  // if (clickedFilters.length !== 0) {
+    // clickedFilters = []
+  // };
+  clickedFilters.length = 0;
   let checkbox = document.forms[0];
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
       clickedFilters.push(checkbox[i].value);
     }
   };
-  renderWebsiteGallery();
+  if (clickedFilters.length === 0) {
+    renderGallery(gallerySites);
+  }
+  else {
+    console.log(clickedFilters);
+    renderGallery();
+  }
 };
 
-function renderWebsiteGallery(data) {
-  console.log('renderWebsiteGallery ran');
+function renderGallery(data) {
+  console.log('renderGallery ran');
   document.getElementById('menu').style.display = 'block';
   document.getElementById('gallery').style.display = 'block';
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
   $('#gallery').empty();
   if (clickedFilters.length === 0) {
-    renderWebsites(data);
+    populateGallery(data);
   }
   else {
     const filteredWebsites = [];
-    for (let i = 0; i < allWebsites.length; i++) {
-      if (allWebsites[i].tags.includes(clickedFilters)) {
-        filteredWebsites.push(allWebsites[i]);
+    for (let i = 0; i < gallerySites.length; i++) {
+      if (gallerySites[i].tags.includes(clickedFilters)) {
+        filteredWebsites.push(gallerySites[i]);
       }
     }
-    console.log(filteredWebsites);
-    renderWebsites(filteredWebsites);
+    if (filteredWebsites.length === 0) {
+      $('#gallery').html('<p>No results. Try deselecting a filter.</p>')
+    }
+    else {
+      populateGallery(filteredWebsites)
+    }
   };
-  renderMenu(data);
 };
 
-// clickedFilters.every(r=> allWebsites[i].tags.indexOf(r) >= 0);
+// clickedFilters.every(r=> gallerySites[i].tags.indexOf(r) >= 0);
 
-// const allWebsites = [];
-function renderWebsites(data, filteredWebsites) {
+// const gallerySites = [];
+function populateGallery(data, filteredWebsites) {
   for (let i = 0; i < data.length; i++) {
-    // allWebsites.push(data[i]);
+    // gallerySites.push(data[i]);
     let eachWebsite = `
-      <div class='each-website' onclick='renderDetailScreen(${[i]})'>
+      <div class='each-website' onclick='renderDetailScreen(${gallerySites[i]})'>
         <h1 class='website-title'>${data[i].title}</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
         <h1 class='website-tags'>${data[i].tags}</h1>
@@ -132,15 +146,14 @@ function renderWebsites(data, filteredWebsites) {
 function renderMenu(data) {
   console.log('renderMenu ran')
   $('#menu').html(`
-    <p>Click an element to filter</p>
+    <p>Select elements and submit to filter.</p>
     <form id='filters'></form>
-    <p>Click <a onclick='renderAddWebsiteScreen()' class='text-link'>here</a> to add a new website</p>
+    <p>Click <a onclick='renderAddScreen()' class='text-link'>here</a> to add a new website.</p>
   `);
-  renderTagFilters(data);
 }
 
-function renderTagFilters(data) {
-  console.log('renderTagFilters ran');
+function renderFilters(data) {
+  console.log('renderFilters ran');
   $('#filters').empty();
   for (let i = 0; i < data.length; i++) {
     $('#filters').append(`
@@ -153,13 +166,13 @@ function renderTagFilters(data) {
   `)
 };
 
-function renderAddWebsiteScreen() {
+function renderAddScreen() {
   document.getElementById('menu').style.display = 'none';
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'block';
   document.getElementById('website-detail').style.display = 'none';
   $('#add-website').append(`
-    <a onclick='renderWebsiteGallery(data)'>Close</a>
+    <a onclick='renderGallery(data)'>Close</a>
     <form class='new-website'>
       <fieldset name='new-url'>
         <legend>Add a new website</legend>
@@ -193,7 +206,7 @@ function handleNewUrlSubmit() {
   // get and store notes field
 };
 
-function renderDetailScreen(i) {
+function renderDetailScreen(i, gallerySites) {
   console.log('handleThumbnailClick ran');
   document.getElementById('menu').style.display = 'none';
   document.getElementById('gallery').style.display = 'none';
@@ -201,17 +214,17 @@ function renderDetailScreen(i) {
   document.getElementById('website-detail').style.display = 'block';
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
-        <a onclick='renderWebsiteGallery(data)' class='text-link'>Close</a>
-        <h1 class='website-title'>${data[i].title}</h1><a href='${data[i].url}' target="_blank">Visit</h1>
+        <a onclick='renderGallery(data)' class='text-link'>Close</a>
+        <h1 class='website-title'>${gallerySites[i].title}</h1><a href='${gallerySites[i].url}' target="_blank">Visit</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
-        <h1 class='website-tags'>${data[i].tags}</h1><a onclick='renderEditScreen(${i})' class='text-link'>Edit</a>
+        <h1 class='website-tags'>${gallerySites[i].tags}</h1><a onclick='renderEditScreen(${i})' class='text-link'>Edit</a>
       </div>
     `);
 };
 
 function renderEditScreen(i) {
   $('#website-detail').append(`
-    <a onclick='renderWebsiteGallery(data)' class='text-link'>Close</a>
+    <a onclick='renderGallery(data)' class='text-link'>Close</a>
     <div id='edit-tags'></div>
     <a onclick='handleEditSubmit()' class='text-link'>Submit</a>
   `);
