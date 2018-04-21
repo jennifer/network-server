@@ -61,6 +61,15 @@ app.get('/websites/filter/:tag', (req, res) => {
 // POST a new webiste
 app.post('/websites', (req, res) => {
 // Grab title and images, add to db
+  const requiredFields = ['url'];
+    for (let i = 0; i < requiredFields.length; i++) {
+      const field = requiredFields[i];
+      if (!(field in req.body)) {
+        const message = `Missing \`${field}\` in request body`;
+        console.error(message);
+        return res.status(400).send(message);
+      }
+    };
   let newWebsite = new Website(req.body);
   newWebsite.save()
   .then(item => {

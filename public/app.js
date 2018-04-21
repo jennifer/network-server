@@ -1,58 +1,5 @@
 'use strict';
 
-/*
-const MOCK_SITE_DATA = {
-  "siteData": [
-		{
-			"userId": 1111111,
-			"url": "https://readymag.com/repponen/20inventions/",
-      "title": "‘20 Most Important Inventions of All Time’ by Anton Repponen | Readymag",
-			"desktopImg": "desktop1.png",
-			"mobileImg": "mobile1.png",
-			"tags": ["color", "font", "animation"],
-			"added": 1470010176609
-		},
-		{
-			"userId": 2222222,
-			"url": "https://letsmuseeum.com/",
-      "title": "#letsmuseeum: Stell dir vor, du scrollst durch ein Museum – in echt.",
-			"desktopImg": "desktop2.png",
-			"mobileImg": "mobile2.png",
-			"tags": ["color", "layout", "animation"],
-			"added": 1470010276609
-		},
-		{
-			"userId": 3333333,
-			"url": "http://marinarachello.com/",
-      "title": "Marina Rachello – Portfolio",
-			"desktopImg": "desktop3.png",
-			"mobileImg": "mobile3.png",
-			"tags": ["color", "layout", "images"],
-			"added": 1470010376609
-		},
-		{
-			"userId": 4444444,
-			"url": "http://christopherbabb.com/#navigation-desktop",
-      "title": "Christopher Babb",
-			"desktopImg": "desktop4.png",
-			"mobileImg": "mobile4.png",
-			"tags": ["images", "responsiveness"],
-			"added": 1470010476609
-		},
-		{
-			"userId": 5555555,
-			"url": "http://belentenorio.com/",
-      "title": "Belen Tenorio",
-			"desktopImg": "desktop5.png",
-			"mobileImg": "mobile5.png",
-			"tags": ["layout", "images"],
-			"added": 1470010576609
-		},
-	],
-  
-};
-*/
-
 const tags = ['color', 'font', 'layout', 'images', 'responsiveness', 'usability'];
 
 function getDataFromApi(response) {
@@ -81,9 +28,6 @@ function createGalleryArray(data) {
 const clickedFilters = [];
 function handleFilterClick() {
   console.log('handleFilterClick ran')
-  // if (clickedFilters.length !== 0) {
-    // clickedFilters = []
-  // };
   clickedFilters.length = 0;
   let checkbox = document.forms[0];
   for (let i = 0; i < checkbox.length; i++) {
@@ -125,6 +69,7 @@ function renderGallery(data) {
     }
   };
 };
+
 
 // clickedFilters.every(r=> gallerySites[i].tags.indexOf(r) >= 0);
 
@@ -189,8 +134,6 @@ function renderAddScreen() {
   renderTagEditor()
 };
 
-//<a onclick='handleNewUrlSubmit(url)' class='text-link'>Submit</a>
-
 function renderTagEditor() {
   console.log('renderTagEdit ran');
   $('#tag-checkboxes').empty();
@@ -201,51 +144,6 @@ function renderTagEditor() {
     <br>
   `)}
 };
-
-function handleNewUrlSubmit(data) {
-  console.log('handleNewUrlSubmit ran');
-  console.log('Adding ' + url);
-  
-};
-
-/*
-fetch('/websites', {
-    method: 'POST',
-    body: JSON.stringify('NEW WEBSITE'),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-  })
-  .then(res=>res.json())
-  .then(res => console.log(res))
- 
-  .catch(function() {
-    console.log('API request error');
-  });
-*/
-// get, store, and render title
-// get, store, and render screenshots
-// get, store, and render tags
-// get and store notes field
-/*
-$.ajax({
-    method: 'POST',
-    url: RECIPES_URL,
-    data: JSON.stringify(recipe),
-    success: function(data) {
-      getAndDisplayRecipes();
-    },
-    dataType: 'json',
-    contentType: 'application/json'
-  });
-*/
-
-/*
-function getWebsiteByID(value) {
-  console.log(value);
-};
-*/
 
 function renderDetailScreen(i) {
   console.log('handleThumbnailClick ran');
@@ -276,12 +174,5 @@ function renderEditScreen(i) {
     `)
   }
 }
-
-function handleEditSubmit() {
-  console.log('handleEditSubmit ran')
-  // get, store, and render tags
-  // get and store notes field
-};
-
 
 getDataFromApi();
