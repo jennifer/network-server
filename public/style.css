@@ -22,3 +22,7 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
 .text-link:hover {
   cursor: pointer;
 }
+
+.url-input {
+  border: 1px black solid;
+}

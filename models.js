@@ -4,14 +4,14 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const siteDataSchema = mongoose.Schema({
-  userId: {type: String, required: true},
-  url: {type: String},
-  title: {type: String},
+  userId: String,
+  url: {type: String, required: true, lowercase: true, trim: true},
+  title: String,
   desktopImg: 
       { data: Buffer, contentType: String },
   mobileImg: 
       { data: Buffer, contentType: String },
-  tags: {type: String},
+  tags: [String],
   created: {type: Date, default: Date.now}
 });
 

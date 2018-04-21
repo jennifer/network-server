@@ -133,7 +133,7 @@ function populateGallery(data, filteredWebsites) {
   for (let i = 0; i < data.length; i++) {
     // gallerySites.push(data[i]);
     let eachWebsite = `
-      <div class='each-website' onclick='renderDetailScreen(${gallerySites[i]})'>
+      <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <h1 class='website-title'>${data[i].title}</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
         <h1 class='website-tags'>${data[i].tags}</h1>
@@ -159,6 +159,7 @@ function renderFilters(data) {
     $('#filters').append(`
         <input type='checkbox' id='${tags[i]}' value='${tags[i]}' />
         <label for='${tags[i]}'>${tags[i]}</label>
+        <br>
     `);
   }
   $('#filters').append(`
@@ -171,42 +172,82 @@ function renderAddScreen() {
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'block';
   document.getElementById('website-detail').style.display = 'none';
+  $('#add-website').empty();
   $('#add-website').append(`
-    <a onclick='renderGallery(data)'>Close</a>
-    <form class='new-website'>
+    <a onclick='renderGallery(gallerySites)'class='text-link'>Close</a>
+    <form class='new-website' method='POST' action='/websites'>
       <fieldset name='new-url'>
         <legend>Add a new website</legend>
         <label for='url-input'>Enter a URL</label>
-        <input type='text' class='url-input' />
+        <input type='text' class='url-input' name='url' /><br>
         <label for='tag-checkboxes'>Tag website elements</label>
         <div id='tag-checkboxes'></div>
+        <input type='submit' value='Submit' class='text-link'>
       </fieldset>
     </form>
-    <a onclick='handleNewUrlSubmit()'>Submit</a>
   `);
   renderTagEditor()
 };
 
+//<a onclick='handleNewUrlSubmit(url)' class='text-link'>Submit</a>
+
 function renderTagEditor() {
   console.log('renderTagEdit ran');
-  for (let i = 0; i < data.tags.length; i++) {
+  $('#tag-checkboxes').empty();
+  for (let i = 0; i < tags.length; i++) {
   $('#tag-checkboxes').append(`
-    <div>
-      <input type='checkbox' id='${data.tags[i]}' value='${data.tags[i]}' />
-      <label for='${data.tags[i]}'>${data.tags[i]}</label>
-    </div>
+    <input type='checkbox' id='${tags[i]}' value='${tags[i]}' name='tags' />
+    <label for='${tags[i]}'>${tags[i]}</label>
+    <br>
   `)}
 };
 
-function handleNewUrlSubmit() {
-  console.log('handleNewUrlSubmit ran')
-  // get, store, and render title
-  // get, store, and render screenshots
-  // get, store, and render tags
-  // get and store notes field
+function handleNewUrlSubmit(data) {
+  console.log('handleNewUrlSubmit ran');
+  console.log('Adding ' + url);
+  
 };
 
-function renderDetailScreen(i, gallerySites) {
+/*
+fetch('/websites', {
+    method: 'POST',
+    body: JSON.stringify('NEW WEBSITE'),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+  })
+  .then(res=>res.json())
+  .then(res => console.log(res))
+ 
+  .catch(function() {
+    console.log('API request error');
+  });
+*/
+// get, store, and render title
+// get, store, and render screenshots
+// get, store, and render tags
+// get and store notes field
+/*
+$.ajax({
+    method: 'POST',
+    url: RECIPES_URL,
+    data: JSON.stringify(recipe),
+    success: function(data) {
+      getAndDisplayRecipes();
+    },
+    dataType: 'json',
+    contentType: 'application/json'
+  });
+*/
+
+/*
+function getWebsiteByID(value) {
+  console.log(value);
+};
+*/
+
+function renderDetailScreen(i) {
   console.log('handleThumbnailClick ran');
   document.getElementById('menu').style.display = 'none';
   document.getElementById('gallery').style.display = 'none';

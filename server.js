@@ -5,10 +5,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const multer  = require('multer');
 const upload = multer({ dest: 'uploads/' });
+const { body,validationResult } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
 
 const app = express();
 app.use(express.static('public'));
 app.use(bodyParser.json());
+// is this line necessary?
+app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.Promise = global.Promise;
 
@@ -56,7 +60,19 @@ app.get('/websites/filter/:tag', (req, res) => {
 
 // POST a new webiste
 app.post('/websites', (req, res) => {
-  const requiredFields = ['userId', 'url'];
+// Grab title and images, add to db
+  let newWebsite = new Website(req.body);
+  newWebsite.save()
+  .then(item => {
+   res.send('Website added');
+   })
+   .catch(err => {
+   res.status(400).send('Unable to save to database');
+   });
+});
+
+/*
+  const requiredFields = ['url'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -65,7 +81,6 @@ app.post('/websites', (req, res) => {
       return res.status(400).send(message);
     }
   }
-// Grab title and images, add to db
   Website
     .create({
       userId: req.body.userId,
@@ -78,8 +93,20 @@ app.post('/websites', (req, res) => {
       console.error(err);
       res.status(500).json({ error: 'Internal server error' });
     });
-
 });
+
+
+app.post("/addname", (req, res) => {
+ var myData = new User(req.body);
+ myData.save()
+ .then(item => {
+ res.send("item saved to database");
+ })
+ .catch(err => {
+ res.status(400).send("unable to save to database");
+ });
+});
+*/
 
 // PUT edit existing tags 
 app.put('/websites/:id', (req, res) => {
