@@ -1,77 +1,70 @@
 'use strict';
 
-function getDataFromApi(response) {
+let allWebsites = [];
+
+function getDataFromApi() {
   $('#gallery').empty();
   fetch('/websites')
   .then(function(response) {
     return response.json();
   })
   .then(function(data) {
-    renderGallery(data);
-    createGalleryArray(data);
+    allWebsites = data;
+    initiateGallery(data);
     createTagsArray(data);
   })
   .catch(function() {
-      console.log('API request error');
-  });
+    console.log('API request error');
+  })
 };
 
-const gallerySites = [];
-function createGalleryArray(data) {
-  for (let i = 0; i < data.length; i++) {
-    gallerySites.push(data[i]);
-  }
-  renderMenu(data);
-};
-
-let uniqueTags = [];
-function createTagsArray(data) {
-  const allTags = [];
-  for (let i = 0; i < data.length; i++) {
-    let tagStr = data[i].tags;
+function createTagsArray() {
+  let allTags = [];
+  for (let i = 0; i < allWebsites.length; i++) {
+    let tagStr = allWebsites[i].tags;
     let tagArr = tagStr.split(',');
     allTags.push(...tagArr);
   }
-  uniqueTags = ([...new Set(allTags)]).sort();
+  let uniqueTags = ([...new Set(allTags)]).sort();
+  renderMenu(uniqueTags)
+};
+
+function renderMenu(uniqueTags) {
+  console.log('renderMenu ran')
   console.log(uniqueTags);
-  renderFilters(data, uniqueTags)
-};
-
-const clickedFilters = [];
-function handleFilterClick() {
-  console.log('handleFilterClick ran')
-  $('#gallery').empty();
-  clickedFilters.length = 0;
-  let checkbox = document.forms[0];
-  for (let i = 0; i < checkbox.length; i++) {
-    if (checkbox[i].checked) {
-      clickedFilters.push(checkbox[i].value);
-    }
+  $('#filters').empty();
+  $('#menu').html(`
+    <p>Select elements and submit to filter.</p>
+    <form id='filters'></form>
+    <p>Click <a onclick='renderAddWebsiteScreen()' class='text-link'>here</a> to add a new website.</p>
+  `);
+  for (let i = 0; i < uniqueTags.length; i++) {
+    $('#filters').append(`
+        <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' />
+        <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
+        <br>
+    `);
   };
-  if (clickedFilters.length === 0) {
-    renderGallery(gallerySites);
-  }
-  else {
-    console.log(clickedFilters);
-    renderGallery();
-  }
+  $('#filters').append(`
+    <a onclick='handleFilterClick()' class='text-link'>Submit</a>
+  `)
 };
 
-function renderGallery(data) {
-  console.log('renderGallery ran');
+function initiateGallery(data) {
+  console.log('initiateGallery ran');
   document.getElementById('menu').style.display = 'block';
   document.getElementById('gallery').style.display = 'block';
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
   $('#gallery').empty();
   if (clickedFilters.length === 0) {
-    populateGallery(data);
+    populateGallery(allWebsites);
   }
   else {
     const filteredWebsites = [];
-    for (let i = 0; i < gallerySites.length; i++) {
-      if (gallerySites[i].tags.includes(clickedFilters)) {
-        filteredWebsites.push(gallerySites[i]);
+    for (let i = 0; i < allWebsites.length; i++) {
+      if (allWebsites[i].tags.includes(clickedFilters)) {
+        filteredWebsites.push(allWebsites[i]);
       }
     }
     if (filteredWebsites.length === 0) {
@@ -80,10 +73,10 @@ function renderGallery(data) {
     else {
       populateGallery(filteredWebsites)
     }
-  };
+  }
 };
 
-function populateGallery(data, filteredWebsites) {
+function populateGallery(data) {
   for (let i = 0; i < data.length; i++) {
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
@@ -96,31 +89,21 @@ function populateGallery(data, filteredWebsites) {
   }
 };
 
-function renderMenu(data) {
-  console.log('renderMenu ran')
-  $('#menu').html(`
-    <p>Select elements and submit to filter.</p>
-    <form id='filters'></form>
-    <p>Click <a onclick='renderAddScreen()' class='text-link'>here</a> to add a new website.</p>
-  `);
-}
+const clickedFilters = [];
 
-function renderFilters(data, uniqueTags) {
-  console.log('renderFilters ran');
-  $('#filters').empty();
-  for (let i = 0; i < data.length; i++) {
-    $('#filters').append(`
-        <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' />
-        <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
-        <br>
-    `);
+function handleFilterClick() {
+  console.log('handleFilterClick ran')
+  clickedFilters.length = 0;
+  let checkbox = document.forms[0];
+  for (let i = 0; i < checkbox.length; i++) {
+    if (checkbox[i].checked) {
+      clickedFilters.push(checkbox[i].value);
+    }
   }
-  $('#filters').append(`
-    <a onclick='handleFilterClick()' class='text-link'>Submit</a>
-  `)
+  initiateGallery(clickedFilters);
 };
 
-function renderAddScreen() {
+function renderAddWebsiteScreen() {
   document.getElementById('menu').style.display = 'none';
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'block';
@@ -141,11 +124,6 @@ function renderAddScreen() {
       </fieldset>
     </form>
   `);
-  renderTagEditor()
-};
-
-function renderTagEditor() {
-  console.log('renderTagEdit ran');
   $('#tag-checkboxes').empty();
   for (let i = 0; i < uniqueTags.length; i++) {
   $('#tag-checkboxes').append(`
@@ -164,18 +142,21 @@ function renderDetailScreen(i) {
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
         <a onclick='getDataFromApi()' class='text-link'>Close</a>
-        <h1 class='website-title'>${gallerySites[i].title}</h1><a href='${gallerySites[i].url}' target="_blank">Visit</h1>
+        <h1 class='website-title'>${allWebsites[i].title}</h1><a href='${allWebsites[i].url}' target="_blank">Visit</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
-        <h1 class='website-tags'>${gallerySites[i].tags}</h1><a onclick='renderEditScreen(${i})' class='text-link'>Edit</a>
+        <p class='website-tags'>${allWebsites[i].tags}</p>
+        <p class='notes'>${allWebsites[i].notes}</p>
+        <a onclick='renderEditWebsiteScreen(${i})' class='text-link'>Edit</a>
       </div>
-    `);
+    `)
 };
 
-function renderEditScreen(i) {
+function renderEditWebsiteScreen(i) {
   $('#website-detail').append(`
     <a onclick='getDataFromApi()' class='text-link'>Close</a>
     <div id='edit-tags'></div>
     <a onclick='handleEditSubmit()' class='text-link'>Submit</a>
+    <a onclick='handleDelete()' class='text-link'>DELETE WEBSITE</a>
   `);
   for (let i = 0; i < data.tags.length; i++) {
     $('#edit-tags').append(`
@@ -183,6 +164,6 @@ function renderEditScreen(i) {
       <label for='${data.tags[i]}'>${data.tags[i]}</label>
     `)
   }
-}
+};
 
 getDataFromApi();
