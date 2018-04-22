@@ -1,16 +1,18 @@
 'use strict';
 
 let allWebsites = [];
+let uniqueTags = [];
 
 function getDataFromApi() {
-  $('#gallery').empty();
+  document.getElementById('gallery').innerHTML = '';
   fetch('/websites')
   .then(function(response) {
     return response.json();
   })
   .then(function(data) {
     allWebsites = data;
-    initiateGallery(data);
+    console.log(allWebsites);
+    renderGallery(data);
     createTagsArray(data);
   })
   .catch(function() {
@@ -25,14 +27,13 @@ function createTagsArray() {
     let tagArr = tagStr.split(',');
     allTags.push(...tagArr);
   }
-  let uniqueTags = ([...new Set(allTags)]).sort();
+  uniqueTags = ([...new Set(allTags)]).sort();
   renderMenu(uniqueTags)
 };
 
 function renderMenu(uniqueTags) {
   console.log('renderMenu ran')
-  console.log(uniqueTags);
-  $('#filters').empty();
+  // can't pass uniqueTags data through html function here
   $('#menu').html(`
     <p>Select elements and submit to filter.</p>
     <form id='filters'></form>
@@ -40,9 +41,9 @@ function renderMenu(uniqueTags) {
   `);
   for (let i = 0; i < uniqueTags.length; i++) {
     $('#filters').append(`
-        <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' />
-        <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
-        <br>
+      <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' />
+      <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
+      <br>
     `);
   };
   $('#filters').append(`
@@ -50,19 +51,19 @@ function renderMenu(uniqueTags) {
   `)
 };
 
-function initiateGallery(data) {
-  console.log('initiateGallery ran');
+function renderGallery(allWebsites) {
+  console.log('renderGallery ran');
   document.getElementById('menu').style.display = 'block';
   document.getElementById('gallery').style.display = 'block';
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
-  $('#gallery').empty();
-  for (let i = 0; i < data.length; i++) {
+  document.getElementById('gallery').innerHTML = '';
+  for (let i = 0; i < allWebsites.length; i++) {
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
-        <h1 class='website-title'>${data[i].title}</h1>
+        <h1 class='website-title'>${allWebsites[i].title}</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
-        <h1 class='website-tags'>${data[i].tags}</h1>
+        <h1 class='website-tags'>${allWebsites[i].tags}</h1>
       </div>
     `;
     $('#gallery').append(eachWebsite);
@@ -79,7 +80,7 @@ function handleFilterClick() {
     }
   };
   console.log(clickedFilters);
-  $('#gallery').empty();
+  document.getElementById('gallery').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
     let tagStr = allWebsites[i].tags;
     let tagArr = tagStr.split(',');
@@ -106,7 +107,7 @@ function renderAddWebsiteScreen() {
   document.getElementById('website-detail').style.display = 'none';
   $('#add-website').empty();
   $('#add-website').append(`
-    <a onclick='getDataFromApi()'class='text-link'>Close</a>
+    <a onclick='renderGallery(allWebsites)'class='text-link'>Close</a>
     <form class='new-website' method='POST' action='/websites'>
       <fieldset name='new-url'>
         <legend>Add a new website</legend>
@@ -137,28 +138,40 @@ function renderDetailScreen(i) {
   document.getElementById('website-detail').style.display = 'block';
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
-        <a onclick='getDataFromApi()' class='text-link'>Close</a>
-        <h1 class='website-title'>${allWebsites[i].title}</h1><a href='${allWebsites[i].url}' target="_blank">Visit</h1>
-        <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
+        <a onclick='renderGallery(allWebsites)' class='text-link'>Close</a>
+        <span title='Click to visit website'> 
+          <a href='${allWebsites[i].url}' target='_blank' >
+            <h1 class='website-title'>${allWebsites[i].title}</h1>  
+            <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
+          </a>
+        </span>
         <p class='website-tags'>${allWebsites[i].tags}</p>
         <p class='notes'>${allWebsites[i].notes}</p>
-        <a onclick='renderEditWebsiteScreen(${i})' class='text-link'>Edit</a>
+        <a onclick='showHideWebsiteEditor()' class='text-link'>Edit</a>
+        <div id='website-editor'></div>
       </div>
-    `)
-};
-
-function renderEditWebsiteScreen(i) {
-  $('#website-detail').append(`
-    <a onclick='getDataFromApi()' class='text-link'>Close</a>
+    `);
+  document.getElementById('website-editor').style.display = 'none';
+  $('#website-editor').append(`
     <div id='edit-tags'></div>
     <a onclick='handleEditSubmit()' class='text-link'>Submit</a>
     <a onclick='handleDelete()' class='text-link'>DELETE WEBSITE</a>
   `);
-  for (let i = 0; i < data.tags.length; i++) {
+  for (let i = 0; i < uniqueTags.length; i++) {
     $('#edit-tags').append(`
-      <input type='checkbox' id='${data.tags[i]}' value='${data.tags[i]}' />
-      <label for='${data.tags[i]}'>${data.tags[i]}</label>
+      <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' />
+      <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
+      <br>
     `)
+  }
+};
+
+function showHideWebsiteEditor() {
+  let editor = document.getElementById('website-editor');
+  if (editor.style.display === "none") {
+      editor.style.display = "block";
+  } else {
+      editor.style.display = "none";
   }
 };
 
