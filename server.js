@@ -33,31 +33,6 @@ app.get('/websites', (req, res) => {
     });
 });
 
-// GET one website by id
-app.get('/websites/:id', (req, res) => {
-  Website
-    .findById(req.params.id)
-    .then(websites => {
-      res.json(websites)})
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
-    });
-});
-
-// GET websites by tag
-app.get('/websites/filter/:tag', (req, res) => {
-  Website
-    .find({tags: req.params.tag})
-    .then(websites => {
-      res.json(websites)})
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
-    });
-});
-
-
 // POST a new webiste
 app.post('/websites', (req, res) => {
 // Grab title and images, add to db
@@ -74,48 +49,12 @@ app.post('/websites', (req, res) => {
   newWebsite.save()
   .then(item => {
    res.send('Website added');
+
    })
    .catch(err => {
    res.status(400).send('Unable to save to database');
    });
 });
-
-/*
-  const requiredFields = ['url'];
-  for (let i = 0; i < requiredFields.length; i++) {
-    const field = requiredFields[i];
-    if (!(field in req.body)) {
-      const message = `Missing \`${field}\` in request body`;
-      console.error(message);
-      return res.status(400).send(message);
-    }
-  }
-  Website
-    .create({
-      userId: req.body.userId,
-      url: req.body.url,
-      tags: req.body.tags
-    })
-    .then(websites => {
-      res.json(websites)})
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
-    });
-});
-
-
-app.post("/addname", (req, res) => {
- var myData = new User(req.body);
- myData.save()
- .then(item => {
- res.send("item saved to database");
- })
- .catch(err => {
- res.status(400).send("unable to save to database");
- });
-});
-*/
 
 // PUT edit existing tags 
 app.put('/websites/:id', (req, res) => {

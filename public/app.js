@@ -1,8 +1,7 @@
 'use strict';
 
-const tags = ['color', 'font', 'layout', 'images', 'responsiveness', 'usability'];
-
 function getDataFromApi(response) {
+  $('#gallery').empty();
   fetch('/websites')
   .then(function(response) {
     return response.json();
@@ -10,6 +9,7 @@ function getDataFromApi(response) {
   .then(function(data) {
     renderGallery(data);
     createGalleryArray(data);
+    createTagsArray(data);
   })
   .catch(function() {
       console.log('API request error');
@@ -22,7 +22,17 @@ function createGalleryArray(data) {
     gallerySites.push(data[i]);
   }
   renderMenu(data);
-  renderFilters(data);
+};
+
+function createTagsArray(data) {
+  const allTags = [];
+  for (let i = 0; i < data.length; i++) {
+    let tagStr = data[i].tags;
+    let tagArr = tagStr.split(',');
+    allTags.push(...tagArr);
+  }
+  let uniqueTags = ([...new Set(allTags)]).sort();
+  renderFilters(data, uniqueTags)
 };
 
 const clickedFilters = [];
@@ -97,13 +107,13 @@ function renderMenu(data) {
   `);
 }
 
-function renderFilters(data) {
+function renderFilters(data, uniqueTags) {
   console.log('renderFilters ran');
   $('#filters').empty();
   for (let i = 0; i < data.length; i++) {
     $('#filters').append(`
-        <input type='checkbox' id='${tags[i]}' value='${tags[i]}' />
-        <label for='${tags[i]}'>${tags[i]}</label>
+        <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' />
+        <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
         <br>
     `);
   }
@@ -119,7 +129,7 @@ function renderAddScreen() {
   document.getElementById('website-detail').style.display = 'none';
   $('#add-website').empty();
   $('#add-website').append(`
-    <a onclick='renderGallery(gallerySites)'class='text-link'>Close</a>
+    <a onclick='getDataFromApi()'class='text-link'>Close</a>
     <form class='new-website' method='POST' action='/websites'>
       <fieldset name='new-url'>
         <legend>Add a new website</legend>
@@ -127,6 +137,8 @@ function renderAddScreen() {
         <input type='text' class='url-input' name='url' /><br>
         <label for='tag-checkboxes'>Tag website elements</label>
         <div id='tag-checkboxes'></div>
+        <label for='notes'>Notes:</label>
+        <input type='text' class='notes' name='notes' /><br>
         <input type='submit' value='Submit' class='text-link'>
       </fieldset>
     </form>
@@ -153,7 +165,7 @@ function renderDetailScreen(i) {
   document.getElementById('website-detail').style.display = 'block';
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
-        <a onclick='renderGallery(data)' class='text-link'>Close</a>
+        <a onclick='getDataFromApi()' class='text-link'>Close</a>
         <h1 class='website-title'>${gallerySites[i].title}</h1><a href='${gallerySites[i].url}' target="_blank">Visit</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
         <h1 class='website-tags'>${gallerySites[i].tags}</h1><a onclick='renderEditScreen(${i})' class='text-link'>Edit</a>
@@ -163,7 +175,7 @@ function renderDetailScreen(i) {
 
 function renderEditScreen(i) {
   $('#website-detail').append(`
-    <a onclick='renderGallery(data)' class='text-link'>Close</a>
+    <a onclick='getDataFromApi()' class='text-link'>Close</a>
     <div id='edit-tags'></div>
     <a onclick='handleEditSubmit()' class='text-link'>Submit</a>
   `);
