@@ -57,26 +57,6 @@ function initiateGallery(data) {
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
   $('#gallery').empty();
-  if (clickedFilters.length === 0) {
-    populateGallery(allWebsites);
-  }
-  else {
-    const filteredWebsites = [];
-    for (let i = 0; i < allWebsites.length; i++) {
-      if (allWebsites[i].tags.includes(clickedFilters)) {
-        filteredWebsites.push(allWebsites[i]);
-      }
-    }
-    if (filteredWebsites.length === 0) {
-      $('#gallery').html('<p>No results. Try deselecting a filter.</p>')
-    }
-    else {
-      populateGallery(filteredWebsites)
-    }
-  }
-};
-
-function populateGallery(data) {
   for (let i = 0; i < data.length; i++) {
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
@@ -89,18 +69,34 @@ function populateGallery(data) {
   }
 };
 
-const clickedFilters = [];
-
 function handleFilterClick() {
   console.log('handleFilterClick ran')
-  clickedFilters.length = 0;
+  let clickedFilters = [];
   let checkbox = document.forms[0];
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
       clickedFilters.push(checkbox[i].value);
     }
+  };
+  console.log(clickedFilters);
+  $('#gallery').empty();
+  for (let i = 0; i < allWebsites.length; i++) {
+    let tagStr = allWebsites[i].tags;
+    let tagArr = tagStr.split(',');
+    if (clickedFilters.every(val => tagArr.indexOf(val) >= 0)) {
+      let eachWebsite = `
+        <div class='each-website' onclick='renderDetailScreen(${[i]})'>
+          <h1 class='website-title'>${allWebsites[i].title}</h1>
+          <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
+          <h1 class='website-tags'>${allWebsites[i].tags}</h1>
+        </div>
+      `;
+      $('#gallery').append(eachWebsite);
+    }
+  };
+  if (document.getElementById('gallery').innerHTML === '') {
+    $('#gallery').html('<p>No results. Try deselecting a filter.</p>')
   }
-  initiateGallery(clickedFilters);
 };
 
 function renderAddWebsiteScreen() {
