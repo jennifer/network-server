@@ -24,6 +24,7 @@ function createGalleryArray(data) {
   renderMenu(data);
 };
 
+let uniqueTags = [];
 function createTagsArray(data) {
   const allTags = [];
   for (let i = 0; i < data.length; i++) {
@@ -31,13 +32,15 @@ function createTagsArray(data) {
     let tagArr = tagStr.split(',');
     allTags.push(...tagArr);
   }
-  let uniqueTags = ([...new Set(allTags)]).sort();
+  uniqueTags = ([...new Set(allTags)]).sort();
+  console.log(uniqueTags);
   renderFilters(data, uniqueTags)
 };
 
 const clickedFilters = [];
 function handleFilterClick() {
   console.log('handleFilterClick ran')
+  $('#gallery').empty();
   clickedFilters.length = 0;
   let checkbox = document.forms[0];
   for (let i = 0; i < checkbox.length; i++) {
@@ -80,13 +83,8 @@ function renderGallery(data) {
   };
 };
 
-
-// clickedFilters.every(r=> gallerySites[i].tags.indexOf(r) >= 0);
-
-// const gallerySites = [];
 function populateGallery(data, filteredWebsites) {
   for (let i = 0; i < data.length; i++) {
-    // gallerySites.push(data[i]);
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <h1 class='website-title'>${data[i].title}</h1>
@@ -149,10 +147,10 @@ function renderAddScreen() {
 function renderTagEditor() {
   console.log('renderTagEdit ran');
   $('#tag-checkboxes').empty();
-  for (let i = 0; i < tags.length; i++) {
+  for (let i = 0; i < uniqueTags.length; i++) {
   $('#tag-checkboxes').append(`
-    <input type='checkbox' id='${tags[i]}' value='${tags[i]}' name='tags' />
-    <label for='${tags[i]}'>${tags[i]}</label>
+    <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' name='tags' />
+    <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
     <br>
   `)}
 };
