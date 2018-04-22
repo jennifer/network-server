@@ -11,7 +11,6 @@ function getDataFromApi() {
   })
   .then(function(data) {
     allWebsites = data;
-    console.log(allWebsites);
     renderGallery(data);
     createTagsArray(data);
   })
@@ -32,8 +31,9 @@ function createTagsArray() {
 };
 
 function renderMenu(uniqueTags) {
-  console.log('renderMenu ran')
-  // can't pass uniqueTags data through html function here
+  console.log('renderMenu ran');
+  // can't pass uniqueTags data through html function here?? 
+  // made uniqueTags global for this
   $('#menu').html(`
     <p>Select elements and submit to filter.</p>
     <form id='filters'></form>
@@ -155,7 +155,7 @@ function renderDetailScreen(i) {
   $('#website-editor').append(`
     <div id='edit-tags'></div>
     <a onclick='handleEditSubmit()' class='text-link'>Submit</a>
-    <a onclick='handleDelete()' class='text-link'>DELETE WEBSITE</a>
+    <a onclick='deleteWebsite(${[i]})' class='text-link'>DELETE WEBSITE</a>
   `);
   for (let i = 0; i < uniqueTags.length; i++) {
     $('#edit-tags').append(`
@@ -166,6 +166,7 @@ function renderDetailScreen(i) {
   }
 };
 
+
 function showHideWebsiteEditor() {
   let editor = document.getElementById('website-editor');
   if (editor.style.display === "none") {
@@ -173,6 +174,15 @@ function showHideWebsiteEditor() {
   } else {
       editor.style.display = "none";
   }
+};
+
+function deleteWebsite(i) {
+  let id = allWebsites[i]._id;
+  console.log('Deleting website `' + id + '`');
+  fetch('/websites/' + id, {
+    method: 'DELETE',
+    success: getDataFromApi()
+  });
 };
 
 getDataFromApi();
