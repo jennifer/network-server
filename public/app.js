@@ -74,6 +74,7 @@ function handleFilterClick() {
   console.log('handleFilterClick ran')
   let clickedFilters = [];
   let checkbox = document.forms[0];
+  console.log(checkbox);
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
       clickedFilters.push(checkbox[i].value);
@@ -105,29 +106,72 @@ function renderAddWebsiteScreen() {
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'block';
   document.getElementById('website-detail').style.display = 'none';
-  $('#add-website').empty();
+  document.getElementById('add-website').innerHTML = '';
   $('#add-website').append(`
     <a onclick='renderGallery(allWebsites)'class='text-link'>Close</a>
-    <form class='new-website' method='POST' action='/websites'>
+    <form id='new-website' name='new-website'>
       <fieldset name='new-url'>
         <legend>Add a new website</legend>
         <label for='url-input'>Enter a URL</label>
-        <input type='text' class='url-input' name='url' /><br>
+        <input type='text' class='url-input' id='url' /><br>
         <label for='tag-checkboxes'>Tag website elements</label>
         <div id='tag-checkboxes'></div>
         <label for='notes'>Notes:</label>
         <input type='text' class='notes' name='notes' /><br>
-        <input type='submit' value='Submit' class='text-link'>
+        <input type='submit' onclick='getFormData();' value='Submit' class='text-link'>
       </fieldset>
     </form>
   `);
-  $('#tag-checkboxes').empty();
+  document.getElementById('tag-checkboxes').innerHTML = '';
   for (let i = 0; i < uniqueTags.length; i++) {
   $('#tag-checkboxes').append(`
     <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' name='tags' />
     <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
     <br>
   `)}
+};
+
+function getFormData() {
+  let url = document.getElementById('url').value;
+  let tags = '';
+  let checkbox = document.getElementsByName('tags');
+  for (let i = 0; i < checkbox.length; i++) {
+    if (checkbox[i].checked) {
+      tags += ","+checkbox[i].value;
+    }
+  }
+  if (tags) tags = tags.substring(1);
+  console.log(url);
+  console.log(tags);
+  let newWebsite = {
+    'url': url,
+    'tags': tags
+  };
+  console.log(newWebsite);
+  postNewWebsite(newWebsite)
+};
+
+function postNewWebsite(newWebsite) {
+  return fetch('/websites', {
+    method: 'POST',
+    body: JSON.stringify(newWebsite),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(checkStatus)
+    .then(()=>console.log(`Added ${url}`))
+};
+
+function checkStatus(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response
+  } else {
+    var error = new Error(response.statusText)
+    error.response = response
+    throw error
+  }
 };
 
 function renderDetailScreen(i) {
@@ -166,7 +210,6 @@ function renderDetailScreen(i) {
   }
 };
 
-
 function showHideWebsiteEditor() {
   let editor = document.getElementById('website-editor');
   if (editor.style.display === "none") {
@@ -175,6 +218,21 @@ function showHideWebsiteEditor() {
       editor.style.display = "none";
   }
 };
+
+/*
+function putWebsiteUpdates(newWebsite) {
+  return fetch('/websites', {
+    method: 'POST',
+    body: JSON.stringify(newWebsite),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(checkStatus)
+    .then(()=>console.log(`Added ${url}`))
+};
+*/
 
 function deleteWebsite(i) {
   let id = allWebsites[i]._id;

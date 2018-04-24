@@ -11,7 +11,6 @@ const { sanitizeBody } = require('express-validator/filter');
 const app = express();
 app.use(express.static('public'));
 app.use(bodyParser.json());
-// is this line necessary?
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.Promise = global.Promise;
