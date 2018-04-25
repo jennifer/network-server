@@ -64,7 +64,7 @@ app.put('/websites/:id', (req, res) => {
   }
 
   const updated = {};
-  const updateableFields = ['tags'];
+  const updateableFields = ['tags', 'notes'];
   updateableFields.forEach(field => {
     if (field in req.body) {
       updated[field] = req.body[field];

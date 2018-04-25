@@ -112,13 +112,10 @@ function renderAddWebsiteScreen() {
     <form id='new-website' name='new-website'>
       <fieldset name='new-url'>
         <legend>Add a new website</legend>
-        <label for='url-input'>Enter a URL</label>
-        <input type='text' class='url-input' id='url' /><br>
-        <label for='tag-checkboxes'>Tag website elements</label>
-        <div id='tag-checkboxes'></div>
-        <label for='notes'>Notes:</label>
-        <input type='text' class='notes' name='notes' /><br>
-        <input type='submit' onclick='getFormData();' value='Submit' class='text-link'>
+          <label for='url-input'>Enter a URL</label><input type='text' class='url-input' id='url' /><br>
+          <label for='tag-checkboxes'>Tag website elements</label><div id='tag-checkboxes'></div>
+          <label for='notes'>Notes:</label><input type='text' class='notes' name='notes' /><br>
+          <input type='submit' onclick='getNewFormData();' value='Submit' class='text-link'>
       </fieldset>
     </form>
   `);
@@ -131,7 +128,7 @@ function renderAddWebsiteScreen() {
   `)}
 };
 
-function getFormData() {
+function getNewFormData() {
   let url = document.getElementById('url').value;
   let tags = '';
   let checkbox = document.getElementsByName('tags');
@@ -198,15 +195,19 @@ function renderDetailScreen(i) {
   document.getElementById('website-editor').style.display = 'none';
   $('#website-editor').append(`
     <div id='edit-tags'></div>
-    <a onclick='handleEditSubmit()' class='text-link'>Submit</a>
+    <label for='notes'>Notes:</label><input type='text' id='notes' name='notes' /><br>
+    <a onclick='getEditFormData(${[i]})' class='text-link'>Submit</a>
     <a onclick='deleteWebsite(${[i]})' class='text-link'>DELETE WEBSITE</a>
   `);
   for (let i = 0; i < uniqueTags.length; i++) {
     $('#edit-tags').append(`
-      <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' />
+      <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' name='tags' />
       <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
       <br>
-    `)
+    `);
+//    if ('the selected website tag matches the uniqueTag') {
+//      document.getElementById(`${uniqueTags[i]}`).checked = true
+//    }
   }
 };
 
@@ -219,20 +220,41 @@ function showHideWebsiteEditor() {
   }
 };
 
-/*
-function putWebsiteUpdates(newWebsite) {
-  return fetch('/websites', {
-    method: 'POST',
-    body: JSON.stringify(newWebsite),
+function getEditFormData(i) {
+  let id = allWebsites[i]._id;
+  let tags = '';
+  let notes = document.getElementById('notes').value;
+  let checkbox = document.getElementsByName('tags');
+  for (let i = 0; i < checkbox.length; i++) {
+    if (checkbox[i].checked) {
+      tags += ","+checkbox[i].value;
+    }
+  }
+  if (tags) tags = tags.substring(1);
+  console.log(id);
+  console.log(tags);
+  console.log(notes);
+  let editedWebsite = {
+    'id': id,
+    'tags': tags,
+    'notes': notes
+  };
+  console.log(editedWebsite);
+  putWebsiteUpdate(editedWebsite)
+};
+
+function putWebsiteUpdate(editedWebsite) {
+  return fetch(`/websites/${editedWebsite.id}`, {
+    method: 'PUT',
+    body: JSON.stringify(editedWebsite),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
   })
     .then(checkStatus)
-    .then(()=>console.log(`Added ${url}`))
+    .then(console.log(`Edited`))
 };
-*/
 
 function deleteWebsite(i) {
   let id = allWebsites[i]._id;
