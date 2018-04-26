@@ -23,6 +23,6 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
   cursor: pointer;
 }
 
-.url-input, .notes {
+.text-input {
   border: 1px black solid;
 }

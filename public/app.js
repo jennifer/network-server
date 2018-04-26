@@ -20,7 +20,7 @@ function getDataFromApi() {
 };
 
 function createTagsArray() {
-  let allTags = [];
+  let allTags = ['color', 'font', 'images', 'layout'];
   for (let i = 0; i < allWebsites.length; i++) {
     let tagStr = allWebsites[i].tags;
     let tagArr = tagStr.split(',');
@@ -112,9 +112,10 @@ function renderAddWebsiteScreen() {
     <form id='new-website' name='new-website'>
       <fieldset name='new-url'>
         <legend>Add a new website</legend>
-          <label for='url-input'>Enter a URL</label><input type='text' class='url-input' id='url' /><br>
+          <label for='url-input'>Enter a URL</label><input type='text' class='text-input' id='url' /><br>
           <label for='tag-checkboxes'>Tag website elements</label><div id='tag-checkboxes'></div>
-          <label for='notes'>Notes:</label><input type='text' class='notes' name='notes' /><br>
+          <label for='custom-tag'>Add a custom tag</label><input type='text' id='customTag' class='text-input' name='tags' /><br>
+          <label for='notes'>Notes:</label><input type='text' class='text-input' name='notes' /><br>
           <input type='submit' onclick='getNewFormData();' value='Submit' class='text-link'>
       </fieldset>
     </form>
@@ -128,15 +129,18 @@ function renderAddWebsiteScreen() {
   `)}
 };
 
+// Why does notes come in?? because not required and doesn't require special treatment?
 function getNewFormData() {
   let url = document.getElementById('url').value;
   let tags = '';
+  let customTag = document.getElementById('customTag').value;
   let checkbox = document.getElementsByName('tags');
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
-      tags += ","+checkbox[i].value;
+      tags += ','+checkbox[i].value;
     }
-  }
+  };
+  tags += ',' + customTag;
   if (tags) tags = tags.substring(1);
   console.log(url);
   console.log(tags);
@@ -195,7 +199,7 @@ function renderDetailScreen(i) {
   document.getElementById('website-editor').style.display = 'none';
   $('#website-editor').append(`
     <div id='edit-tags'></div>
-    <label for='notes'>Notes:</label><input type='text' id='notes' name='notes' /><br>
+    <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' /><br>
     <a onclick='getEditFormData(${[i]})' class='text-link'>Submit</a>
     <a onclick='deleteWebsite(${[i]})' class='text-link'>DELETE WEBSITE</a>
   `);
@@ -227,7 +231,7 @@ function getEditFormData(i) {
   let checkbox = document.getElementsByName('tags');
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
-      tags += ","+checkbox[i].value;
+      tags += "," + checkbox[i].value;
     }
   }
   if (tags) tags = tags.substring(1);
@@ -262,7 +266,7 @@ function deleteWebsite(i) {
   fetch('/websites/' + id, {
     method: 'DELETE',
     success: getDataFromApi()
-  });
+  })
 };
 
 getDataFromApi();
