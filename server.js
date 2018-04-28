@@ -5,8 +5,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const multer  = require('multer');
 const upload = multer({ dest: 'uploads/' });
-const { body,validationResult } = require('express-validator/check');
-const { sanitizeBody } = require('express-validator/filter');
+const urlExists = require('url-exists');
+const nodeMetainspector = require('node-metainspector');
 
 const app = express();
 app.use(express.static('public'));
@@ -34,7 +34,7 @@ app.get('/websites', (req, res) => {
 
 // POST a new webiste
 app.post('/websites', (req, res) => {
-// Grab title and images, add to db
+  // Check for required fields
   const requiredFields = ['url'];
     for (let i = 0; i < requiredFields.length; i++) {
       const field = requiredFields[i];
@@ -44,15 +44,35 @@ app.post('/websites', (req, res) => {
         return res.status(400).send(message);
       }
     };
-  let newWebsite = new Website(req.body);
-  newWebsite.save()
-  .then(item => {
-   res.send('Website added');
-
-   })
-   .catch(err => {
-   res.status(400).send('Unable to save to database');
-   });
+  // Check that URL is valid
+  urlExists(req.body.url, function(err, exists) {
+    console.log(exists);
+    if (exists) {
+      // Get URL title
+      let client = new nodeMetainspector(req.body.url, { timeout: 5000 });
+        client.on("fetch", function(){
+          console.log("Title: " + client.title);
+          req.body.title = client.title;
+          console.log(req.body.title);
+        });
+        client.on("error", function(err){
+          console.log(err);
+        });
+        client.fetch();
+      // Add new website
+      let newWebsite = new Website(req.body);
+        newWebsite.save()
+        .then(item => {
+          res.send('Website added');
+        })
+        .catch(err => {
+          res.status(400).send('Unable to save to database')
+        })
+      }
+      else {
+        console.log('URL does not exist');
+      }
+    })
 });
 
 // PUT edit existing tags 

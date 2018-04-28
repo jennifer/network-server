@@ -129,9 +129,9 @@ function renderAddWebsiteScreen() {
   `)}
 };
 
-// Why does notes come in?? because not required and doesn't require special treatment?
 function getNewFormData() {
   let url = document.getElementById('url').value;
+  let title = '';
   let tags = '';
   let customTag = document.getElementById('customTag').value;
   let checkbox = document.getElementsByName('tags');
@@ -148,9 +148,9 @@ function getNewFormData() {
   let newWebsite = {
     'url': url,
     'tags': tags,
-    'notes': notes
+    'notes': notes,
+    'title': title
   };
-  console.log(newWebsite);
   postNewWebsite(newWebsite)
 };
 
