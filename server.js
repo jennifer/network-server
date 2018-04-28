@@ -51,9 +51,8 @@ app.post('/websites', (req, res) => {
       // Get URL title
       let client = new nodeMetainspector(req.body.url, { timeout: 5000 });
         client.on("fetch", function(){
-          console.log("Title: " + client.title);
           req.body.title = client.title;
-          console.log(req.body.title);
+          console.log("DB title: " + req.body.title);
         });
         client.on("error", function(err){
           console.log(err);
@@ -61,6 +60,7 @@ app.post('/websites', (req, res) => {
         client.fetch();
       // Add new website
       let newWebsite = new Website(req.body);
+        console.log('New Website: ' + newWebsite);
         newWebsite.save()
         .then(item => {
           res.send('Website added');
