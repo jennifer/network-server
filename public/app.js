@@ -115,7 +115,7 @@ function renderAddWebsiteScreen() {
           <label for='url-input'>Enter a URL</label><input type='text' class='text-input' id='url' /><br>
           <label for='tag-checkboxes'>Tag website elements</label><div id='tag-checkboxes'></div>
           <label for='custom-tag'>Add a custom tag</label><input type='text' id='customTag' class='text-input' name='tags' /><br>
-          <label for='notes'>Notes:</label><input type='text' class='text-input' name='notes' /><br>
+          <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' /><br>
           <input type='submit' onclick='getNewFormData();' value='Submit' class='text-link'>
       </fieldset>
     </form>
@@ -135,6 +135,7 @@ function getNewFormData() {
   let tags = '';
   let customTag = document.getElementById('customTag').value;
   let checkbox = document.getElementsByName('tags');
+  let notes = document.getElementById('notes').value;
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
       tags += ','+checkbox[i].value;
@@ -146,7 +147,8 @@ function getNewFormData() {
   console.log(tags);
   let newWebsite = {
     'url': url,
-    'tags': tags
+    'tags': tags,
+    'notes': notes
   };
   console.log(newWebsite);
   postNewWebsite(newWebsite)
@@ -198,6 +200,7 @@ function renderDetailScreen(i) {
     `);
   document.getElementById('website-editor').style.display = 'none';
   $('#website-editor').append(`
+    <a onclick='getDataFromApi()' class='text-link'>Close</a>
     <div id='edit-tags'></div>
     <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' /><br>
     <a onclick='getEditFormData(${[i]})' class='text-link'>Submit</a>
@@ -261,9 +264,7 @@ function putWebsiteUpdate(editedWebsite) {
 };
 
 function deleteWebsite(i) {
-  let id = allWebsites[i]._id;
-  console.log('Deleting website `' + id + '`');
-  fetch('/websites/' + id, {
+  fetch(`/websites/${allWebsites[i]._id}`, {
     method: 'DELETE',
     success: getDataFromApi()
   })
