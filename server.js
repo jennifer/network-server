@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
 const multer  = require('multer');
-const nodeMetainspector = require('node-metainspector');
+const nodeMetaInspector = require('node-metainspector');
 const upload = multer({ dest: 'uploads/' });
 const urlExists = require('url-exists');
 const webshot = require('webshot');
@@ -37,29 +37,41 @@ app.get('/websites', (req, res) => {
 app.post('/websites', (req, res) => {
   // Check for required fields
   const requiredFields = ['url'];
-    for (let i = 0; i < requiredFields.length; i++) {
-      const field = requiredFields[i];
-      if (!(field in req.body)) {
-        const message = `Missing \`${field}\` in request body`;
-        console.error(message);
-        return res.status(400).send(message);
-      }
-    };
+  for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  };
   // Check that URL is valid
   urlExists(req.body.url, function(err, exists) {
     console.log(exists);
     if (exists) {
 
       // Get URL title
-      let client = new nodeMetainspector(req.body.url, { timeout: 5000 });
-        client.on("fetch", function(){
-          req.body.title = client.title;
-          console.log("DB title: " + req.body.title);
-        });
-        client.on("error", function(err){
-          console.log(err);
-        });
-        client.fetch();
+      let client = new nodeMetaInspector(req.body.url, { timeout: 5000 });
+      client.on("fetch", function(){
+        req.body.title = client.title;
+        console.log("DB title: " + req.body.title);
+
+        // Add new website to DB
+        let newWebsite = new Website(req.body);
+        console.log('New Website: ' + newWebsite);
+        newWebsite.save()
+          .then(item => {
+            res.status(201).send('Website added');
+          })
+          .catch(err => {
+            res.status(400).send('Unable to save to database')
+          })
+
+      });
+      client.on("error", function(err){
+        console.log(err);
+      });
+      client.fetch();
 
       // Get full size screenshot
       webshot(req.body.url, 'fullsize.png', function(err) {
@@ -68,39 +80,28 @@ app.post('/websites', (req, res) => {
 
       // Get mobile screenshot
       let options = {
-        screenSize: 
-        {
+        screenSize: {
           width: 320,
           height: 480
         },
-        shotSize: 
-        {
+        shotSize: {
           width: 320,
           height: 'all'
         },
         userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
           + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
-        };
+      };
       webshot(req.body.url, 'mobile.png', options, function(err) {
         // Add screenshot to website object here
       });
 
-      // Add new website to DB
-      let newWebsite = new Website(req.body);
-        console.log('New Website: ' + newWebsite);
-        newWebsite.save()
-        .then(item => {
-          res.send('Website added');
-        })
-        .catch(err => {
-          res.status(400).send('Unable to save to database')
-        })
+      
       // If URL is invalid
-      }
-      else {
-        console.log('URL does not exist');
-      }
-    })
+    }
+    else {
+      console.log('URL does not exist');
+    }
+  })
 });
 
 // PUT edit existing tags 

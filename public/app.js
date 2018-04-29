@@ -198,6 +198,7 @@ function renderDetailScreen(i) {
         <div id='website-editor'></div>
       </div>
     `);
+  // Website editing tools
   document.getElementById('website-editor').style.display = 'none';
   $('#website-editor').append(`
     <a onclick='getDataFromApi()' class='text-link'>Close</a>
@@ -260,7 +261,8 @@ function putWebsiteUpdate(editedWebsite) {
     }
   })
     .then(checkStatus)
-    .then(console.log(`Edited`))
+    .then(console.log(`Edited`));
+    renderDetailScreen(i)
 };
 
 function deleteWebsite(i) {
