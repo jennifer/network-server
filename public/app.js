@@ -23,7 +23,7 @@ function createTagsArray() {
   let allTags = ['color', 'font', 'images', 'layout'];
   for (let i = 0; i < allWebsites.length; i++) {
     let tagStr = allWebsites[i].tags;
-    let tagArr = tagStr.split(',').filter(n => true);
+    let tagArr = tagStr.split(',').filter(function(n){ return n != false }); 
     allTags.push(...tagArr);
   }
   uniqueTags = ([...new Set(allTags)]).sort();
