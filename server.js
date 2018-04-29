@@ -4,9 +4,10 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
 const multer  = require('multer');
+const nodeMetainspector = require('node-metainspector');
 const upload = multer({ dest: 'uploads/' });
 const urlExists = require('url-exists');
-const nodeMetainspector = require('node-metainspector');
+const webshot = require('webshot');
 
 const app = express();
 app.use(express.static('public'));
@@ -48,6 +49,7 @@ app.post('/websites', (req, res) => {
   urlExists(req.body.url, function(err, exists) {
     console.log(exists);
     if (exists) {
+
       // Get URL title
       let client = new nodeMetainspector(req.body.url, { timeout: 5000 });
         client.on("fetch", function(){
@@ -58,7 +60,13 @@ app.post('/websites', (req, res) => {
           console.log(err);
         });
         client.fetch();
-      // Add new website
+
+      // Get URL screenshot
+      webshot(req.body.url, `${req.body.title}.png`, function(err) {
+        // Add screenshot to website object here
+      });
+
+      // Add new website to DB
       let newWebsite = new Website(req.body);
         console.log('New Website: ' + newWebsite);
         newWebsite.save()
@@ -68,6 +76,7 @@ app.post('/websites', (req, res) => {
         .catch(err => {
           res.status(400).send('Unable to save to database')
         })
+      // If URL is invalid
       }
       else {
         console.log('URL does not exist');

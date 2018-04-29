@@ -23,7 +23,7 @@ function createTagsArray() {
   let allTags = ['color', 'font', 'images', 'layout'];
   for (let i = 0; i < allWebsites.length; i++) {
     let tagStr = allWebsites[i].tags;
-    let tagArr = tagStr.split(',');
+    let tagArr = tagStr.split(',').filter(n => true);
     allTags.push(...tagArr);
   }
   uniqueTags = ([...new Set(allTags)]).sort();
@@ -41,7 +41,7 @@ function renderMenu(uniqueTags) {
   `);
   for (let i = 0; i < uniqueTags.length; i++) {
     $('#filters').append(`
-      <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' />
+      <input type='checkbox' value='${uniqueTags[i]}' />
       <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
       <br>
     `);
@@ -123,7 +123,7 @@ function renderAddWebsiteScreen() {
   document.getElementById('tag-checkboxes').innerHTML = '';
   for (let i = 0; i < uniqueTags.length; i++) {
   $('#tag-checkboxes').append(`
-    <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' name='tags' />
+    <input type='checkbox' value='${uniqueTags[i]}' name='tags' />
     <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
     <br>
   `)}
@@ -206,15 +206,15 @@ function renderDetailScreen(i) {
     <a onclick='getEditFormData(${[i]})' class='text-link'>Submit</a>
     <a onclick='deleteWebsite(${[i]})' class='text-link'>DELETE WEBSITE</a>
   `);
-  for (let i = 0; i < uniqueTags.length; i++) {
+  for (let t = 0; t < uniqueTags.length; t++) {
     $('#edit-tags').append(`
-      <input type='checkbox' id='${uniqueTags[i]}' value='${uniqueTags[i]}' name='tags' />
-      <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
+      <input type='checkbox' id='${uniqueTags[t]}' value='${uniqueTags[t]}' name='tags' />
+      <label for='${uniqueTags[t]}'>${uniqueTags[t]}</label>
       <br>
     `);
-//    if ('the selected website tag matches the uniqueTag') {
-//      document.getElementById(`${uniqueTags[i]}`).checked = true
-//    }
+    if ((`${allWebsites[i].tags}`).includes(`${uniqueTags[t]}`)) {
+      document.getElementById(`${uniqueTags[t]}`).checked = true
+    }
   }
 };
 
