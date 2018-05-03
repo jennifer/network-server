@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 
 const bodyParser = require('body-parser'); 
 const express = require('express')
@@ -6,6 +7,7 @@ const fs = require('fs');
 const Grid = require('gridfs-stream');
 const mongoose = require('mongoose');
 const nodeMetaInspector = require('node-metainspector');
+const passport = require('passport');
 const urlExists = require('url-exists');
 const webshot = require('webshot');
 
@@ -20,9 +22,20 @@ mongoose.Promise = global.Promise;
 const { PORT, DATABASE_URL } = require('./config');
 const { Website } = require('./models');
 
+const { router: usersRouter } = require('./users');
+const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
+
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
+app.use('/api/users/', usersRouter);
+app.use('/api/auth/', authRouter);
+
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
 
 // GET all websites
-app.get('/websites', (req, res) => {
+app.get('/websites', jwtAuth, (req, res) => {
   Website
     .find()
     .then(websites => {
@@ -35,7 +48,7 @@ app.get('/websites', (req, res) => {
 });
 
 // POST a new webiste
-app.post('/websites', (req, res) => {
+app.post('/websites', jwtAuth, (req, res) => {
   // Check for required fields
   const requiredFields = ['url'];
   for (let i = 0; i < requiredFields.length; i++) {
@@ -120,7 +133,7 @@ app.post('/websites', (req, res) => {
 });
 
 // PUT edit existing tags 
-app.put('/websites/:id', (req, res) => {
+app.put('/websites/:id', jwtAuth, (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     res.status(400).json({
       error: 'Request path id and request body id values must match'
@@ -143,7 +156,7 @@ app.put('/websites/:id', (req, res) => {
 
 
 // DELETE a website
-app.delete('/websites/:id', (req, res) => {
+app.delete('/websites/:id', jwtAuth, (req, res) => {
   Website
     .findByIdAndRemove(req.params.id)
     .then(() => {

@@ -3,6 +3,48 @@
 let allWebsites = [];
 let uniqueTags = [];
 
+$('#login-form').submit(function(e){
+  e.preventDefault();
+  let user = {};
+  user.username = $('#username').val();
+  user.password = $('#password').val();
+  fetch('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(user),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then((token) => {
+    localStorage.setItem('authToken', token);
+    console.log(`Logged In`);
+    getDataFromApi();
+  })
+  .catch(() => {
+    console.log('login failed')
+  })
+});
+
+$('#signup-form').submit(function(e){
+  e.preventDefault();
+  let user = {};
+  user.username = $('#signup-email').val();
+  user.password = $('#signup-password').val();
+  fetch('/api/users', {
+    method: 'POST',
+    body: JSON.stringify(user),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then((token) => {
+    console.log(`Signed Up`)
+  })
+  .catch(() => {
+    console.log('Signup failed')
+  })
+});
+
 function getDataFromApi() {
   document.getElementById('gallery').innerHTML = '';
   fetch('/websites')
@@ -145,22 +187,28 @@ function getNewFormData() {
   if (tags) tags = tags.substring(1);
   console.log(url);
   console.log(tags);
+  let token = localStorage.getItem('token');
   let newWebsite = {
     'url': url,
     'tags': tags,
     'notes': notes,
-    'title': title
+    'title': title,
+    'headers': {
+      'Authorization': `Bearer ${token}`
+    }
   };
   postNewWebsite(newWebsite)
 };
 
 function postNewWebsite(newWebsite) {
+  let token = localStorage.getItem('token');
   return fetch('/websites', {
     method: 'POST',
     body: JSON.stringify(newWebsite),
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     }
   })
   .then(checkStatus)
@@ -221,10 +269,10 @@ function renderDetailScreen(i) {
 
 function showHideWebsiteEditor() {
   let editor = document.getElementById('website-editor');
-  if (editor.style.display === "none") {
-      editor.style.display = "block";
+  if (editor.style.display === 'none') {
+      editor.style.display = 'block';
   } else {
-      editor.style.display = "none";
+      editor.style.display = 'none';
   }
 };
 
@@ -235,29 +283,35 @@ function getEditFormData(i) {
   let checkbox = document.getElementsByName('tags');
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
-      tags += "," + checkbox[i].value;
+      tags += ',' + checkbox[i].value;
     }
   }
   if (tags) tags = tags.substring(1);
   console.log(id);
   console.log(tags);
   console.log(notes);
+  let token = localStorage.getItem('token');
   let editedWebsite = {
     'id': id,
     'tags': tags,
-    'notes': notes
+    'notes': notes,
+    'headers': {
+      'Authorization': `Bearer ${token}`
+    }
   };
   console.log(editedWebsite);
   putWebsiteUpdate(editedWebsite)
 };
 
 function putWebsiteUpdate(editedWebsite) {
+  let token = localStorage.getItem('token');
   return fetch(`/websites/${editedWebsite.id}`, {
     method: 'PUT',
     body: JSON.stringify(editedWebsite),
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     }
   })
     .then(checkStatus)
@@ -266,10 +320,12 @@ function putWebsiteUpdate(editedWebsite) {
 };
 
 function deleteWebsite(i) {
+  let token = localStorage.getItem('token');
   fetch(`/websites/${allWebsites[i]._id}`, {
     method: 'DELETE',
-    success: getDataFromApi()
+    success: getDataFromApi(),
+    'headers': {
+      'Authorization': `Bearer ${token}`
+    }
   })
 };
-
-getDataFromApi();
