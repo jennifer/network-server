@@ -13,19 +13,8 @@ const UserSchema = mongoose.Schema({
   password: {
     type: String,
     required: true
-  },
-  firstName: {type: String, default: ''},
-  lastName: {type: String, default: ''};
-  tags: {type: String, default: ['color', 'font', 'layout', 'images', 'responsiveness', 'usability']}
+  }
 });
-
-UserSchema.methods.serialize = function() {
-  return {
-    username: this.username || '',
-    firstName: this.firstName || '',
-    lastName: this.lastName || ''
-  };
-};
 
 UserSchema.methods.validatePassword = function(password) {
   return bcrypt.compare(password, this.password);

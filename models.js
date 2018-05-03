@@ -7,7 +7,7 @@ const siteDataSchema = mongoose.Schema({
   userId: String,
   url: {type: String, required: true, lowercase: true, trim: true},
   title: String,
-  desktopImg: 
+  fullsizeImg: 
       { data: Buffer, contentType: String },
   mobileImg: 
       { data: Buffer, contentType: String },

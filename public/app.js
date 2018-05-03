@@ -163,15 +163,15 @@ function postNewWebsite(newWebsite) {
       'Content-Type': 'application/json'
     }
   })
-    .then(checkStatus)
-    .then(()=>console.log(`Added ${url}`))
+  .then(checkStatus)
+  .then(()=>console.log(`Added ${url}`))
 };
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response
   } else {
-    var error = new Error(response.statusText)
+    let error = new Error(response.statusText)
     error.response = response
     throw error
   }

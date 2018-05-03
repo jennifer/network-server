@@ -1,15 +1,16 @@
 'use strict';
 
 const bodyParser = require('body-parser'); 
-const express = require('express');
+const express = require('express')
+const fs = require('fs');
+const Grid = require('gridfs-stream');
 const mongoose = require('mongoose');
-const multer  = require('multer');
 const nodeMetaInspector = require('node-metainspector');
-const upload = multer({ dest: 'uploads/' });
 const urlExists = require('url-exists');
 const webshot = require('webshot');
 
 const app = express();
+
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -52,9 +53,10 @@ app.post('/websites', (req, res) => {
 
       // Get URL title
       let client = new nodeMetaInspector(req.body.url, { timeout: 5000 });
-      client.on("fetch", function(){
+      client.on("fetch", function() {
         req.body.title = client.title;
         console.log("DB title: " + req.body.title);
+
 
         // Add new website to DB
         let newWebsite = new Website(req.body);
@@ -64,18 +66,38 @@ app.post('/websites', (req, res) => {
             res.status(201).send('Website added');
           })
           .catch(err => {
-            res.status(400).send('Unable to save to database')
+            res.status(500).send('Unable to save to database')
           })
-
-      });
-      client.on("error", function(err){
-        console.log(err);
-      });
-      client.fetch();
+        });
+        client.on("error", function(err) {
+          console.log(err);
+          res.status(500).send('Unable to fetch URL title')
+        });
+        client.fetch();
+    }
+    else {
+      console.log('URL does not exist');
+    };
 
       // Get full size screenshot
       webshot(req.body.url, 'fullsize.png', function(err) {
         // Add screenshot to website object here
+        mongo.MongoClient.connect(DATABASE_URL, function(err, db) {
+          let gfs = Grid(db, mongo);
+          let part = './fullsize.png';
+          let writeStream = gfs.createWriteStream({
+            filename: part.name,
+            mode: 'w',
+            content_type:part.mimetype
+          });
+          writeStream.on('close', function() {
+            return res.status(200).send({
+              message: 'Success'
+            });
+          });
+          writeStream.write(part.name);
+          writeStream.end();
+        })
       });
 
       // Get mobile screenshot
@@ -94,13 +116,6 @@ app.post('/websites', (req, res) => {
       webshot(req.body.url, 'mobile.png', options, function(err) {
         // Add screenshot to website object here
       });
-
-      
-      // If URL is invalid
-    }
-    else {
-      console.log('URL does not exist');
-    }
   })
 });
 

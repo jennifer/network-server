@@ -9,6 +9,30 @@
 <body>
   <header onclick='getDataFromApi()' class='my-link'>Site Bank</header>
   <main>
+    <section>
+      <h1>Login</h1>
+        <div>
+          <form action='/' method='post'>
+            <input type='text' name='logemail' placeholder='E-mail' required='' class='text-input' />
+            <input type='password' name='logpassword' placeholder='Password' required='' class='text-input' />
+            <div>
+              <input type='submit' value='LOGIN' />
+            </div>
+          </form>
+        </div>
+      <div>
+        <h1>Sign Up</h1>
+        <div>
+          <form action='/' method='post'>
+            <input type='text' name='email' placeholder='E-mail' required='' class='text-input' />
+            <input type='text' name='username' placeholder='Username' required='' class='text-input' />
+            <input type='password' name='password' placeholder='Password' required='' class='text-input' />
+            <input type='password' name='passwordConf' placeholder='Confirm Password' required='' class='text-input' />
+            <input type='submit' value='REGISTER'>
+          </form>
+        </div>
+      </div>
+    </section>
     <section id='menu'></section>
     <section id='gallery'></section> 
     <section id='add-website'></section> 
