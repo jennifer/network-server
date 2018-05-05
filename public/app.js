@@ -3,17 +3,17 @@
 let allWebsites = [];
 let uniqueTags = [];
 
-$('#login-form').submit(function(e){
+document.getElementById('login-button').addEventListener('click', function(e){
   e.preventDefault();
   let user = {};
-  user.username = $('#username').val();
-  user.password = $('#password').val();
-  fetch('/api/auth/login', {
+  user.username = document.getElementById('username').value;
+  user.password = document.getElementById('password').value;
+  return fetch('/api/auth/login', {
     method: 'POST',
     body: JSON.stringify(user),
     headers: {
       'Content-Type': 'application/json'
-    }
+    } 
   })
   .then((token) => {
     localStorage.setItem('authToken', token);
@@ -25,13 +25,13 @@ $('#login-form').submit(function(e){
   })
 });
 
-$('#signup-form').submit(function(e){
+document.getElementById('submit-button').addEventListener('click', function(e){
   e.preventDefault();
   let user = {};
-  user.username = $('#signup-email').val();
-  user.password = $('#signup-password').val();
-  fetch('/api/users', {
-    method: 'POST',
+  user.username = document.getElementById('signup-username').value;
+  user.password = document.getElementById('signup-password').value;
+  return fetch('/api/users', {
+    method: 'POST',      
     body: JSON.stringify(user),
     headers: {
       'Content-Type': 'application/json'
