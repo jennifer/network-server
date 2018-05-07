@@ -17,11 +17,11 @@ document.getElementById('login-button').addEventListener('click', function(e){
   })
   .then((token) => {
     localStorage.setItem('authToken', token);
-    console.log(`Logged In`);
+    console.log('Logged in');
     getDataFromApi();
   })
   .catch(() => {
-    console.log('login failed')
+    console.log('Login failed')
   })
 });
 
@@ -38,13 +38,38 @@ document.getElementById('submit-button').addEventListener('click', function(e){
     }
   })
   .then((token) => {
-    console.log(`Signed Up`)
+    console.log('Signed up')
   })
   .catch(() => {
     console.log('Signup failed')
   })
 });
 
+function getDataFromApi() {
+  document.getElementById('gallery').innerHTML = '';
+  let token = localStorage.getItem('token');
+  return fetch('/websites', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(data) {
+    allWebsites = data;
+    renderGallery(data);
+    createTagsArray(data);
+  })
+  .catch(function() {
+    console.log('API request error');
+  })
+};
+
+/*
+// pre-auth working version
 function getDataFromApi() {
   document.getElementById('gallery').innerHTML = '';
   fetch('/websites')
@@ -60,6 +85,7 @@ function getDataFromApi() {
     console.log('API request error');
   })
 };
+*/
 
 function createTagsArray() {
   let allTags = ['color', 'font', 'images', 'layout'];
@@ -192,10 +218,10 @@ function getNewFormData() {
     'url': url,
     'tags': tags,
     'notes': notes,
-    'title': title,
-    'headers': {
-      'Authorization': `Bearer ${token}`
-    }
+    'title': title
+    //'headers': {
+    //  'Authorization': `Bearer ${token}`
+    //}
   };
   postNewWebsite(newWebsite)
 };
@@ -294,10 +320,10 @@ function getEditFormData(i) {
   let editedWebsite = {
     'id': id,
     'tags': tags,
-    'notes': notes,
-    'headers': {
-      'Authorization': `Bearer ${token}`
-    }
+    'notes': notes
+    //'headers': {
+    //  'Authorization': `Bearer ${token}`
+    //}
   };
   console.log(editedWebsite);
   putWebsiteUpdate(editedWebsite)
@@ -324,7 +350,7 @@ function deleteWebsite(i) {
   fetch(`/websites/${allWebsites[i]._id}`, {
     method: 'DELETE',
     success: getDataFromApi(),
-    'headers': {
+    headers: {
       'Authorization': `Bearer ${token}`
     }
   })
