@@ -8,6 +8,7 @@ document.getElementById('login-button').addEventListener('click', function(e){
   let user = {};
   user.username = document.getElementById('username').value;
   user.password = document.getElementById('password').value;
+  console.log(user);
   return fetch('/api/auth/login', {
     method: 'POST',
     body: JSON.stringify(user),
@@ -15,8 +16,10 @@ document.getElementById('login-button').addEventListener('click', function(e){
       'Content-Type': 'application/json'
     } 
   })
+  .then(res => res.json())
   .then((token) => {
-    localStorage.setItem('authToken', token);
+    localStorage.setItem('authToken', token.authToken);
+    console.log(token);
     console.log('Logged in');
     getDataFromApi();
   })
@@ -47,7 +50,7 @@ document.getElementById('submit-button').addEventListener('click', function(e){
 
 function getDataFromApi() {
   document.getElementById('gallery').innerHTML = '';
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem('authToken');
   return fetch('/websites', {
     method: 'GET',
     headers: {
