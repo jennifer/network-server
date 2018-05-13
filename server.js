@@ -4,13 +4,9 @@ require('dotenv').config();
 
 const bodyParser = require('body-parser'); 
 const express = require('express')
-const fs = require('fs');
-const Grid = require('gridfs-stream');
 const mongoose = require('mongoose');
-const nodeMetaInspector = require('node-metainspector');
 const passport = require('passport');
-const urlExists = require('url-exists');
-const webshot = require('webshot');
+
 
 const app = express();
 

@@ -137,7 +137,7 @@ function renderGallery(allWebsites) {
   document.getElementById('website-detail').style.display = 'none';
   document.getElementById('gallery').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
-    let tagDisplay = (allWebsites[i].tags).split(',').join(', ');
+    let tagDisplay = (allWebsites[i].tags).split(',').join(' | ');
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <h1 class='website-title'>${allWebsites[i].title}</h1>
@@ -152,7 +152,7 @@ function renderGallery(allWebsites) {
 function handleFilterClick() {
   console.log('handleFilterClick ran')
   let clickedFilters = [];
-  let checkbox = document.forms[0];
+  let checkbox = document.forms[2];
   console.log(checkbox);
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
@@ -163,7 +163,7 @@ function handleFilterClick() {
   document.getElementById('gallery').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
     let tagArr = (allWebsites[i].tags).split(',');
-    let tagDisplay = (allWebsites[i].tags).split(',').join(', ');
+    let tagDisplay = (allWebsites[i].tags).split(',').join(' | ');
     if (clickedFilters.every(val => tagArr.indexOf(val) >= 0)) {
       let eachWebsite = `
         <div class='each-website' onclick='renderDetailScreen(${[i]})'>
@@ -268,6 +268,7 @@ function renderDetailScreen(i) {
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'block';
+  let tagDisplay = (allWebsites[i].tags).split(',').join(' | ');
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
         <a onclick='renderGallery(allWebsites)' class='text-link'>Close</a>
@@ -277,7 +278,7 @@ function renderDetailScreen(i) {
             <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
           </a>
         </span>
-        <p class='website-tags'>${allWebsites[i].tags}</p>
+        <p class='website-tags'>${tagDisplay}</p>
         <p class='notes'>${allWebsites[i].notes}</p>
         <a onclick='showHideWebsiteEditor()' class='text-link'>Edit</a>
         <div id='website-editor'></div>
@@ -288,7 +289,8 @@ function renderDetailScreen(i) {
   $('#website-editor').append(`
     <a onclick='getDataFromApi()' class='text-link'>Close</a>
     <div id='edit-tags'></div>
-    <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' /><br>
+    <label for='custom-tag'>Add a custom tag</label><input type='text' id='customTag' class='text-input' name='tags' /><br>
+    <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' /><br>
     <a onclick='getEditFormData(${[i]})' class='text-link'>Submit</a>
     <a onclick='deleteWebsite(${[i]})' class='text-link'>DELETE WEBSITE</a>
   `);
@@ -316,13 +318,15 @@ function showHideWebsiteEditor() {
 function getEditFormData(i) {
   let id = allWebsites[i]._id;
   let tags = '';
+  let customTag = document.getElementById('customTag').value;
   let notes = document.getElementById('notes').value;
   let checkbox = document.getElementsByName('tags');
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
       tags += ',' + checkbox[i].value;
     }
-  }
+  };
+  tags += ',' + customTag;
   if (tags) tags = tags.substring(1);
   console.log(id);
   console.log(tags);
@@ -332,13 +336,11 @@ function getEditFormData(i) {
     'id': id,
     'tags': tags,
     'notes': notes
-    //'headers': {
-    //  'Authorization': `Bearer ${token}`
-    //}
   };
   console.log(editedWebsite);
   putWebsiteUpdate(editedWebsite)
 };
+
 
 function putWebsiteUpdate(editedWebsite) {
   let token = localStorage.getItem('authToken');
@@ -353,7 +355,7 @@ function putWebsiteUpdate(editedWebsite) {
   })
     .then(checkStatus)
     .then(console.log(`Edited`));
-    renderDetailScreen(i)
+    getDataFromApi()
 };
 
 function deleteWebsite(i) {
