@@ -3,6 +3,13 @@
 let allWebsites = [];
 let uniqueTags = [];
 
+
+
+document.getElementById('menu').style.display = 'none';
+document.getElementById('gallery').style.display = 'none';
+document.getElementById('add-website').style.display = 'none';
+document.getElementById('website-detail').style.display = 'none';
+
 document.getElementById('login-button').addEventListener('click', function(e){
   e.preventDefault();
   let user = {};
@@ -93,8 +100,7 @@ function getDataFromApi() {
 function createTagsArray() {
   let allTags = ['color', 'font', 'images', 'layout'];
   for (let i = 0; i < allWebsites.length; i++) {
-    let tagStr = allWebsites[i].tags;
-    let tagArr = tagStr.split(',').filter(function(n){ return n != false }); 
+    let tagArr = (allWebsites[i].tags).split(',').filter(function(n){ return n != false });
     allTags.push(...tagArr);
   }
   uniqueTags = ([...new Set(allTags)]).sort();
@@ -124,17 +130,19 @@ function renderMenu(uniqueTags) {
 
 function renderGallery(allWebsites) {
   console.log('renderGallery ran');
+  document.getElementById('auth-forms').style.display = 'none';
   document.getElementById('menu').style.display = 'block';
   document.getElementById('gallery').style.display = 'block';
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
   document.getElementById('gallery').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
+    let tagDisplay = (allWebsites[i].tags).split(',').join(', ');
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <h1 class='website-title'>${allWebsites[i].title}</h1>
         <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
-        <h1 class='website-tags'>${allWebsites[i].tags}</h1>
+        <h1 class='website-tags'>${tagDisplay}</h1>
       </div>
     `;
     $('#gallery').append(eachWebsite);
@@ -154,14 +162,14 @@ function handleFilterClick() {
   console.log(clickedFilters);
   document.getElementById('gallery').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
-    let tagStr = allWebsites[i].tags;
-    let tagArr = tagStr.split(',');
+    let tagArr = (allWebsites[i].tags).split(',');
+    let tagDisplay = (allWebsites[i].tags).split(',').join(', ');
     if (clickedFilters.every(val => tagArr.indexOf(val) >= 0)) {
       let eachWebsite = `
         <div class='each-website' onclick='renderDetailScreen(${[i]})'>
           <h1 class='website-title'>${allWebsites[i].title}</h1>
           <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
-          <h1 class='website-tags'>${allWebsites[i].tags}</h1>
+          <h1 class='website-tags'>${tagDisplay}</h1>
         </div>
       `;
       $('#gallery').append(eachWebsite);
