@@ -216,7 +216,7 @@ function getNewFormData() {
   if (tags) tags = tags.substring(1);
   console.log(url);
   console.log(tags);
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem('authToken');
   let newWebsite = {
     'url': url,
     'tags': tags,
@@ -230,7 +230,7 @@ function getNewFormData() {
 };
 
 function postNewWebsite(newWebsite) {
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem('authToken');
   return fetch('/websites', {
     method: 'POST',
     body: JSON.stringify(newWebsite),
@@ -319,7 +319,7 @@ function getEditFormData(i) {
   console.log(id);
   console.log(tags);
   console.log(notes);
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem('authToken');
   let editedWebsite = {
     'id': id,
     'tags': tags,
@@ -333,7 +333,7 @@ function getEditFormData(i) {
 };
 
 function putWebsiteUpdate(editedWebsite) {
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem('authToken');
   return fetch(`/websites/${editedWebsite.id}`, {
     method: 'PUT',
     body: JSON.stringify(editedWebsite),
@@ -349,7 +349,7 @@ function putWebsiteUpdate(editedWebsite) {
 };
 
 function deleteWebsite(i) {
-  let token = localStorage.getItem('token');
+  let token = localStorage.getItem('authToken');
   fetch(`/websites/${allWebsites[i]._id}`, {
     method: 'DELETE',
     success: getDataFromApi(),
