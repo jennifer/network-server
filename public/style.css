@@ -5,9 +5,22 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
   box-sizing: border-box;
 }
 
-.each-website, section {
+main {
+  display: flex;
+}
+
+#gallery {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border: 1px black solid;
+}
+
+.each-website {
   border: 1px black solid;
   margin: 10px;
+  height: 300px;
+  width: 400px;
 }
 
 .website-image {

@@ -1,14 +1,13 @@
 'use strict';
 
-const express = require('express');
-const passport = require('passport');
 const bodyParser = require('body-parser');
+const express = require('express');
+const fs = require('fs');
+const multer = require('multer');
+const nodeMetaInspector = require('node-metainspector');
+const passport = require('passport');
 const urlExists = require('url-exists');
 const webshot = require('webshot');
-const fs = require('fs');
-const Grid = require('gridfs-stream');
-const nodeMetaInspector = require('node-metainspector');
-
 
 const config = require('../config');
 const router = express.Router();
@@ -114,6 +113,22 @@ router.post('/', jwtAuth, (req, res) => {
       });
   })
 });
+
+/*
+// POST screenshots to db
+app.use(multer({ dest: ‘./uploads/’,
+ rename: function (fieldname, filename) {
+   return filename;
+ },
+}));
+
+app.post(‘/api/photo’,function(req,res){
+ let newItem = new Item();
+ newItem.img.data = fs.readFileSync(req.files.fullsize.path)
+ newItem.img.contentType = ‘image/png’;
+ newItem.save();
+});
+*/
 
 // PUT edit existing tags 
 router.put('/:id', jwtAuth, (req, res) => {

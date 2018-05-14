@@ -118,7 +118,7 @@ function renderMenu(uniqueTags) {
   `);
   for (let i = 0; i < uniqueTags.length; i++) {
     $('#filters').append(`
-      <input type='checkbox' value='${uniqueTags[i]}' />
+      <input type='checkbox' value='${uniqueTags[i]}' onclick='handleFilterClick()' />
       <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
       <br>
     `);
@@ -230,9 +230,6 @@ function getNewFormData() {
     'tags': tags,
     'notes': notes,
     'title': title
-    //'headers': {
-    //  'Authorization': `Bearer ${token}`
-    //}
   };
   postNewWebsite(newWebsite)
 };
