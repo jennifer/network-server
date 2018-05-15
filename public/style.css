@@ -12,11 +12,10 @@ main {
 #gallery {
   display: flex;
   flex-direction: row;
-  width: 100%;
-  border: 1px black solid;
 }
 
 .each-website {
+  display: inline-block;
   border: 1px black solid;
   margin: 10px;
   height: 300px;

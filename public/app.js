@@ -3,8 +3,6 @@
 let allWebsites = [];
 let uniqueTags = [];
 
-
-
 document.getElementById('menu').style.display = 'none';
 document.getElementById('gallery').style.display = 'none';
 document.getElementById('add-website').style.display = 'none';
@@ -78,25 +76,6 @@ function getDataFromApi() {
   })
 };
 
-/*
-// pre-auth working version
-function getDataFromApi() {
-  document.getElementById('gallery').innerHTML = '';
-  fetch('/websites')
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(data) {
-    allWebsites = data;
-    renderGallery(data);
-    createTagsArray(data);
-  })
-  .catch(function() {
-    console.log('API request error');
-  })
-};
-*/
-
 function createTagsArray() {
   let allTags = ['color', 'font', 'images', 'layout'];
   for (let i = 0; i < allWebsites.length; i++) {
@@ -111,11 +90,6 @@ function renderMenu(uniqueTags) {
   console.log('renderMenu ran');
   // can't pass uniqueTags data through html function here?? 
   // made uniqueTags global for this
-  $('#menu').html(`
-    <p>Select elements and submit to filter.</p>
-    <form id='filters'></form>
-    <p>Click <a onclick='renderAddWebsiteScreen()' class='text-link'>here</a> to add a new website.</p>
-  `);
   for (let i = 0; i < uniqueTags.length; i++) {
     $('#filters').append(`
       <input type='checkbox' value='${uniqueTags[i]}' onclick='handleFilterClick()' />
@@ -185,20 +159,6 @@ function renderAddWebsiteScreen() {
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'block';
   document.getElementById('website-detail').style.display = 'none';
-  document.getElementById('add-website').innerHTML = '';
-  $('#add-website').append(`
-    <a onclick='renderGallery(allWebsites)'class='text-link'>Close</a>
-    <form id='new-website' name='new-website'>
-      <fieldset name='new-url'>
-        <legend>Add a new website</legend>
-          <label for='url-input'>Enter a URL</label><input type='text' class='text-input' id='url' /><br>
-          <label for='tag-checkboxes'>Tag website elements</label><div id='tag-checkboxes'></div>
-          <label for='custom-tag'>Add a custom tag</label><input type='text' id='customTag' class='text-input' name='tags' /><br>
-          <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' /><br>
-          <input type='submit' onclick='getNewFormData();' value='Submit' class='text-link'>
-      </fieldset>
-    </form>
-  `);
   document.getElementById('tag-checkboxes').innerHTML = '';
   for (let i = 0; i < uniqueTags.length; i++) {
   $('#tag-checkboxes').append(`
