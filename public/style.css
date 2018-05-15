@@ -5,8 +5,16 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
   box-sizing: border-box;
 }
 
+header {
+  height: 50px;
+}
+
 main {
   display: flex;
+}
+
+#menu {
+  width: 400px;
 }
 
 #gallery {
