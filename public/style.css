@@ -5,27 +5,51 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
   box-sizing: border-box;
 }
 
+body {
+  background-color: #F8D5F0;
+  font-family: 'Questrial', sans-serif;
+}
+
 header {
   height: 50px;
+  border-width: 3px 3px 0 3px;
+  border-color: black;
+  border-style: solid;
+}
+
+#auth-forms {
+  min-width: 300px;
+  border-width: 0 3px 0 0;
+  border-color: black;
+  border-style: solid;
+  height: 100vh;
 }
 
 main {
   display: flex;
+  border: 3px black solid;
 }
 
 #menu {
-  width: 400px;
+  min-width: 300px;
+  border-width: 0 3px 0 0;
+  border-color: black;
+  border-style: solid;
+  padding: 20px;
 }
 
 #gallery {
   display: flex;
   flex-direction: row;
+  padding-bottom: 10px;
 }
 
 .each-website {
   display: inline-block;
-  border: 1px black solid;
-  margin: 10px;
+  background-color: white;
+  border: 3px black solid;
+  box-shadow: 10px 10px;
+  margin: 20px;
   height: 300px;
   width: 400px;
 }
@@ -44,5 +68,6 @@ main {
 }
 
 .text-input {
+  height: 20px;
   border: 1px black solid;
 }
