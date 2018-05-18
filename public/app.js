@@ -68,26 +68,13 @@ function getDataFromApi() {
   })
   .then(function(data) {
     allWebsites = data;
-    renderGallery(data);
-    renderMenu(data);
-    console.log(allWebsites);
+    renderGallery(allWebsites);
+    renderMenu(allWebsites);
   })
   .catch(function() {
     console.log('API request error');
   })
 };
-
-/*
-function createTagsArray() {
-  let allTags = ['color', 'font', 'images', 'layout'];
-  for (let i = 0; i < allWebsites.length; i++) {
-    let tagArr = (allWebsites[i].tags).split(',').filter(function(n){ return n != false });
-    allTags.push(...tagArr);
-  }
-  uniqueTags = ([...new Set(allTags)]).sort();
-  renderMenu(uniqueTags)
-};
-*/
 
 function renderGallery(allWebsites) {
   console.log('renderGallery ran');
@@ -98,7 +85,7 @@ function renderGallery(allWebsites) {
   document.getElementById('website-detail').style.display = 'none';
   document.getElementById('gallery').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
-    let tagDisplay = (allWebsites[i].tags).join(' | ');
+    let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <h1 class='website-title'>${allWebsites[i].title}</h1>
@@ -113,10 +100,9 @@ function renderGallery(allWebsites) {
 function renderMenu(data) {
   let tagArr = ['color', 'font', 'images', 'layout'];
   for (let i = 0; i < allWebsites.length; i++) {
-    tagArr.push(allWebsites[i].tags)
+    tagArr.push.apply(tagArr, allWebsites[i].tags);
   }
   uniqueTags = ([...new Set(tagArr)]).sort();
-
   document.getElementById('filters').innerHTML = '';
   for (let i = 0; i < uniqueTags.length; i++) {
     $('#filters').append(`
@@ -139,8 +125,7 @@ function handleFilterClick() {
   console.log(clickedFilters);
   document.getElementById('gallery').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
-    //let tagArr = (allWebsites[i].tags);
-    let tagDisplay = (allWebsites[i].tags).join(' | ');
+    let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     if (clickedFilters.every(val => (allWebsites[i].tags).indexOf(val) >= 0)) {
       let eachWebsite = `
         <div class='each-website' onclick='renderDetailScreen(${[i]})'>
@@ -162,6 +147,7 @@ function renderAddWebsiteScreen() {
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'block';
   document.getElementById('website-detail').style.display = 'none';
+  document.getElementById('url').value = '';
   document.getElementById('tag-checkboxes').innerHTML = '';
   for (let i = 0; i < uniqueTags.length; i++) {
   $('#tag-checkboxes').append(`
@@ -181,8 +167,9 @@ document.getElementById('new-website').addEventListener('submit', function(e){
       tags.push(checkbox[i].value)
     }
   };
-
-  tags.push(document.getElementById('customTag').value);
+  if (document.getElementById('customTag').value) {
+    tags.push(document.getElementById('customTag').value)
+  };
   console.log(tags);
   //if (tags) tags = tags.substring(1);
 
@@ -204,52 +191,8 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   })
   .then(checkStatus)
   .then(()=>console.log(`Added ${url}`))
+  .then(getDataFromApi());
 });
-
-/*
-function getNewFormData() {
-  let url = document.getElementById('url').value;
-  let title = '';
-  let tags = '';
-  let customTag = document.getElementById('customTag').value;
-  //let checkbox = document.getElementsByName('tags');
-  let notes = document.getElementById('notes').value;
-  /*
-  for (let i = 0; i < checkbox.length; i++) {
-    if (checkbox[i].checked) {
-      tags += ','+checkbox[i].value;
-    }
-  };
-  
-  tags += ',' + customTag;
-  if (tags) tags = tags.substring(1);
-  console.log(url);
-  console.log(tags);
-  let token = localStorage.getItem('authToken');
-  let newWebsite = {
-    'url': url,
-    'tags': tags,
-    'notes': notes,
-    'title': title
-  };
-  postNewWebsite(newWebsite)
-
-
-function postNewWebsite(newWebsite) {
-  let token = localStorage.getItem('authToken');
-  return fetch('/websites', {
-    method: 'POST',
-    body: JSON.stringify(newWebsite),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  })
-  .then(checkStatus)
-  .then(()=>console.log(`Added ${url}`))
-};
-*/
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -267,7 +210,7 @@ function renderDetailScreen(i) {
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'block';
-  let tagDisplay = (allWebsites[i].tags).split(',').join(' | ');
+  let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
         <a onclick='renderGallery(allWebsites)' class='text-link'>Close</a>
