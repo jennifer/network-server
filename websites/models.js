@@ -11,8 +11,8 @@ const siteDataSchema = mongoose.Schema({
       { data: Buffer, contentType: String },
   mobileImg: 
       { data: Buffer, contentType: String },
-  tags: { type: String },
-  notes: { type: String },
+  tags: [],
+  notes: String,
   created: { type: Date, default: Date.now }
 });
 

@@ -15,6 +15,7 @@ header {
   border-width: 3px 3px 0 3px;
   border-color: black;
   border-style: solid;
+  padding: 10px;
 }
 
 #auth-forms {
@@ -22,12 +23,18 @@ header {
   border-width: 0 3px 0 0;
   border-color: black;
   border-style: solid;
+  padding: 20px;
   height: 100vh;
+  background-color: #F8D5F0;
 }
 
 main {
   display: flex;
   border: 3px black solid;
+  /*
+  background: url('https://i.imgur.com/bHOoaJc.jpg') no-repeat center center fixed;
+  background-size: cover;
+  */
 }
 
 #menu {
@@ -36,11 +43,11 @@ main {
   border-color: black;
   border-style: solid;
   padding: 20px;
+  background-color: #F8D5F0;
 }
 
 #gallery {
   display: flex;
-  flex-direction: row;
   padding-bottom: 10px;
 }
 

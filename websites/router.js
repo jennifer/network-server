@@ -77,6 +77,7 @@ router.post('/', jwtAuth, (req, res) => {
       // Get full size screenshot
       webshot(req.body.url, 'fullsize.png', function(err) {
         // Add screenshot to website object here
+        /*
         mongo.MongoClient.connect(DATABASE_URL, function(err, db) {
           let gfs = Grid(db, mongo);
           let part = './fullsize.png';
@@ -93,6 +94,7 @@ router.post('/', jwtAuth, (req, res) => {
           writeStream.write(part.name);
           writeStream.end();
         })
+        */
       });
 
       // Get mobile screenshot
