@@ -3,6 +3,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const fs = require('fs');
+const mongoose = require('mongoose');
 const multer = require('multer');
 const nodeMetaInspector = require('node-metainspector');
 const passport = require('passport');
@@ -52,6 +53,14 @@ router.post('/', jwtAuth, (req, res) => {
         req.body.title = client.title;
         console.log("DB title: " + req.body.title);
 
+        // Get full size screenshot
+        webshot(req.body.url, 'fullsize.png', function(err) {
+          let imgPath = './fullsize.png';
+          //let newItem = new req.body.fullSizeImg;
+          req.body.fullSizeImg.data = fs.readFileSync(imgPath);
+          req.body.fullSizeImg.contentType = 'image/png';
+          req.body.fullSizeImg.save();
+        });
 
         // Add new website to DB
         let newWebsite = new Website(req.body);
@@ -74,62 +83,33 @@ router.post('/', jwtAuth, (req, res) => {
       console.log('URL does not exist');
     };
 
-      // Get full size screenshot
-      webshot(req.body.url, 'fullsize.png', function(err) {
-        // Add screenshot to website object here
-        /*
-        mongo.MongoClient.connect(DATABASE_URL, function(err, db) {
-          let gfs = Grid(db, mongo);
-          let part = './fullsize.png';
-          let writeStream = gfs.createWriteStream({
-            filename: part.name,
-            mode: 'w',
-            content_type:part.mimetype
-          });
-          writeStream.on('close', function() {
-            return res.status(200).send({
-              message: 'Success'
-            });
-          });
-          writeStream.write(part.name);
-          writeStream.end();
-        })
-        */
-      });
-
-      // Get mobile screenshot
-      let options = {
-        screenSize: {
-          width: 320,
-          height: 480
-        },
-        shotSize: {
-          width: 320,
-          height: 'all'
-        },
-        userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
-          + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
-      };
-      webshot(req.body.url, 'mobile.png', options, function(err) {
-        // Add screenshot to website object here
-      });
-  })
+    // Get mobile screenshot
+    let options = {
+      screenSize: {
+        width: 320,
+        height: 480
+      },
+      shotSize: {
+        width: 320,
+        height: 'all'
+      },
+      userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
+        + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
+    };
+    webshot(req.body.url, 'mobile.png', options, function(err) {
+      // Add screenshot to website object here
+    });
+  });
 });
+
 
 /*
-// POST screenshots to db
-app.use(multer({ dest: ‘./uploads/’,
- rename: function (fieldname, filename) {
-   return filename;
- },
-}));
-
-app.post(‘/api/photo’,function(req,res){
- let newItem = new Item();
- newItem.img.data = fs.readFileSync(req.files.fullsize.path)
- newItem.img.contentType = ‘image/png’;
- newItem.save();
-});
+// Add screenshot to website object here
+        let newItem = new req.body.fullSizeImg;
+           newItem.img.data = fs.readFileSync('../fullsize.png')
+           newItem.img.contentType = ‘image/png’;
+           newItem.save();
+        });
 */
 
 // PUT edit existing tags 
