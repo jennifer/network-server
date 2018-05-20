@@ -22,6 +22,8 @@ router.get('/', jwtAuth, (req, res) => {
     .find()
     .then(websites => {
       res.json(websites);
+      //res.contentType(user.img.contentType);
+      //res.send(user.img.data);
     })
     .catch(err => {
       console.error(err);
@@ -107,49 +109,6 @@ router.post('/', jwtAuth, (req, res) => {
     };
   });
 });
-    
-
-/*
-// -------Image testing----------//
-
-// img path
-let imgPath = 'fullsize.png';
-
-let Schema = mongoose.Schema;
-
-// example schema
-let schema = new Schema({
-    img: { data: Buffer, contentType: String }
-});
-
-// our model
-let A = mongoose.model('A', schema);
-
-mongoose.connection.on('open', function () {
-  console.error('mongo is open');
-
-  // empty the collection
-  A.remove(function (err) {
-    if (err) throw err;
-
-    console.error('removed old docs');
-
-    // store an img in binary in mongo
-    let a = new A;
-    a.img.data = fs.readFileSync(imgPath);
-    a.img.contentType = 'image/png';
-    a.save(function (err, a) {
-      if (err) throw err;
-
-      console.error('saved img to mongo');
-
-    });
-  });
-
-});
-
-// -------Image testing----------// 
-*/
 
 // PUT edit existing tags 
 router.put('/:id', jwtAuth, (req, res) => {

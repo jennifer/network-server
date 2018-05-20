@@ -6,7 +6,9 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
 }
 
 body {
+  /*
   background-color: #F8D5F0;
+  */
   font-family: 'Questrial', sans-serif;
 }
 
@@ -25,7 +27,9 @@ header {
   border-style: solid;
   padding: 20px;
   height: 100vh;
+  /*
   background-color: #F8D5F0;
+  */
 }
 
 main {
@@ -43,7 +47,9 @@ main {
   border-color: black;
   border-style: solid;
   padding: 20px;
+  /*
   background-color: #F8D5F0;
+  */
 }
 
 #gallery {

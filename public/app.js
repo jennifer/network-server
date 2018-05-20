@@ -89,7 +89,7 @@ function renderGallery(allWebsites) {
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <h1 class='website-title'>${allWebsites[i].title}</h1>
-        <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
+        <img src='${allWebsites[i].fullsizeImg}' class='website-image' alt='screenshot of website' />
         <h1 class='website-tags'>${tagDisplay}</h1>
       </div>
     `;
