@@ -46,6 +46,7 @@ router.post('/', jwtAuth, (req, res) => {
   // Check that URL is valid
   urlExists(req.body.url, function(err, exists) {
     console.log(exists);
+    let newWebsite;
     if (exists) {
 
       // Get URL title
@@ -54,56 +55,54 @@ router.post('/', jwtAuth, (req, res) => {
         req.body.title = client.title;
         console.log("DB title: " + req.body.title);
 
-      // Get full size screenshot
-      webshot(req.body.url, 'fullsize.png', function(err) {
-        let imgPath = 'fullsize.png';
-        let newWebsite = new Website(req.body);
-        newWebsite.fullsizeImg.data = fs.readFileSync(imgPath);
-        newWebsite.fullsizeImg.contentType = 'image/png';
-        newWebsite.save(function (err, a) {
-          if (err) throw err;
-
-          console.error('saved img to mongo');
-
+        // Get full size screenshot
+        webshot(req.body.url, 'fullsize.png', function(err) {
+          let imgPath = 'fullsize.png';
+          newWebsite = new Website(req.body);
+          newWebsite.fullsizeImg.data = fs.readFileSync(imgPath);
+          newWebsite.fullsizeImg.contentType = 'image/png';
+          newWebsite.save()
+          .then(item => {
+            res.status(201).send('Website added');
+          })
+          .catch(err => {
+            res.status(500).send('Unable to save to database')
+          })
         });
+
+/*
+        // Get mobile screenshot
+        let options = {
+          screenSize: {
+            width: 320,
+            height: 480
+          },
+          shotSize: {
+            width: 320,
+            height: 'all'
+          },
+          userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
+            + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
+        };
+        
+        webshot(req.body.url, 'mobile.png', options, function(err) {
+          let imgPath = 'mobile.png';
+          newWebsite.mobileImg.data = fs.readFileSync(imgPath);
+          newWebsite.mobileImg.contentType = 'image/png';
+        });
+*/
+        // RUN LAST
+        // Add new website to DB        
+        
       });
 
-      // Get mobile screenshot
-      let options = {
-        screenSize: {
-          width: 320,
-          height: 480
-        },
-        shotSize: {
-          width: 320,
-          height: 'all'
-        },
-        userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
-          + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
-      };
-      
-      webshot(req.body.url, 'mobile.png', options, function(err) {
-        // Add screenshot to website object here
-      });
-
-      // Add new website to DB
-      let newWebsite = new Website(req.body);
-      console.log('New Website: ' + newWebsite);
-      newWebsite.save()
-        .then(item => {
-          res.status(201).send('Website added');
-        })
-        .catch(err => {
-          res.status(500).send('Unable to save to database')
-        })
-      });
       client.on("error", function(err) {
         console.log(err);
         res.status(500).send('Unable to fetch URL title')
       });
       client.fetch();
 
-    }
+      }
     else {
       console.log('URL does not exist');
     };
