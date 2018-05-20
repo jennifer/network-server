@@ -148,6 +148,7 @@ function renderAddWebsiteScreen() {
   document.getElementById('add-website').style.display = 'block';
   document.getElementById('website-detail').style.display = 'none';
   document.getElementById('url').value = '';
+  document.getElementById('customTag').value = '';
   document.getElementById('tag-checkboxes').innerHTML = '';
   for (let i = 0; i < uniqueTags.length; i++) {
   $('#tag-checkboxes').append(`
@@ -183,6 +184,7 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   return fetch('/websites', {
     method: 'POST',
     body: JSON.stringify(newWebsite),
+    success: getDataFromApi(),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -289,6 +291,7 @@ function putWebsiteUpdate(editedWebsite) {
   return fetch(`/websites/${editedWebsite.id}`, {
     method: 'PUT',
     body: JSON.stringify(editedWebsite),
+    success: getDataFromApi(),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -297,7 +300,6 @@ function putWebsiteUpdate(editedWebsite) {
   })
     .then(checkStatus)
     .then(console.log(`Edited`));
-    getDataFromApi()
 };
 
 function deleteWebsite(i) {

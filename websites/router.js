@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const fs = require('fs');
 const mongoose = require('mongoose');
-const multer = require('multer');
 const nodeMetaInspector = require('node-metainspector');
 const passport = require('passport');
 const urlExists = require('url-exists');
@@ -53,63 +52,103 @@ router.post('/', jwtAuth, (req, res) => {
         req.body.title = client.title;
         console.log("DB title: " + req.body.title);
 
-        // Get full size screenshot
-        webshot(req.body.url, 'fullsize.png', function(err) {
-          let imgPath = './fullsize.png';
-          //let newItem = new req.body.fullSizeImg;
-          req.body.fullSizeImg.data = fs.readFileSync(imgPath);
-          req.body.fullSizeImg.contentType = 'image/png';
-          req.body.fullSizeImg.save();
-        });
-
-        // Add new website to DB
+      // Get full size screenshot
+      webshot(req.body.url, 'fullsize.png', function(err) {
+        let imgPath = 'fullsize.png';
         let newWebsite = new Website(req.body);
-        console.log('New Website: ' + newWebsite);
-        newWebsite.save()
-          .then(item => {
-            res.status(201).send('Website added');
-          })
-          .catch(err => {
-            res.status(500).send('Unable to save to database')
-          })
+        newWebsite.fullsizeImg.data = fs.readFileSync(imgPath);
+        newWebsite.fullsizeImg.contentType = 'image/png';
+        newWebsite.save(function (err, a) {
+          if (err) throw err;
+
+          console.error('saved img to mongo');
+
         });
-        client.on("error", function(err) {
-          console.log(err);
-          res.status(500).send('Unable to fetch URL title')
-        });
-        client.fetch();
+      });
+
+      // Get mobile screenshot
+      let options = {
+        screenSize: {
+          width: 320,
+          height: 480
+        },
+        shotSize: {
+          width: 320,
+          height: 'all'
+        },
+        userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
+          + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
+      };
+      
+      webshot(req.body.url, 'mobile.png', options, function(err) {
+        // Add screenshot to website object here
+      });
+
+      // Add new website to DB
+      let newWebsite = new Website(req.body);
+      console.log('New Website: ' + newWebsite);
+      newWebsite.save()
+        .then(item => {
+          res.status(201).send('Website added');
+        })
+        .catch(err => {
+          res.status(500).send('Unable to save to database')
+        })
+      });
+      client.on("error", function(err) {
+        console.log(err);
+        res.status(500).send('Unable to fetch URL title')
+      });
+      client.fetch();
+
     }
     else {
       console.log('URL does not exist');
     };
-
-    // Get mobile screenshot
-    let options = {
-      screenSize: {
-        width: 320,
-        height: 480
-      },
-      shotSize: {
-        width: 320,
-        height: 'all'
-      },
-      userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
-        + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
-    };
-    webshot(req.body.url, 'mobile.png', options, function(err) {
-      // Add screenshot to website object here
-    });
   });
 });
-
+    
 
 /*
-// Add screenshot to website object here
-        let newItem = new req.body.fullSizeImg;
-           newItem.img.data = fs.readFileSync('../fullsize.png')
-           newItem.img.contentType = ‘image/png’;
-           newItem.save();
-        });
+// -------Image testing----------//
+
+// img path
+let imgPath = 'fullsize.png';
+
+let Schema = mongoose.Schema;
+
+// example schema
+let schema = new Schema({
+    img: { data: Buffer, contentType: String }
+});
+
+// our model
+let A = mongoose.model('A', schema);
+
+mongoose.connection.on('open', function () {
+  console.error('mongo is open');
+
+  // empty the collection
+  A.remove(function (err) {
+    if (err) throw err;
+
+    console.error('removed old docs');
+
+    // store an img in binary in mongo
+    let a = new A;
+    a.img.data = fs.readFileSync(imgPath);
+    a.img.contentType = 'image/png';
+    a.save(function (err, a) {
+      if (err) throw err;
+
+      console.error('saved img to mongo');
+
+    });
+  });
+
+});
+
+// -------Image testing----------// 
 */
 
 // PUT edit existing tags 
