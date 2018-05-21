@@ -97,9 +97,11 @@ function renderGallery(allWebsites) {
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
-        <h1 class='website-title'>${allWebsites[i].title}</h1>
         <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
-        <h1 class='website-tags'>${tagDisplay}</h1>
+        <div class='hoverInfo'>
+          <h1 class='website-title'>${allWebsites[i].title}</h1>
+          <h1 class='website-tags'>${tagDisplay}</h1>
+        </div>
       </div>
     `;
     $('#gallery').append(eachWebsite);
@@ -139,7 +141,7 @@ function handleFilterClick() {
       let eachWebsite = `
         <div class='each-website' onclick='renderDetailScreen(${[i]})'>
           <h1 class='website-title'>${allWebsites[i].title}</h1>
-          <img src='' class='website-image' alt='screenshot of website' />
+          <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
           <h1 class='website-tags'>${tagDisplay}</h1>
         </div>
       `;
@@ -228,7 +230,7 @@ function renderDetailScreen(i) {
         <span title='Click to visit website'> 
           <a href='${allWebsites[i].url}' target='_blank' >
             <h1 class='website-title'>${allWebsites[i].title}</h1>  
-            <img src='' class='website-image' alt='screenshot of website' />
+            <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
           </a>
         </span>
         <p class='website-tags'>${tagDisplay}</p>

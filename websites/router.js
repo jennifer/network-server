@@ -58,17 +58,12 @@ router.post('/', jwtAuth, (req, res) => {
         req.body.title = client.title;
         console.log('DB title: ' + req.body.title);
 
-        // Get full size screenshot, POST new website
+        // Get screenshot, save to cloud, POST new website
         webshot(req.body.url, 'fullsize.png', function(err) {
-          
-          //let imgPath = 'fullsize.png';
           newWebsite = new Website(req.body);
-          
           cloudinary.v2.uploader.upload('fullsize.png', {public_id: `${newWebsite._id}`},
           function(error, result){console.log(result)});
 
-          //newWebsite.fullsizeImg.data = fs.readFileSync(imgPath);
-          //newWebsite.fullsizeImg.contentType = 'image/png';
           newWebsite.save()
           .then(item => {
             res.status(201).send('Website added');
