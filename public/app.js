@@ -85,11 +85,20 @@ function renderGallery(allWebsites) {
   document.getElementById('website-detail').style.display = 'none';
   document.getElementById('gallery').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
+    /*
+    // GET THE DATA
+    let imgDb = allWebsites[i].fullsizeImg.data.data;
+    console.log(imgDb);
+    
+    // CONVERT TO base64 STRING
+    let imgStr = new Buffer(imgDb.toString('base64'));
+    console.log(imgStr);
+*/
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <h1 class='website-title'>${allWebsites[i].title}</h1>
-        <img src='data:image/png;utf8,${allWebsites[i].fullsizeImg.data.data.toString('utf8')}' class='website-image' alt='screenshot of website' />
+        <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
         <h1 class='website-tags'>${tagDisplay}</h1>
       </div>
     `;
@@ -130,7 +139,7 @@ function handleFilterClick() {
       let eachWebsite = `
         <div class='each-website' onclick='renderDetailScreen(${[i]})'>
           <h1 class='website-title'>${allWebsites[i].title}</h1>
-          <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
+          <img src='' class='website-image' alt='screenshot of website' />
           <h1 class='website-tags'>${tagDisplay}</h1>
         </div>
       `;
@@ -192,7 +201,7 @@ document.getElementById('new-website').addEventListener('submit', function(e){
     }
   })
   .then(checkStatus)
-  .then(()=>console.log(`Added ${url}`))
+  .then(()=>console.log(`Added new website`))
   .then(getDataFromApi());
 });
 
@@ -219,7 +228,7 @@ function renderDetailScreen(i) {
         <span title='Click to visit website'> 
           <a href='${allWebsites[i].url}' target='_blank' >
             <h1 class='website-title'>${allWebsites[i].title}</h1>  
-            <img src='./test-images/sample-site.png' class='website-image' alt='screenshot of website' />
+            <img src='' class='website-image' alt='screenshot of website' />
           </a>
         </span>
         <p class='website-tags'>${tagDisplay}</p>

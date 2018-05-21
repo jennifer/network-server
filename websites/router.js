@@ -1,6 +1,9 @@
 'use strict';
 
+require('dotenv').load();
+
 const bodyParser = require('body-parser');
+const cloudinary = require('cloudinary');
 const express = require('express');
 const fs = require('fs');
 const mongoose = require('mongoose');
@@ -51,16 +54,21 @@ router.post('/', jwtAuth, (req, res) => {
 
       // Get URL title
       let client = new nodeMetaInspector(req.body.url, { timeout: 5000 });
-      client.on("fetch", function() {
+      client.on('fetch', function() {
         req.body.title = client.title;
-        console.log("DB title: " + req.body.title);
+        console.log('DB title: ' + req.body.title);
 
-        // Get full size screenshot
+        // Get full size screenshot, POST new website
         webshot(req.body.url, 'fullsize.png', function(err) {
-          let imgPath = 'fullsize.png';
+          
+          //let imgPath = 'fullsize.png';
           newWebsite = new Website(req.body);
-          newWebsite.fullsizeImg.data = fs.readFileSync(imgPath);
-          newWebsite.fullsizeImg.contentType = 'image/png';
+          
+          cloudinary.v2.uploader.upload('fullsize.png', {public_id: `${newWebsite._id}`},
+          function(error, result){console.log(result)});
+
+          //newWebsite.fullsizeImg.data = fs.readFileSync(imgPath);
+          //newWebsite.fullsizeImg.contentType = 'image/png';
           newWebsite.save()
           .then(item => {
             res.status(201).send('Website added');
@@ -90,13 +98,11 @@ router.post('/', jwtAuth, (req, res) => {
           newWebsite.mobileImg.data = fs.readFileSync(imgPath);
           newWebsite.mobileImg.contentType = 'image/png';
         });
-*/
-        // RUN LAST
-        // Add new website to DB        
+*/  
         
       });
 
-      client.on("error", function(err) {
+      client.on('error', function(err) {
         console.log(err);
         res.status(500).send('Unable to fetch URL title')
       });
