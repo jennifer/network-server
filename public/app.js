@@ -85,22 +85,13 @@ function renderGallery(allWebsites) {
   document.getElementById('website-detail').style.display = 'none';
   document.getElementById('gallery').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
-    /*
-    // GET THE DATA
-    let imgDb = allWebsites[i].fullsizeImg.data.data;
-    console.log(imgDb);
-    
-    // CONVERT TO base64 STRING
-    let imgStr = new Buffer(imgDb.toString('base64'));
-    console.log(imgStr);
-*/
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
-        <div class='hoverInfo'>
-          <h1 class='website-title'>${allWebsites[i].title}</h1>
-          <h1 class='website-tags'>${tagDisplay}</h1>
+        <div class='overlay'>
+          <h1 class='text website-title'>${allWebsites[i].title}</h1><br />
+          <h2 class='text website-tags'>${tagDisplay}</h2>
         </div>
       </div>
     `;
