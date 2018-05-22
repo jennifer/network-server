@@ -6,7 +6,9 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
 }
 
 body {
+  /*
   background-color: #F8D5F0;
+  */
   font-family: 'Questrial', sans-serif;
 }
 
@@ -16,6 +18,11 @@ header {
   border-color: black;
   border-style: solid;
   padding: 10px;
+  font-size: 30px;
+}
+
+header:hover {
+  cursor: pointer;
 }
 
 #auth-forms {
@@ -58,7 +65,8 @@ main {
 .each-website {
   display: inline-block;
   position: relative;
-  width: 40%;
+  max-width: 500px;
+  min-width: 250px;
   margin: 20px;
   border: 3px black solid;
   box-shadow: 10px 10px;
