@@ -7,6 +7,12 @@ document.getElementById('menu').style.display = 'none';
 document.getElementById('gallery').style.display = 'none';
 document.getElementById('add-website').style.display = 'none';
 document.getElementById('website-detail').style.display = 'none';
+document.getElementById('signup-wrapper').style.display = 'none';
+
+document.getElementById('signup-link').addEventListener('click', function(e){
+  document.getElementById('login-wrapper').style.display = 'none';
+  document.getElementById('signup-wrapper').style.display = 'block';
+});
 
 document.getElementById('login-form').addEventListener('submit', function(e){
   e.preventDefault();
@@ -54,6 +60,7 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
 });
 
 function getDataFromApi() {
+  console.log('getDataFromApi ran');
   document.getElementById('gallery').innerHTML = '';
   let token = localStorage.getItem('authToken');
   return fetch('/websites', {
@@ -186,7 +193,6 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   return fetch('/websites', {
     method: 'POST',
     body: JSON.stringify(newWebsite),
-    success: getDataFromApi(),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -194,8 +200,7 @@ document.getElementById('new-website').addEventListener('submit', function(e){
     }
   })
   .then(checkStatus)
-  .then(()=>console.log(`Added new website`))
-  .then(getDataFromApi());
+  .then(setTimeout(function(){getDataFromApi()},9000));
 });
 
 function checkStatus(response) {

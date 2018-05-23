@@ -3,30 +3,33 @@
 <head>
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width'>
-  <title>Site Bank</title>
+  <title>Gallery</title>
   <link rel='stylesheet' type='text/css' href='style.css'>
   <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet">
 </head>
 <body>
-  <header onclick='getDataFromApi()'>Site Bank</header>
+  <header onclick='getDataFromApi()'>Gallery</header>
   <main>
     <section id='auth-forms'>
-      <h1>Login</h1>
-      <div>
-        <form id='login-form'>
-          <input type='text' name='loginusername' placeholder='Username' required='' class='text-input' id='username' />
-          <input type='password' name='loginpassword' placeholder='Password' required='' class='text-input' id='password' />
-          <div>
-            <button type='submit' class='button'>Login</button>
-          </div>
-        </form>
+      <div id='login-wrapper'>
+        <h1>Login</h1>
+        <div>
+          <form id='login-form'>
+            <input type='text' name='loginusername' placeholder='Username' required='' class='text-input' id='username' />
+            <input type='password' name='loginpassword' placeholder='Password' required='' class='text-input' id='password' />
+            <div>
+              <button type='submit' class='button'>Login</button>
+            </div><br />
+          </form>
+          <p >Or, click <span id='signup-link' class='text-link'>here</span> to sign up.</p>
+        </div>
       </div>
 
-      <div>
+      <div id='signup-wrapper'>
         <h1>Sign Up</h1>
         <div>
           <form id='signup-form'>
-            <input type='text' name='username' placeholder='username' required='' class='text-input' id='signup-username' />
+            <input type='text' name='username' placeholder='Username' required='' class='text-input' id='signup-username' />
             <input type='password' name='password' placeholder='Password' required='' class='text-input' id='signup-password' />
             <div>
               <button type='submit' class='button'>Submit</button>
