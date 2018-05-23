@@ -91,7 +91,7 @@ function renderGallery(allWebsites) {
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
   document.getElementById('gallery').innerHTML = '';
-  for (let i = 0; i < allWebsites.length; i++) {
+  for (let i = allWebsites.length - 1; i >= 0; i--) {
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     let eachWebsite = `
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
