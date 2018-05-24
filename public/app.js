@@ -16,10 +16,10 @@ document.getElementById('signup-link').addEventListener('click', function(e){
 
 document.getElementById('login-form').addEventListener('submit', function(e){
   e.preventDefault();
+  document.getElementById('notification').innerHTML = '';
   let user = {};
   user.username = document.getElementById('username').value;
   user.password = document.getElementById('password').value;
-  console.log(user);
   return fetch('/api/auth/login', {
     method: 'POST',
     body: JSON.stringify(user),
@@ -30,17 +30,18 @@ document.getElementById('login-form').addEventListener('submit', function(e){
   .then(res => res.json())
   .then((token) => {
     localStorage.setItem('authToken', token.authToken);
-    console.log(token);
     console.log('Logged in');
     getDataFromApi();
   })
-  .catch(() => {
-    console.log('Login failed')
+  .catch((err) => {
+    let error = new Error(response.message)
+    document.getElementById('notification').innerHTML = error;
   })
 });
 
 document.getElementById('signup-form').addEventListener('submit', function(e){
   e.preventDefault();
+  document.getElementById('notification').innerHTML = '';
   let user = {};
   user.username = document.getElementById('signup-username').value;
   user.password = document.getElementById('signup-password').value;
@@ -51,16 +52,12 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
       'Content-Type': 'application/json'
     }
   })
-  .then((token) => {
-    console.log('Signed up')
-  })
-  .catch(() => {
-    console.log('Signup failed')
-  })
+  .then(res => res.json())
+  .catch(error => console.error('Error:', error))
+  .then(response => console.log('Success:', response));
 });
 
 function getDataFromApi() {
-  console.log('getDataFromApi ran');
   document.getElementById('gallery').innerHTML = '';
   let token = localStorage.getItem('authToken');
   return fetch('/websites', {
@@ -84,7 +81,6 @@ function getDataFromApi() {
 };
 
 function renderGallery(allWebsites) {
-  console.log('renderGallery ran');
   document.getElementById('auth-forms').style.display = 'none';
   document.getElementById('menu').style.display = 'block';
   document.getElementById('gallery').style.display = 'block';
@@ -123,7 +119,6 @@ function renderMenu(data) {
 };
 
 function handleFilterClick() {
-  console.log('handleFilterClick ran')
   let clickedFilters = [];
   let checkbox = document.forms[2];
   for (let i = 0; i < checkbox.length; i++) {
@@ -131,18 +126,19 @@ function handleFilterClick() {
       clickedFilters.push(checkbox[i].value);
     }
   };
-  console.log(clickedFilters);
   document.getElementById('gallery').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     if (clickedFilters.every(val => (allWebsites[i].tags).indexOf(val) >= 0)) {
       let eachWebsite = `
-        <div class='each-website' onclick='renderDetailScreen(${[i]})'>
-          <h1 class='website-title'>${allWebsites[i].title}</h1>
-          <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
-          <h1 class='website-tags'>${tagDisplay}</h1>
+      <div class='each-website' onclick='renderDetailScreen(${[i]})'>
+        <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
+        <div class='overlay'>
+          <h1 class='text website-title'>${allWebsites[i].title}</h1><br />
+          <h2 class='text website-tags'>${tagDisplay}</h2>
         </div>
-      `;
+      </div>
+    `;
       $('#gallery').append(eachWebsite);
     }
   };
@@ -167,7 +163,6 @@ function renderAddWebsiteScreen() {
   `)}
 };
 
-// refactor get form data
 document.getElementById('new-website').addEventListener('submit', function(e){
   e.preventDefault();
   let tags = [];
@@ -180,14 +175,12 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   if (document.getElementById('customTag').value) {
     tags.push(document.getElementById('customTag').value)
   };
-  console.log(tags);
   //if (tags) tags = tags.substring(1);
 
   let newWebsite = {};
     newWebsite.url = document.getElementById('url').value;
     newWebsite.tags = tags;
     newWebsite.notes = document.getElementById('notes').value;
-    console.log(newWebsite);
 
   let token = localStorage.getItem('authToken');
   return fetch('/websites', {
@@ -204,17 +197,16 @@ document.getElementById('new-website').addEventListener('submit', function(e){
 });
 
 function checkStatus(response) {
+  document.getElementById('notification').innerHTML = '';
   if (response.status >= 200 && response.status < 300) {
     return response
   } else {
-    let error = new Error(response.statusText)
-    error.response = response
-    throw error
+    let error = new Error(response.message);
+    document.getElementById('notification') = error;
   }
 };
 
 function renderDetailScreen(i) {
-  console.log('handleThumbnailClick ran');
   document.getElementById('menu').style.display = 'none';
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'none';
@@ -279,16 +271,12 @@ function getEditFormData(i) {
   };
   tags += ',' + customTag;
   if (tags) tags = tags.substring(1);
-  console.log(id);
-  console.log(tags);
-  console.log(notes);
   let token = localStorage.getItem('authToken');
   let editedWebsite = {
     'id': id,
     'tags': tags,
     'notes': notes
   };
-  console.log(editedWebsite);
   putWebsiteUpdate(editedWebsite)
 };
 
