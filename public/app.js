@@ -34,8 +34,7 @@ document.getElementById('login-form').addEventListener('submit', function(e){
     getDataFromApi();
   })
   .catch((err) => {
-    let error = new Error(response.message)
-    document.getElementById('notification').innerHTML = error;
+    document.getElementById('notification').innerHTML = 'Login failed. Try again or click below to sign up';
   })
 });
 
@@ -56,6 +55,7 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
   .catch(error => console.error('Error:', error))
   .then(response => console.log('Success:', response));
 });
+
 
 function getDataFromApi() {
   document.getElementById('gallery').innerHTML = '';
@@ -79,6 +79,7 @@ function getDataFromApi() {
     console.log('API request error');
   })
 };
+
 
 function renderGallery(allWebsites) {
   document.getElementById('auth-forms').style.display = 'none';
@@ -127,6 +128,7 @@ function handleFilterClick() {
     }
   };
   document.getElementById('gallery').innerHTML = '';
+  document.getElementById('notification').innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     if (clickedFilters.every(val => (allWebsites[i].tags).indexOf(val) >= 0)) {
@@ -143,7 +145,7 @@ function handleFilterClick() {
     }
   };
   if (document.getElementById('gallery').innerHTML === '') {
-    $('#gallery').html('<p>No results. Try deselecting a filter.</p>')
+    document.getElementById('notification').innerHTML = 'No results. Try deselecting a filter.'
   }
 };
 
@@ -191,9 +193,9 @@ document.getElementById('new-website').addEventListener('submit', function(e){
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     }
-  })
+   })
   .then(checkStatus)
-  .then(setTimeout(function(){getDataFromApi()},9000));
+  .then(setTimeout(function(){getDataFromApi()},9000))
 });
 
 function checkStatus(response) {

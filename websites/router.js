@@ -62,7 +62,7 @@ router.post('/', jwtAuth, (req, res) => {
         webshot(req.body.url, 'fullsize.png', function(err) {
           newWebsite = new Website(req.body);
           cloudinary.v2.uploader.upload('fullsize.png', {public_id: `${newWebsite._id}`},
-          function(error, result){console.log(result)});
+            function(error, result){console.log(result)});
 
           newWebsite.save()
           .then(item => {
