@@ -217,7 +217,7 @@ function renderDetailScreen(i) {
   let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
-        <a id='close-link' class='text-link'>Close</a>
+        <a onclick='renderGallery(allWebsites)' class='text-link'>Close</a>
         <span title='Click to visit website'> 
           <a href='${allWebsites[i].url}' target='_blank' >
             <h1 class='website-title'>${allWebsites[i].title}</h1>  
@@ -233,11 +233,16 @@ function renderDetailScreen(i) {
   // Website editing tools
   document.getElementById('website-editor').style.display = 'none';
   $('#website-editor').append(`
-    <a id='close-link' class='text-link'>Close</a>
-    <div id='edit-tags'></div>
-    <label for='custom-tag'>Add a custom tag</label><input type='text' id='customTag' class='text-input' name='tags' /><br>
-    <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' /><br>
-    <a onclick='getEditFormData(${[i]})' class='text-link'>Submit</a>
+    <a onclick='renderGallery(allWebsites)' class='text-link'>Close</a>
+    <form>
+      <fieldset>
+      <legend>Edit website elements</legend>
+        <div id='edit-tags'></div>
+        <label for='custom-tag'>Add a custom tag</label><input type='text' id='customTag' class='text-input' /><br>
+        <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' /><br>
+        <a onclick='editWebsite(${[i]})' class='text-link'>Submit</a>
+      </fieldset>
+    </form>
     <a onclick='deleteWebsite(${[i]})' class='text-link'>DELETE WEBSITE</a>
   `);
   for (let t = 0; t < uniqueTags.length; t++) {
@@ -261,27 +266,28 @@ function showHideWebsiteEditor() {
   }
 };
 
-function getEditFormData(i) {
+function editWebsite(i) {
   let id = allWebsites[i]._id;
-  let tags = '';
+  let tags = [];
   let customTag = document.getElementById('customTag').value;
+  console.log(customTag);
   let notes = document.getElementById('notes').value;
+  console.log(notes);
   let checkbox = document.getElementsByName('tags');
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
       tags.push(checkbox[i].value)
     }
   };
-  let token = localStorage.getItem('authToken');
+  if (customTag) {
+    tags.push(customTag)
+  }
   let editedWebsite = {
     'id': id,
     'tags': tags,
     'notes': notes
   };
-  putWebsiteUpdate(editedWebsite)
-};
-
-function putWebsiteUpdate(editedWebsite) {
+  console.log(tags);
   let token = localStorage.getItem('authToken');
   return fetch(`/websites/${editedWebsite.id}`, {
     method: 'PUT',
@@ -317,3 +323,5 @@ document.getElementById('close-link').addEventListener('click', function(e){
   e.preventDefault();
   renderGallery(allWebsites)
 });
+
+

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const siteDataSchema = mongoose.Schema({
+  username: String,
   url: { type: String, required: true, lowercase: true, trim: true },
   title: String,
   tags: [],
