@@ -10,49 +10,51 @@
 <body>
   <header onclick='getDataFromApi()'>Gallery</header>
   <main>
-    <section id='auth-forms'>
-      <div id='login-wrapper'>
-        <h1>Login</h1>
-        <div>
-          <form id='login-form'>
-            <input type='text' name='loginusername' placeholder='Username' required='' class='text-input' id='username' />
-            <input type='password' name='loginpassword' placeholder='Password' required='' class='text-input' id='password' />
-            <div>
-              <button type='submit' class='button'>Login</button>
-            </div><br />
-          </form>
-          <p >Or, click <span id='signup-link' class='text-link'>here</span> to sign up.</p>
+    <div class='left-column'>
+      <section id='auth-forms'>
+        <div id='login-wrapper'>
+          <h1>Login</h1>
+          <div>
+            <form id='login-form'>
+              <input type='text' name='loginusername' placeholder='Username' required='' class='text-input' id='username' />
+              <input type='password' name='loginpassword' placeholder='Password' required='' class='text-input' id='password' />
+              <div>
+                <button type='submit' class='button'>Login</button>
+              </div><br />
+            </form>
+            <p >Or, click <span id='signup-link' class='text-link'>here</span> to sign up.</p>
+          </div>
         </div>
-      </div>
 
-      <div id='signup-wrapper'>
-        <h1>Sign Up</h1>
-        <div>
-          <form id='signup-form'>
-            <input type='text' name='username' placeholder='Username' required='' class='text-input' id='signup-username' />
-            <input type='password' name='password' placeholder='Password' required='' class='text-input' id='signup-password' />
-            <div>
-              <button type='submit' class='button'>Submit</button>
-            </div>
-          </form>
+        <div id='signup-wrapper'>
+          <h1>Sign Up</h1>
+          <div>
+            <form id='signup-form'>
+              <input type='text' name='username' placeholder='Username' required='' class='text-input' id='signup-username' />
+              <input type='password' name='password' placeholder='Password' required='' class='text-input' id='signup-password' />
+              <div>
+                <button type='submit' class='button'>Submit</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section>
-      <p id='notification'></p>
-    </section>
+      <section>
+        <p id='notification'></p>
+      </section>
 
-    <section id='menu'>
-      <p>Select elements to filter.</p>
-      <form id='filters'></form>
-      <p>Click <a onclick='renderAddWebsiteScreen()' id='add-link' class='text-link'>here</a> to add a new website.</p>
-    </section>
+      <section id='menu'>
+        <p>Select elements to filter.</p>
+        <form id='filters'></form>
+        <p>Click <a id='add-link' class='text-link'>here</a> to add a new website.</p>
+      </section>
+    </div>
 
     <section id='gallery'></section> 
 
     <section id='add-website'>
-      <a onclick='renderGallery(allWebsites)'class='text-link'>Close</a>
+      <a id='close-link'class='text-link'>Close</a>
       <form id='new-website' name='new-website'>
         <fieldset name='new-url'>
           <legend>Add a new website</legend>

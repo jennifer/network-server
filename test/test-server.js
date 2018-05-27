@@ -4,27 +4,16 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 const faker = require('faker');
+const jwt = require('jsonwebtoken');
 
 const should = chai.should();
 const expect = chai.expect();
 
-const { Website } = require('../models');
+const { Website } = require('../websites/models');
 const { closeServer, runServer, app } = require('../server');
-const { TEST_DATABASE_URL } = require('../config');
+const { TEST_DATABASE_URL, JWT_SECRET } = require('../config');
 
 chai.use(chaiHttp);
-
-/*
-describe('index page', function () {
-  it('should exist', function () {
-    return chai.request(app)
-      .get('/')
-      .then(function (res) {
-        expect(res).to.have.status(200);
-      });
-  });
-});
-*/
 
 function tearDownDb() {
   return new Promise((resolve, reject) => {
@@ -43,8 +32,6 @@ function seedWebsiteData() {
       userId: faker.random.number(),
       url: faker.internet.url(),
       title: faker.lorem.sentence(),
-      desktopImg: faker.image.abstract(),
-      mobileImg: faker.image.abstract(),
       tags: faker.lorem.words(),
       created: faker.date.past()
     });
@@ -65,14 +52,34 @@ describe('website API resource', function () {
   after(function () {
     return closeServer();
   });
+
+  const username = 'exampleUser';
+  const password = 'examplePass';
+  const firstName = 'Example';
+  const lastName = 'User';
+
+  const token = jwt.sign(
+    {
+      user: {
+        username,
+        firstName,
+        lastName
+      }
+    },
+    JWT_SECRET,
+    {
+      algorithm: 'HS256',
+      subject: username,
+      expiresIn: '7d'
+    }
+  );
  
   describe('GET endpoint', function () {
-    
-    // TypeError: res.body.should.have.length.of is not a function
     it('should return all existing websites', function () {
       let res;
       return chai.request(app)
         .get('/websites')
+        .set('authorization', `Bearer ${token}`)
         .then(_res => {
           res = _res;
           res.should.have.status(200);
@@ -84,11 +91,11 @@ describe('website API resource', function () {
         });
     });
     
-    // AssertionError: expected { Object (created, _id, ...) } to contain keys '__v', '_id', 'userId', 'url', 'title', 'desktopImg', 'mobileImg', 'tags', and 'created'
     it('should return websites with right fields', function () {
       let resSite;
       return chai.request(app)
         .get('/websites')
+        .set('authorization', `Bearer ${token}`)
         .then(function (res) {
           res.should.have.status(200);
           res.should.be.json;
@@ -110,10 +117,9 @@ describe('website API resource', function () {
     });
   });
 
-
-  // AssertionError: expected { Object (_id, userId, ...) } to contain keys 'userId', 'url', 'title', 'desktopImg', 'mobileImg', 'tags', and 'created'
   describe('POST endpoint', function () {
     it('should add a new website', function () {
+      this.timeout(15000);
       const newSite = {
         userId: faker.random.number(),
         url: faker.internet.url(),
@@ -122,9 +128,10 @@ describe('website API resource', function () {
       };
       return chai.request(app)
         .post('/websites')
+        .set('authorization', `Bearer ${token}`)
         .send(newSite)
         .then(function (res) {
-          res.should.have.status(200);
+          res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.a('object');
           res.body.should.include.keys('userId', 'url', 'tags', 'created');
@@ -142,13 +149,9 @@ describe('website API resource', function () {
   describe('PUT endpoint', function () {
     it('should update fields you send over', function () {
       const updateData = {
-        url: faker.internet.url(),
-        title: faker.lorem.sentence(),
-        desktopImg: faker.image.abstract(),
-        mobileImg: faker.image.abstract(),
+        notes: faker.lorem.sentence(),
         tags: faker.lorem.words()
-        }
-      });
+      }
       return Website
         .findOne()
         .then(site => {
@@ -156,19 +159,18 @@ describe('website API resource', function () {
 
           return chai.request(app)
             .put(`/websites/${site.id}`)
+            .set('authorization', `Bearer ${token}`)
             .send(updateData);
         })
         .then(res => {
           res.should.have.status(204);
-          return BlogPost.findById(updateData.id);
+          return Website.findById(updateData.id);
         })
         .then(site => {
-          site.url.should.equal(updateData.url);
-          site.title.should.equal(updateData.title);
-          site.desktopImg.should.equal(updateData.desktopImg);
-          site.mobileImg.should.equal(updateData.mobileImg);
+          site.notes.should.equal(updateData.notes);
           site.tags.should.equal(updateData.tags)
         })
+      })
   });
 
   describe('DELETE endpoint', function () {
@@ -178,7 +180,9 @@ describe('website API resource', function () {
         .findOne()
         .then(_site => {
           site = _site;
-          return chai.request(app).delete(`/websites/${site.id}`);
+          return chai.request(app)
+            .delete(`/websites/${site.id}`)
+            .set('authorization', `Bearer ${token}`)
         })
         .then(res => {
           res.should.have.status(204);

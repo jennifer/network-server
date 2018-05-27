@@ -18,20 +18,30 @@ header {
   border-color: black;
   border-style: solid;
   padding: 10px;
+}
+
+#header-link {
+  position: absolute;
   font-size: 30px;
+}
+
+#logout {
+  text-align: right;
 }
 
 header:hover {
   cursor: pointer;
 }
 
-#auth-forms {
-  min-width: 300px;
+.left-column {
+  padding: 10px;
+}
+
+#auth-forms,  {
   border-width: 0 3px 0 0;
   border-color: black;
   border-style: solid;
-  padding: 20px;
-  height: 100vh;
+  padding-left: 10px;
   /*
   background-color: #F8D5F0;
   */
@@ -40,6 +50,7 @@ header:hover {
 main {
   display: flex;
   border: 3px black solid;
+  height: 100vh;
   /*
   background: url('https://i.imgur.com/bHOoaJc.jpg') no-repeat center center fixed;
   background-size: cover;
@@ -48,10 +59,6 @@ main {
 
 #menu {
   min-width: 300px;
-  border-width: 0 3px 0 0;
-  border-color: black;
-  border-style: solid;
-  padding: 20px;
   /*
   background-color: #F8D5F0;
   */
@@ -59,7 +66,7 @@ main {
 
 #gallery {
   display: flex;
-  padding: 20px;
+  border-left: 3px black solid;
 }
 
 .each-website {

@@ -30,10 +30,12 @@ document.getElementById('login-form').addEventListener('submit', function(e){
   .then(res => res.json())
   .then((token) => {
     localStorage.setItem('authToken', token.authToken);
+    localStorage.setItem('username', user.username);
     console.log('Logged in');
     getDataFromApi();
   })
   .catch((err) => {
+    console.log(err);
     document.getElementById('notification').innerHTML = 'Login failed. Try again or click below to sign up';
   })
 });
@@ -55,7 +57,6 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
   .catch(error => console.error('Error:', error))
   .then(response => console.log('Success:', response));
 });
-
 
 function getDataFromApi() {
   document.getElementById('gallery').innerHTML = '';
@@ -79,7 +80,6 @@ function getDataFromApi() {
     console.log('API request error');
   })
 };
-
 
 function renderGallery(allWebsites) {
   document.getElementById('auth-forms').style.display = 'none';
@@ -149,7 +149,8 @@ function handleFilterClick() {
   }
 };
 
-function renderAddWebsiteScreen() {
+document.getElementById('add-link').addEventListener('click', function(e){
+  e.preventDefault();
   document.getElementById('menu').style.display = 'none';
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'block';
@@ -163,7 +164,7 @@ function renderAddWebsiteScreen() {
     <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
     <br>
   `)}
-};
+});
 
 document.getElementById('new-website').addEventListener('submit', function(e){
   e.preventDefault();
@@ -177,9 +178,9 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   if (document.getElementById('customTag').value) {
     tags.push(document.getElementById('customTag').value)
   };
-  //if (tags) tags = tags.substring(1);
 
   let newWebsite = {};
+    newWebsite.username = localStorage.getItem('username');
     newWebsite.url = document.getElementById('url').value;
     newWebsite.tags = tags;
     newWebsite.notes = document.getElementById('notes').value;
@@ -216,7 +217,7 @@ function renderDetailScreen(i) {
   let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
-        <a onclick='renderGallery(allWebsites)' class='text-link'>Close</a>
+        <a id='close-link' class='text-link'>Close</a>
         <span title='Click to visit website'> 
           <a href='${allWebsites[i].url}' target='_blank' >
             <h1 class='website-title'>${allWebsites[i].title}</h1>  
@@ -232,7 +233,7 @@ function renderDetailScreen(i) {
   // Website editing tools
   document.getElementById('website-editor').style.display = 'none';
   $('#website-editor').append(`
-    <a onclick='getDataFromApi()' class='text-link'>Close</a>
+    <a id='close-link' class='text-link'>Close</a>
     <div id='edit-tags'></div>
     <label for='custom-tag'>Add a custom tag</label><input type='text' id='customTag' class='text-input' name='tags' /><br>
     <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' /><br>
@@ -268,11 +269,9 @@ function getEditFormData(i) {
   let checkbox = document.getElementsByName('tags');
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
-      tags += ',' + checkbox[i].value;
+      tags.push(checkbox[i].value)
     }
   };
-  tags += ',' + customTag;
-  if (tags) tags = tags.substring(1);
   let token = localStorage.getItem('authToken');
   let editedWebsite = {
     'id': id,
@@ -281,7 +280,6 @@ function getEditFormData(i) {
   };
   putWebsiteUpdate(editedWebsite)
 };
-
 
 function putWebsiteUpdate(editedWebsite) {
   let token = localStorage.getItem('authToken');
@@ -309,3 +307,7 @@ function deleteWebsite(i) {
     }
   })
 };
+
+document.getElementById('close-link').addEventListener('click', function(e){
+  renderGallery(allWebsites)
+});
