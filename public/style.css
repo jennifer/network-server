@@ -21,12 +21,19 @@ header {
 }
 
 #header-link {
-  position: absolute;
-  font-size: 30px;
+  
 }
 
 #logout {
-  text-align: right;
+  float: right;
+}
+
+button {
+  font-size: 25px;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 header:hover {

@@ -324,4 +324,13 @@ document.getElementById('close-link').addEventListener('click', function(e){
   renderGallery(allWebsites)
 });
 
-
+document.getElementById('logout').addEventListener('click', function(e){
+  e.preventDefault();
+  localStorage.setItem('authToken', '');
+  localStorage.setItem('username', '');
+  document.getElementById('menu').style.display = 'none';
+  document.getElementById('gallery').style.display = 'none';
+  document.getElementById('add-website').style.display = 'none';
+  document.getElementById('website-detail').style.display = 'none';
+  document.getElementById('auth-forms').style.display = 'block';
+});
