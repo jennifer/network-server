@@ -308,6 +308,12 @@ function deleteWebsite(i) {
   })
 };
 
+document.getElementById('gallery-link').addEventListener('click', function(e){
+  e.preventDefault();
+  getDataFromApi() 
+});
+
 document.getElementById('close-link').addEventListener('click', function(e){
+  e.preventDefault();
   renderGallery(allWebsites)
 });
