@@ -226,24 +226,24 @@ function renderDetailScreen(i) {
         </span>
         <p class='website-tags'>${tagDisplay}</p>
         <p class='notes'>${allWebsites[i].notes}</p>
-        <a onclick='showHideWebsiteEditor()' class='text-link'>Edit</a>
+        <button onclick='showHideWebsiteEditor()'>Edit</button>
         <div id='website-editor'></div>
       </div>
     `);
   // Website editing tools
   document.getElementById('website-editor').style.display = 'none';
   $('#website-editor').append(`
-    <a onclick='renderGallery(allWebsites)' class='text-link'>Close</a>
+    <button onclick='renderGallery(allWebsites)'>Close</button>
     <form>
       <fieldset>
       <legend>Edit website elements</legend>
         <div id='edit-tags'></div>
         <label for='custom-tag'>Add a custom tag</label><input type='text' id='customTag' class='text-input' /><br>
         <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' /><br>
-        <a onclick='editWebsite(${[i]})' class='text-link'>Submit</a>
+        <a onclick='editWebsite(${[i]})'>Submit</a>
       </fieldset>
     </form>
-    <a onclick='deleteWebsite(${[i]})' class='text-link'>DELETE WEBSITE</a>
+    <button onclick='deleteWebsite(${[i]})'>DELETE WEBSITE</button>
   `);
   for (let t = 0; t < uniqueTags.length; t++) {
     $('#edit-tags').append(`
