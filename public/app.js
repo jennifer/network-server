@@ -33,6 +33,8 @@ document.getElementById('login-form').addEventListener('submit', function(e){
     localStorage.setItem('username', user.username);
     console.log('Logged in');
     getDataFromApi();
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
   })
   .catch((err) => {
     console.log(err);
@@ -95,7 +97,8 @@ function renderGallery(allWebsites) {
         <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
         <div class='overlay'>
           <h1 class='text website-title'>${allWebsites[i].title}</h1><br />
-          <h2 class='text website-tags'>${tagDisplay}</h2>
+          <h2 class='text website-tags'>${tagDisplay}</h2><br />
+          <h2 class='text website-tags'>${allWebsites[i].notes}</h2>
         </div>
       </div>
     `;
@@ -157,6 +160,7 @@ document.getElementById('add-link').addEventListener('click', function(e){
   document.getElementById('website-detail').style.display = 'none';
   document.getElementById('url').value = '';
   document.getElementById('customTag').value = '';
+  document.getElementById('notes').value = '';
   document.getElementById('tag-checkboxes').innerHTML = '';
   for (let i = 0; i < uniqueTags.length; i++) {
   $('#tag-checkboxes').append(`
@@ -238,8 +242,8 @@ function renderDetailScreen(i) {
       <fieldset>
       <legend>Edit website elements</legend>
         <div id='edit-tags'></div>
-        <label for='custom-tag'>Add a custom tag</label><input type='text' id='customTag' class='text-input' /><br>
-        <label for='notes'>Notes:</label><input type='text' id='notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' /><br>
+        <label for='custom-tag'>Add a custom tag</label><input type='text' id='edit-customTag' class='text-input' /><br>
+        <label for='notes'>Notes:</label><input type='text' id='edit-notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' /><br>
         <a onclick='editWebsite(${[i]})'>Submit</a>
       </fieldset>
     </form>
@@ -267,32 +271,26 @@ function showHideWebsiteEditor() {
 };
 
 function editWebsite(i) {
-  let id = allWebsites[i]._id;
   let tags = [];
-  let customTag = document.getElementById('customTag').value;
-  console.log(customTag);
-  let notes = document.getElementById('notes').value;
-  console.log(notes);
   let checkbox = document.getElementsByName('tags');
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
       tags.push(checkbox[i].value)
     }
   };
+  let customTag = document.getElementById('edit-customTag').value;
   if (customTag) {
     tags.push(customTag)
-  }
-  let editedWebsite = {
-    'id': id,
-    'tags': tags,
-    'notes': notes
   };
-  console.log(tags);
+  let editedWebsite = {};
+    editedWebsite.id = allWebsites[i]._id;
+    editedWebsite.tags = tags;
+    editedWebsite.notes = document.getElementById('edit-notes').value;
+  
   let token = localStorage.getItem('authToken');
   return fetch(`/websites/${editedWebsite.id}`, {
     method: 'PUT',
     body: JSON.stringify(editedWebsite),
-    success: getDataFromApi(),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -300,7 +298,8 @@ function editWebsite(i) {
     }
   })
     .then(checkStatus)
-    .then(console.log(`Edited`));
+    .then(console.log(`Edited`))
+    .then(getDataFromApi())
 };
 
 function deleteWebsite(i) {
