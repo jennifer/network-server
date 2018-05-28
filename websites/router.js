@@ -105,7 +105,8 @@ router.post('/', jwtAuth, (req, res) => {
 
       }
     else {
-      console.log('URL does not exist');
+      console.error(err);
+      res.status(500).send({status:500, message: 'URL does not exist', type:'internal'}); 
     };
   });
 });

@@ -37,7 +37,6 @@ document.getElementById('login-form').addEventListener('submit', function(e){
     document.getElementById('password').value = '';
   })
   .catch((err) => {
-    console.log(err);
     document.getElementById('notification').innerHTML = 'Login failed. Try again or click below to sign up';
   })
 });
@@ -56,8 +55,7 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
     }
   })
   .then(res => res.json())
-  .catch(error => console.error('Error:', error))
-  .then(response => console.log('Success:', response));
+  .then(response => document.getElementById('notification').innerHTML = response.message);
 });
 
 function getDataFromApi() {
@@ -170,6 +168,7 @@ document.getElementById('add-link').addEventListener('click', function(e){
   `)}
 });
 
+// POST a new website
 document.getElementById('new-website').addEventListener('submit', function(e){
   e.preventDefault();
   let tags = [];
@@ -208,8 +207,8 @@ function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response
   } else {
-    let error = new Error(response.message);
-    document.getElementById('notification') = error;
+    console.log(response);
+    document.getElementById('notification').innerHTML = response.message;
   }
 };
 
