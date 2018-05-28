@@ -15,27 +15,23 @@
     <main>
       <section id='auth-forms'>
         <div id='login-wrapper'>
-          <h1>Login</h1>
           <div>
             <form id='login-form'>
               <input type='text' name='loginusername' placeholder='Username' required='' class='text-input' id='username' />
               <input type='password' name='loginpassword' placeholder='Password' required='' class='text-input' id='password' />
-              <div>
-                <button type='submit' class='button'>Login</button>
-              </div><br />
+              <button type='submit' class='button auth-button'>Login</button>
             </form>
-            <p >Or, click <span id='signup-link' class='text-link'>here</span> to sign up.</p>
+            <button type='submit' class='button auth-button' id='signup-link'>Make an Account</button>
           </div>
         </div>
 
         <div id='signup-wrapper'>
-          <h1>Sign Up</h1>
           <div>
             <form id='signup-form'>
               <input type='text' name='username' placeholder='Username' required='' class='text-input' id='signup-username' />
               <input type='password' name='password' placeholder='Password' required='' class='text-input' id='signup-password' />
               <div>
-                <button type='submit' class='button'>Submit</button>
+                <button type='submit' class='button auth-button'>Submit</button>
               </div>
             </form>
           </div>
@@ -47,9 +43,9 @@
       </section>
 
       <section id='menu'>
-        <p>Select elements to filter.</p>
-        <form id='filters'></form>
-        <button id='add-link'>Click here to add a new website.</button>
+        <p class='p-text'>Check boxes to filter:</p>
+        <form id='filters' class='checkbox-wrapper'></form>
+        <button id='add-link'>Add a Website</button>
       </section>
       <button id='logout'>Logout</button>
     </div>
@@ -65,7 +61,7 @@
             <div>
               <label for='tag-checkboxes'>Tag website elements</label>
             </div>
-            <div id='tag-checkboxes'></div>
+            <div id='tag-checkboxes' class='checkbox-wrapper'></div>
             <div>
               <label for='custom-tag'>Add a custom tag</label>
               <input type='text' id='customTag' class='text-input' name='tags' />

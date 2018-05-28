@@ -13,17 +13,19 @@ body {
 }
 
 .left-column {
-  width: 300px;
+  min-width: 300px;
+  height: 0%;
   margin: 20px;
   border: 3px black solid;
   background-color: white
 }
 
-#gallery-link, #logout {
+button {
   height: 55px;
   width: 100%;
   font-size: 30px;
-  text-align: center;
+  text-align: left;
+  padding-left: 10px;
 }
 
 #gallery-link {
@@ -32,13 +34,10 @@ body {
   border-style: solid;
 }
 
-#logout {
+#logout, #add-link, .auth-button {
   border-top: 3px;
   border-color: black;
   border-style: solid;
-}
-
-button {
 }
 
 button:hover {
@@ -52,14 +51,29 @@ header:hover {
   cursor: pointer;
 }
 
-#auth-forms,  {
- 
+.p-text, #filters {
+  font-size: 26px;
+  padding: 10px;
 }
 
+.p-text {
+  padding-bottom: 0;
+}
 
+#filters {
+  padding-top: 0;
+}
 
-#menu {
-  width: 300px;
+input[type='checkbox'] {
+  -webkit-appearance:none;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border: 2px solid black;
+}
+
+input[type='checkbox']:checked {
+  background: black;
 }
 
 #gallery {
@@ -100,25 +114,40 @@ header:hover {
 
 .each-website:hover .overlay {
   opacity: 1;
+  cursor: pointer;
 }
 
 .text {
   position: relative;
   display: inline;
+  padding: 5px;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
 }
 
 .website-title {
-  font-size: 30px;
+  font-size: 32px;
 }
 
 .website-tags {
-  font-size: 20px;
-  line-height: 30px; 
+  font-size: 26px;
+}
+
+.website-notes {
+  font-size: 22px;
 }
 
 .text-input {
-  height: 20px;
-  border: 1px black solid;
+  display: block;
+  height: 55px;
+  width: 100%;
+}
+
+input::placeholder {
+  font-size: 22px;
+  padding-left: 10px;
+}
+
+#login-form {
+  height: auto;
 }
