@@ -6,22 +6,20 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
 }
 
 body {
-  /*
-  background-color: #F8D5F0;
-  */
+  border: 3px black solid;
   font-family: 'Questrial', sans-serif;
+  background: url('https://i.imgur.com/wsFyz8e.jpg') no-repeat center center fixed;
+  background-size: cover;
 }
 
-header {
-  height: 50px;
-  border-width: 3px 3px 0 3px;
-  border-color: black;
-  border-style: solid;
-  padding: 10px;
-}
 
-#header-link {
-  
+
+#gallery-link, #logout {
+  height: 65px;
+  width: 125px;
+  border: 3px black solid;
+  margin: 20px;
+  font-size: 30px;
 }
 
 #logout {
@@ -29,7 +27,6 @@ header {
 }
 
 button {
-  font-size: 20px;
 }
 
 button:hover {
@@ -56,12 +53,7 @@ header:hover {
 
 main {
   display: flex;
-  border: 3px black solid;
   height: 100vh;
-  /*
-  background: url('https://i.imgur.com/bHOoaJc.jpg') no-repeat center center fixed;
-  background-size: cover;
-  */
 }
 
 #menu {
@@ -73,12 +65,12 @@ main {
 
 #gallery {
   display: flex;
-  border-left: 3px black solid;
 }
 
 .each-website {
   display: inline-block;
   position: relative;
+  background-color: white;
   max-width: 500px;
   min-width: 250px;
   margin: 20px;
@@ -108,7 +100,7 @@ main {
 }
 
 .each-website:hover .overlay {
-  opacity: 0.9;
+  opacity: 1;
 }
 
 .text {
