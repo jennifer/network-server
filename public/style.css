@@ -3,27 +3,39 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
 	padding: 0;
 	border: 0;
   box-sizing: border-box;
+  font-family: 'Gothic A1', sans-serif;
 }
 
 body {
-  border: 3px black solid;
-  font-family: 'Questrial', sans-serif;
   background: url('https://i.imgur.com/wsFyz8e.jpg') no-repeat center center fixed;
   background-size: cover;
+  display: flex;
 }
 
-
+.left-column {
+  width: 300px;
+  margin: 20px;
+  border: 3px black solid;
+  background-color: white
+}
 
 #gallery-link, #logout {
-  height: 65px;
-  width: 125px;
-  border: 3px black solid;
-  margin: 20px;
+  height: 55px;
+  width: 100%;
   font-size: 30px;
+  text-align: center;
+}
+
+#gallery-link {
+  border-bottom: 3px;
+  border-color: black;
+  border-style: solid;
 }
 
 #logout {
-  float: right;
+  border-top: 3px;
+  border-color: black;
+  border-style: solid;
 }
 
 button {
@@ -31,36 +43,23 @@ button {
 
 button:hover {
   cursor: pointer;
+  color: white;
+  background-color: black;
+  font-weight: bold;
 }
 
 header:hover {
   cursor: pointer;
 }
 
-.left-column {
-  padding: 10px;
-}
-
 #auth-forms,  {
-  border-width: 0 3px 0 0;
-  border-color: black;
-  border-style: solid;
-  padding-left: 10px;
-  /*
-  background-color: #F8D5F0;
-  */
+ 
 }
 
-main {
-  display: flex;
-  height: 100vh;
-}
+
 
 #menu {
-  min-width: 300px;
-  /*
-  background-color: #F8D5F0;
-  */
+  width: 300px;
 }
 
 #gallery {
@@ -117,15 +116,6 @@ main {
 .website-tags {
   font-size: 20px;
   line-height: 30px; 
-}
-
-.text-link {
-  color: blue;
-  text-decoration: underline;
-}
-
-.text-link:hover {
-  cursor: pointer;
 }
 
 .text-input {
