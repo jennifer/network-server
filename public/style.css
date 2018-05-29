@@ -10,6 +10,7 @@ body {
   background: url('https://i.imgur.com/wsFyz8e.jpg') no-repeat center center fixed;
   background-size: cover;
   display: flex;
+  font-size: 30px;
 }
 
 .left-column {
@@ -34,7 +35,7 @@ button {
   border-style: solid;
 }
 
-#logout, #add-link, .auth-button {
+.border-top {
   border-top: 3px;
   border-color: black;
   border-style: solid;
@@ -51,7 +52,7 @@ header:hover {
   cursor: pointer;
 }
 
-.p-text, #filters {
+.p-text, #filters, .padding-div {
   font-size: 26px;
   padding: 10px;
 }
@@ -75,6 +76,10 @@ input[type='checkbox'] {
 input[type='checkbox']:checked {
   background: black;
 }
+
+input[type='text'] {
+
+}  
 
 #gallery {
   display: flex;
@@ -139,15 +144,57 @@ input[type='checkbox']:checked {
 
 .text-input {
   display: block;
-  height: 55px;
+  height: 40px;
   width: 100%;
+  font-size: 20px;
+  padding-left: 10px;
+  background-color: black;
+  color: white;
 }
 
 input::placeholder {
-  font-size: 22px;
-  padding-left: 10px;
+  font-size: 20px;
+  color: white;
 }
 
 #login-form {
   height: auto;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  margin: 20px;
+  border: 3px black solid;
+}
+
+footer button {
+  width: 40px;
+  height: 40px;
+}
+
+.cursor {
+  position: relative;
+}
+.cursor i {
+  position: absolute;
+  width: 3px;
+  height: 75%;
+  background-color: white;
+  left: 5px;
+  top: 10%;
+  animation-name: blink;
+  animation-duration: 800ms;
+  animation-iteration-count: infinite;
+  opacity: 1;
+}
+
+.cursor input:focus + i {
+  display: none;
+}
+
+@keyframes blink {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

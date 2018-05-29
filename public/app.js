@@ -90,6 +90,7 @@ function renderGallery(allWebsites) {
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
   document.getElementById('gallery').innerHTML = '';
+  document.getElementById('notification').innerHTML = '';
   for (let i = allWebsites.length - 1; i >= 0; i--) {
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     let eachWebsite = `
@@ -156,9 +157,9 @@ function handleFilterClick() {
 document.getElementById('add-link').addEventListener('click', function(e){
   e.preventDefault();
   document.getElementById('menu').style.display = 'none';
-  document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'block';
   document.getElementById('website-detail').style.display = 'none';
+  document.getElementById('logout').style.display = 'none';
   document.getElementById('url').value = '';
   document.getElementById('customTag').value = '';
   document.getElementById('notes').value = '';
@@ -220,6 +221,7 @@ function renderDetailScreen(i) {
   document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'block';
+  document.getElementById('logout').style.display = 'none';
   let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>

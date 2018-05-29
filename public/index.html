@@ -17,22 +17,40 @@
         <div id='login-wrapper'>
           <div>
             <form id='login-form'>
-              <input type='text' name='loginusername' placeholder='Username' required='' class='text-input' id='username' />
-              <input type='password' name='loginpassword' placeholder='Password' required='' class='text-input' id='password' />
-              <button type='submit' class='button auth-button'>Login</button>
+              <div class='padding-div'>
+                <label for='username'>Username:</label>
+                <div class="cursor">
+                  <input type='text' name='loginusername' required='' class='text-input' id='username' />
+                  <i></i>
+                </div>
+                <label for='password'>Password:</label>
+                <div class="cursor">
+                  <input type='password' name='loginpassword' required='' class='text-input' id='password' />
+                  <i></i>
+                </div>
+              </div>
+              <button type='submit' class='border-top'>Login</button>
             </form>
-            <button type='submit' class='button auth-button' id='signup-link'>Make an Account</button>
+            <button type='submit' class='border-top' id='signup-link'>Make an account</button>
           </div>
         </div>
 
         <div id='signup-wrapper'>
           <div>
             <form id='signup-form'>
-              <input type='text' name='username' placeholder='Username' required='' class='text-input' id='signup-username' />
-              <input type='password' name='password' placeholder='Password' required='' class='text-input' id='signup-password' />
-              <div>
-                <button type='submit' class='button auth-button'>Submit</button>
+              <div class='padding-div'>
+                <label for='signup-username'>Username:</label>
+                <div class="cursor">
+                  <input type='text' name='username' required='' class='text-input' id='signup-username' />
+                  <i></i>
+                </div>
+                <label for='signup-password'>Password:</label>
+                <div class="cursor">
+                  <input type='password' name='password' required='' class='text-input' id='signup-password' />
+                  <i></i>
+                </div>
               </div>
+              <button type='submit' class='border-top'>Submit</button>
             </form>
           </div>
         </div>
@@ -45,38 +63,52 @@
       <section id='menu'>
         <p class='p-text'>Check boxes to filter:</p>
         <form id='filters' class='checkbox-wrapper'></form>
-        <button id='add-link'>Add a Website</button>
+        <button id='add-link' class='border-top'>Add a website</button>
       </section>
-      <button id='logout'>Logout</button>
-    </div>
 
-    <section id='gallery'></section> 
+      <section id='add-website'>
+        <form id='new-website' name='new-website'>
+          <fieldset name='new-url'>
+            <div class='padding-div'>
+              <legend>Add a new website</legend>
+                <label for='url-input'>Enter a URL:</label>
+                <div class="cursor">
+                  <input type='text' class='text-input' id='url' required='' />
+                  <i></i>
+                </div>
+                <div>
+                  <label for='tag-checkboxes'>Tag website elements:</label>
+                </div>
+                <div id='tag-checkboxes' class='checkbox-wrapper'></div>
+                <div>
+                  <label for='custom-tag'>Add a custom tag:</label>
+                  <div class="cursor">
+                    <input type='text' id='customTag' class='text-input' name='tags' />
+                    <i></i>
+                  </div>
+                </div>
+                <div>
+                  <label for='notes'>Add notes:</label>
+                  <div class="cursor">
+                    <input type='text' id='notes' class='text-input' name='notes' />
+                    <i></i>
+                  </div>
+                </div>
+              </div>
+            <button type='submit' class='border-top'>Submit</button>
+          </fieldset>
+        </form>
+        <button type='submit' id='close-link' class='border-top'>Close</button>
+      </section> 
+      <button id='logout' class='border-top'>Logout</button> 
+    </div> 
 
-    <section id='add-website'>
-      <a id='close-link'class='text-link'>Close</a>
-      <form id='new-website' name='new-website'>
-        <fieldset name='new-url'>
-          <legend>Add a new website</legend>
-            <label for='url-input'>Enter a URL</label><input type='text' class='text-input' id='url' />
-            <div>
-              <label for='tag-checkboxes'>Tag website elements</label>
-            </div>
-            <div id='tag-checkboxes' class='checkbox-wrapper'></div>
-            <div>
-              <label for='custom-tag'>Add a custom tag</label>
-              <input type='text' id='customTag' class='text-input' name='tags' />
-            </div>
-            <div>
-              <label for='notes'>Notes:</label>
-              <input type='text' id='notes' class='text-input' name='notes' />
-            </div>
-            <button type='submit' class='button'>Submit</button>
-        </fieldset>
-      </form>
-    </section> 
-
+    <section id='gallery'></section>
     <section id='website-detail'></section>
   </main>
+  <footer>
+    <button>?</button>
+  </footer>
   <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
   <script type='text/javascript' src='app.js'></script>
 </body>
