@@ -9,8 +9,11 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
 body {
   background: url('https://i.imgur.com/wsFyz8e.jpg') no-repeat center center fixed;
   background-size: cover;
-  display: flex;
   font-size: 30px;
+}
+
+.flex-wrapper {
+  display: flex;
 }
 
 .left-column {
@@ -20,66 +23,6 @@ body {
   border: 3px black solid;
   background-color: white
 }
-
-button {
-  height: 55px;
-  width: 100%;
-  font-size: 30px;
-  text-align: left;
-  padding-left: 10px;
-}
-
-#gallery-link {
-  border-bottom: 3px;
-  border-color: black;
-  border-style: solid;
-}
-
-.border-top {
-  border-top: 3px;
-  border-color: black;
-  border-style: solid;
-}
-
-button:hover {
-  cursor: pointer;
-  color: white;
-  background-color: black;
-  font-weight: bold;
-}
-
-header:hover {
-  cursor: pointer;
-}
-
-.p-text, #filters, .padding-div {
-  font-size: 26px;
-  padding: 10px;
-}
-
-.p-text {
-  padding-bottom: 0;
-}
-
-#filters {
-  padding-top: 0;
-}
-
-input[type='checkbox'] {
-  -webkit-appearance:none;
-  width: 18px;
-  height: 18px;
-  background: white;
-  border: 2px solid black;
-}
-
-input[type='checkbox']:checked {
-  background: black;
-}
-
-input[type='text'] {
-
-}  
 
 #gallery {
   display: flex;
@@ -100,6 +43,96 @@ input[type='text'] {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.detail-image {
+  max-width: 800px;
+}
+
+button {
+  height: 55px;
+  width: 100%;
+  font-size: 30px;
+  text-align: left;
+  padding-left: 10px;
+}
+
+button:hover {
+  cursor: pointer;
+  color: white;
+  background-color: black;
+  font-weight: bold;
+}
+
+header:hover {
+  cursor: pointer;
+}
+
+#gallery-link {
+  border-color: black;
+  border-style: solid;
+}
+
+.border-top {
+  border-top: 3px;
+  border-color: black;
+  border-style: solid;
+}
+
+.p-text, #filters, .padding-div {
+  font-size: 26px;
+  padding: 10px;
+}
+
+.p-text {
+  padding-bottom: 0;
+}
+
+#filters {
+  padding-top: 0;
+}
+
+#login-form {
+  height: auto;
+}
+
+.submit {
+  display: block;
+  height: 45px;
+  width: 97%;
+  border: 0;
+  border-top: 3px;
+  padding-top: 10px;
+  padding-left: 10px;
+  border-color: black;
+  border-style: solid;
+}
+
+.submit:hover {
+  cursor: pointer;
+  color: white;
+  background-color: black;
+  font-weight: bold;
+}
+
+.submit:hover {
+  cursor: pointer;
+}
+
+input[type='checkbox'] {
+  -webkit-appearance:none;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border: 2px solid black;
+}
+
+input[type='checkbox']:checked {
+  background: black;
+}
+
+input[type='text'] {
+
 }
 
 .overlay {
@@ -157,12 +190,9 @@ input::placeholder {
   color: white;
 }
 
-#login-form {
-  height: auto;
-}
-
 footer {
-  position: fixed;
+  position: relative;
+  width: 40px;
   left: 0;
   bottom: 0;
   margin: 20px;
@@ -170,7 +200,6 @@ footer {
 }
 
 footer button {
-  width: 40px;
   height: 40px;
 }
 

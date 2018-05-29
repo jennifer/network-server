@@ -225,33 +225,36 @@ function renderDetailScreen(i) {
   let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
    $('#website-detail').empty().append(`
       <div class='each-website' onclick=''>
-        <a onclick='renderGallery(allWebsites)' class='text-link'>Close</a>
         <span title='Click to visit website'> 
-          <a href='${allWebsites[i].url}' target='_blank' >
-            <h1 class='website-title'>${allWebsites[i].title}</h1>  
-            <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
+          <a href='${allWebsites[i].url}' target='_blank' >  
+            <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' alt='screenshot of website' class='detail-image'/>
           </a>
         </span>
+        <p class='website-title'>${allWebsites[i].title}</p>
         <p class='website-tags'>${tagDisplay}</p>
-        <p class='notes'>${allWebsites[i].notes}</p>
-        <button onclick='showHideWebsiteEditor()'>Edit</button>
-        <div id='website-editor'></div>
+        <p class='website-notes'>${allWebsites[i].notes}</p>
+        <button onclick='showHideWebsiteEditor()' class='border-top'>Edit</button>
+        <button onclick='renderGallery(allWebsites)' class='border-top'>Close</button>
       </div>
     `);
   // Website editing tools
-  document.getElementById('website-editor').style.display = 'none';
-  $('#website-editor').append(`
-    <button onclick='renderGallery(allWebsites)'>Close</button>
+  document.getElementById('edit-website').style.display = 'none';
+  $('#edit-website').append(`
     <form>
       <fieldset>
-      <legend>Edit website elements</legend>
-        <div id='edit-tags' class='checkbox-wrapper'></div>
-        <label for='custom-tag'>Add a custom tag</label><input type='text' id='edit-customTag' class='text-input' /><br>
-        <label for='notes'>Notes:</label><input type='text' id='edit-notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' /><br>
-        <a onclick='editWebsite(${[i]})'>Submit</a>
+        <div class='padding-div border-top'>
+          <legend>Edit tags:</legend>
+          <div id='edit-tags' class='checkbox-wrapper'></div>
+          <label for='custom-tag'>Add a custom tag:</label>
+          <input type='text' id='edit-customTag' class='text-input' />
+          <label for='notes'>Edit notes:</label>
+          <input type='text' id='edit-notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' />
+        </div>
+        <a onclick='editWebsite(${[i]})' class='submit'>Submit</a>
       </fieldset>
     </form>
-    <button onclick='deleteWebsite(${[i]})'>DELETE WEBSITE</button>
+    <button onclick='deleteWebsite(${[i]})' class='border-top'>Delete website</button>
+    <button onclick='showHideWebsiteEditor()' class='border-top'>Close</button>
   `);
   for (let t = 0; t < uniqueTags.length; t++) {
     $('#edit-tags').append(`
@@ -266,7 +269,7 @@ function renderDetailScreen(i) {
 };
 
 function showHideWebsiteEditor() {
-  let editor = document.getElementById('website-editor');
+  let editor = document.getElementById('edit-website');
   if (editor.style.display === 'none') {
       editor.style.display = 'block';
   } else {

@@ -1,115 +1,122 @@
 <!DOCTYPE html>
 <html lang='en'>
-<head>
-  <meta charset='utf-8'>
-  <meta name='viewport' content='width=device-width'>
-  <title>Gallery</title>
-  <link rel='stylesheet' type='text/css' href='style.css'>
-  <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
-</head>
-<body>
-  <div class='left-column'>
-    <header>
-      <button id='gallery-link'>Gallery</button>
-    </header>
-    <main>
-      <section id='auth-forms'>
-        <div id='login-wrapper'>
-          <div>
-            <form id='login-form'>
-              <div class='padding-div'>
-                <label for='username'>Username:</label>
-                <div class="cursor">
-                  <input type='text' name='loginusername' required='' class='text-input' id='username' />
-                  <i></i>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width'>
+    <title>Gallery</title>
+    <link rel='stylesheet' type='text/css' href='style.css'>
+    <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
+  </head>
+  <body>
+    <div class='flex-wrapper'>
+      <div class='left-column'>
+        <header>
+          <button id='gallery-link'>Gallery</button>
+        </header>
+        
+        <section id='auth-forms'>
+          <div id='login-wrapper'>
+            <div>
+              <form id='login-form'>
+                <div class='padding-div border-top'>
+                  <label for='username'>Username:</label>
+                  <div class="cursor">
+                    <input type='text' name='loginusername' required='' class='text-input' id='username' />
+                    <i></i>
+                  </div>
+                  <label for='password'>Password:</label>
+                  <div class="cursor">
+                    <input type='password' name='loginpassword' required='' class='text-input' id='password' />
+                    <i></i>
+                  </div>
                 </div>
-                <label for='password'>Password:</label>
-                <div class="cursor">
-                  <input type='password' name='loginpassword' required='' class='text-input' id='password' />
-                  <i></i>
-                </div>
-              </div>
-              <button type='submit' class='border-top'>Login</button>
-            </form>
-            <button type='submit' class='border-top' id='signup-link'>Make an account</button>
+                <button type='submit' class='border-top'>Login</button>
+              </form>
+              <button type='submit' class='border-top' id='signup-link'>Make an account</button>
+            </div>
           </div>
-        </div>
 
-        <div id='signup-wrapper'>
-          <div>
-            <form id='signup-form'>
-              <div class='padding-div'>
-                <label for='signup-username'>Username:</label>
-                <div class="cursor">
-                  <input type='text' name='username' required='' class='text-input' id='signup-username' />
-                  <i></i>
+          <div id='signup-wrapper'>
+            <div>
+              <form id='signup-form'>
+                <div class='padding-div border-top'>
+                  <label for='signup-username'>Username:</label>
+                  <div class="cursor">
+                    <input type='text' name='username' required='' class='text-input' id='signup-username' />
+                    <i></i>
+                  </div>
+                  <label for='signup-password'>Password:</label>
+                  <div class="cursor">
+                    <input type='password' name='password' required='' class='text-input' id='signup-password' />
+                    <i></i>
+                  </div>
                 </div>
-                <label for='signup-password'>Password:</label>
-                <div class="cursor">
-                  <input type='password' name='password' required='' class='text-input' id='signup-password' />
-                  <i></i>
+                <button type='submit' class='border-top'>Submit</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <p id='notification'></p>
+        </section>
+        
+        <section id='menu'>
+          <p class='p-text border-top'>Check boxes to filter:</p>
+          <form id='filters' class='checkbox-wrapper'></form>
+          <button id='add-link' class='border-top'>Add a website</button>
+        </section>
+
+        <section id='add-website'>
+          <form id='new-website' name='new-website'>
+            <fieldset name='new-url'>
+              <div class='padding-div border-top'>
+                <legend>Add a new website</legend>
+                  <label for='url-input'>Enter a URL:</label>
+                  <div class="cursor">
+                    <input type='text' class='text-input' id='url' required='' />
+                    <i></i>
+                  </div>
+                  <div>
+                    <label for='tag-checkboxes'>Tag website elements:</label>
+                  </div>
+                  <div id='tag-checkboxes' class='checkbox-wrapper'></div>
+                  <div>
+                    <label for='custom-tag'>Add a custom tag:</label>
+                    <div class="cursor">
+                      <input type='text' id='customTag' class='text-input' name='tags' />
+                      <i></i>
+                    </div>
+                  </div>
+                  <div>
+                    <label for='notes'>Add notes:</label>
+                    <div class="cursor">
+                      <input type='text' id='notes' class='text-input' name='notes' />
+                      <i></i>
+                    </div>
+                  </div>
                 </div>
-              </div>
               <button type='submit' class='border-top'>Submit</button>
-            </form>
-          </div>
-        </div>
-      </section>
+            </fieldset>
+          </form>
+          <button type='submit' id='close-link' class='border-top'>Close</button>
+        </section> 
+        <button id='logout' class='border-top'>Logout</button> 
 
-      <section>
-        <p id='notification'></p>
-      </section>
+        <section id='edit-website'></section>
+      </div>
 
-      <section id='menu'>
-        <p class='p-text'>Check boxes to filter:</p>
-        <form id='filters' class='checkbox-wrapper'></form>
-        <button id='add-link' class='border-top'>Add a website</button>
-      </section>
+      <main>
+        <section id='gallery'></section>
+        <section id='website-detail'></section>
+      </main>
+    </div>
 
-      <section id='add-website'>
-        <form id='new-website' name='new-website'>
-          <fieldset name='new-url'>
-            <div class='padding-div'>
-              <legend>Add a new website</legend>
-                <label for='url-input'>Enter a URL:</label>
-                <div class="cursor">
-                  <input type='text' class='text-input' id='url' required='' />
-                  <i></i>
-                </div>
-                <div>
-                  <label for='tag-checkboxes'>Tag website elements:</label>
-                </div>
-                <div id='tag-checkboxes' class='checkbox-wrapper'></div>
-                <div>
-                  <label for='custom-tag'>Add a custom tag:</label>
-                  <div class="cursor">
-                    <input type='text' id='customTag' class='text-input' name='tags' />
-                    <i></i>
-                  </div>
-                </div>
-                <div>
-                  <label for='notes'>Add notes:</label>
-                  <div class="cursor">
-                    <input type='text' id='notes' class='text-input' name='notes' />
-                    <i></i>
-                  </div>
-                </div>
-              </div>
-            <button type='submit' class='border-top'>Submit</button>
-          </fieldset>
-        </form>
-        <button type='submit' id='close-link' class='border-top'>Close</button>
-      </section> 
-      <button id='logout' class='border-top'>Logout</button> 
-    </div> 
+    <footer>
+      <button>?</button>
+    </footer>
 
-    <section id='gallery'></section>
-    <section id='website-detail'></section>
-  </main>
-  <footer>
-    <button>?</button>
-  </footer>
-  <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
-  <script type='text/javascript' src='app.js'></script>
-</body>
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
+    <script type='text/javascript' src='app.js'></script>
+  </body>
 </html>
