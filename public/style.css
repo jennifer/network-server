@@ -9,27 +9,30 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
 body {
   display: grid;
   grid-template-columns: 300px auto;
-  border: 4px black solid;
+  background: url('https://i.imgur.com/wsFyz8e.jpg?1') no-repeat center center fixed;
+  background-size: cover;
 }
 
 .left-column {
   position: relative;
   grid-column-start: 1;
   grid-column-end: 2;
-  height: 100vh;
+  align-self: flex-start;
+  margin: 26px;
+  padding-bottom: 5px;
+  margin-right: 0;
+  background-color: white;
+  border: 4px black solid;
 }
 
 main {
   grid-column-start: 2;
   grid-column-end: 3;
-  background: url('https://i.imgur.com/wsFyz8e.jpg') no-repeat center center fixed;
-  background-size: cover;
-  border-left: 4px black solid;
 }
 
 #gallery {
   display: flex;
-  padding: 20px;
+  padding: 13px;
 }
 
 .each-website {
@@ -38,7 +41,7 @@ main {
   background-color: white;
   max-width: 500px;
   min-width: 250px;
-  margin: 20px;
+  margin: 13px;
   border: 4px black solid;
   box-shadow: 10px 10px;
 }
@@ -59,10 +62,6 @@ button {
   padding-left: 5px;
   padding-right: 5px;  
   margin: 10px;
-  /*
-  border-right: 4px black solid;
-  border-bottom: 4px black solid;
-  */
   border: 2px black solid;
   box-shadow: 4px 4px;
 }
@@ -80,14 +79,6 @@ button:hover {
   height: 60px;
   width: 92%;
   font-size: 28px;
-/*
-  margin: 0;
-  border: 0;
-  padding-left: 10px;
-  border-bottom: 4px black solid;
-  text-align: left;
-  box-shadow: none;
-*/
 }
 
 /*
@@ -114,12 +105,6 @@ button:hover {
 
 #login-form {
   height: auto;
-}
-
-.bottom-buttons {
-  position: fixed;
-  bottom: 0;
-  width: 275px;
 }
 
 .label-margin {
@@ -219,7 +204,7 @@ input[type='checkbox']:checked {
   display: block;
   height: 30px;
   width: 100%;
-  font-size: 20px;
+  font-size: 18px;
   padding-left: 10px;
   border-bottom: 4px dotted;
 }
@@ -228,6 +213,12 @@ input[type='checkbox']:checked {
   color: blue;
   text-decoration: underline;
   font-size: 22px;
+}
+
+#logout {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 15px;
 }
 
 input::placeholder {
@@ -240,8 +231,7 @@ footer {
   width: 40px;
   left: 0;
   bottom: 0;
-  margin: 20px;
-  border: 2px black solid;
+  margin: 10px;
 }
 
 footer button {
