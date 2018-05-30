@@ -20,9 +20,9 @@ const { Website } = require('./models');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // GET all websites
-router.get('/', jwtAuth, (req, res) => {
+router.get('/:username', jwtAuth, (req, res) => {
   Website
-    .find()
+    .find({username:req.params.username})
     .then(websites => {
       res.json(websites);
       //res.contentType(user.img.contentType);

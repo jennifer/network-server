@@ -62,7 +62,8 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
 function getDataFromApi() {
   document.getElementById('gallery').innerHTML = '';
   let token = localStorage.getItem('authToken');
-  return fetch('/websites', {
+  let username = localStorage.getItem('username');
+  return fetch(`/websites/${username}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
