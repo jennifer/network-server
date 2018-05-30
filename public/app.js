@@ -97,9 +97,9 @@ function renderGallery(allWebsites) {
       <div class='each-website' onclick='renderDetailScreen(${[i]})'>
         <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
         <div class='overlay'>
-          <h1 class='text website-title'>${allWebsites[i].title}</h1><br />
-          <h2 class='text website-tags'>${tagDisplay}</h2><br />
-          <h2 class='text website-notes'>${allWebsites[i].notes}</h2>
+          <p class='text website-title'>${allWebsites[i].title}</p><br />
+          <p class='text website-tags label-margin'>${tagDisplay}</p><br />
+          <p class='text website-notes label-margin'>${allWebsites[i].notes}</p>
         </div>
       </div>
     `;
@@ -218,43 +218,50 @@ function checkStatus(response) {
 
 function renderDetailScreen(i) {
   document.getElementById('menu').style.display = 'none';
-  document.getElementById('gallery').style.display = 'none';
   document.getElementById('add-website').style.display = 'none';
-  document.getElementById('website-detail').style.display = 'block';
   document.getElementById('logout').style.display = 'none';
+  document.getElementById('website-detail').style.display = 'block';
+  document.getElementById('gallery').innerHTML = '';
+  document.getElementById('website-detail').innerHTML = '';
   let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
-   $('#website-detail').empty().append(`
-      <div class='each-website' onclick=''>
-        <span title='Click to visit website'> 
-          <a href='${allWebsites[i].url}' target='_blank' >  
-            <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' alt='screenshot of website' class='detail-image'/>
-          </a>
-        </span>
+  $('#gallery').append(`
+    <div class='website-detail'>
+      <span title='Click to visit website'> 
+        <a href='${allWebsites[i].url}' target='_blank' >  
+          <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' alt='screenshot of website' class='detail-image website-image'/>
+        </a>
+      </span>
+    </div>
+  `);
+  $('#website-detail').append(`
+      <div class='detail-wrapper'>
         <p class='website-title'>${allWebsites[i].title}</p>
-        <p class='website-tags'>${tagDisplay}</p>
-        <p class='website-notes'>${allWebsites[i].notes}</p>
-        <button onclick='showHideWebsiteEditor()' class='border-top'>Edit</button>
-        <button onclick='renderGallery(allWebsites)' class='border-top'>Close</button>
+        <p class='website-tags label-margin'>${tagDisplay}</p>
+        <p class='website-notes label-margin'>${allWebsites[i].notes}</p>
       </div>
-    `);
-  // Website editing tools
-  document.getElementById('edit-website').style.display = 'none';
-  $('#edit-website').append(`
+      <button onclick='renderWebsiteEditor(${i})' class='border-top'>Edit</button>
+      <button onclick='renderGallery(allWebsites)' class='border-top border-bottom'>Close</button>
+  `);
+};
+
+function renderWebsiteEditor(i) {
+  document.getElementById('website-detail').innerHTML = '';
+  $('#website-detail').append(`
     <form>
       <fieldset>
-        <div class='padding-div border-top'>
+        <div class='padding-div'>
           <legend>Edit tags:</legend>
           <div id='edit-tags' class='checkbox-wrapper'></div>
-          <label for='custom-tag'>Add a custom tag:</label>
+          <label for='custom-tag' class='label-margin'>Add a custom tag:</label>
           <input type='text' id='edit-customTag' class='text-input' />
-          <label for='notes'>Edit notes:</label>
+          <label for='notes' class='label-margin'>Edit notes:</label>
           <input type='text' id='edit-notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' />
         </div>
-        <a onclick='editWebsite(${[i]})' class='submit'>Submit</a>
+        <a onclick='editWebsite(${[i]})' class='submit'>Submit changes</a>
       </fieldset>
     </form>
-    <button onclick='deleteWebsite(${[i]})' class='border-top'>Delete website</button>
-    <button onclick='showHideWebsiteEditor()' class='border-top'>Close</button>
+    <button onclick='deleteWebsite(${[i]})' class='border-top delete'>Delete website</button>
+    <button onclick='renderDetailScreen(${i})' class='border-top border-bottom'>Close</button>
   `);
   for (let t = 0; t < uniqueTags.length; t++) {
     $('#edit-tags').append(`
@@ -265,15 +272,6 @@ function renderDetailScreen(i) {
     if ((`${allWebsites[i].tags}`).includes(`${uniqueTags[t]}`)) {
       document.getElementById(`${uniqueTags[t]}`).checked = true
     }
-  }
-};
-
-function showHideWebsiteEditor() {
-  let editor = document.getElementById('edit-website');
-  if (editor.style.display === 'none') {
-      editor.style.display = 'block';
-  } else {
-      editor.style.display = 'none';
   }
 };
 
@@ -322,7 +320,7 @@ function deleteWebsite(i) {
 
 document.getElementById('gallery-link').addEventListener('click', function(e){
   e.preventDefault();
-  getDataFromApi() 
+  getDataFromApi()
 });
 
 document.getElementById('close-link').addEventListener('click', function(e){
