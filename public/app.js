@@ -240,8 +240,9 @@ function renderDetailScreen(i) {
         <p class='website-tags label-margin'>${tagDisplay}</p>
         <p class='website-notes label-margin'>${allWebsites[i].notes}</p>
       </div>
-      <button onclick='renderWebsiteEditor(${i})' class='border-top'>Edit</button>
-      <button onclick='renderGallery(allWebsites)' class='border-top border-bottom'>Close</button>
+      <button onclick='renderWebsiteEditor(${i})' class='border-top'>Edit website</button>
+      <p class='p-text'>or</p>
+      <button onclick='renderGallery(allWebsites)' class='border-top border-bottom'>Go back</button>
   `);
 };
 
@@ -262,7 +263,8 @@ function renderWebsiteEditor(i) {
       </fieldset>
     </form>
     <button onclick='deleteWebsite(${[i]})' class='border-top delete'>Delete website</button>
-    <button onclick='renderDetailScreen(${i})' class='border-top border-bottom'>Close</button>
+    <p class='p-text'>or</p>
+    <button onclick='renderDetailScreen(${i})' class='border-top border-bottom'>Go back</button>
   `);
   for (let t = 0; t < uniqueTags.length; t++) {
     $('#edit-tags').append(`
