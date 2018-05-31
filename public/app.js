@@ -310,20 +310,19 @@ function editWebsite(i) {
       'Authorization': `Bearer ${token}`
     }
   })
-    .then(checkStatus)
-    .then(console.log(`Edited`))
-    .then(getDataFromApi())
+  .then(checkStatus)
+  .then(getDataFromApi())
 };
 
 function deleteWebsite(i) {
   let token = localStorage.getItem('authToken');
   fetch(`/websites/${allWebsites[i]._id}`, {
     method: 'DELETE',
-    success: getDataFromApi(),
     headers: {
       'Authorization': `Bearer ${token}`
     }
   })
+  .then(getDataFromApi())
 };
 
 document.getElementById('gallery-link').addEventListener('click', function(e){
