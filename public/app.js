@@ -9,7 +9,6 @@ document.getElementById('add-website').style.display = 'none';
 document.getElementById('website-detail').style.display = 'none';
 document.getElementById('signup-wrapper').style.display = 'none';
 document.getElementById('logout').style.display = 'none';
-
 document.getElementById('signup-link').addEventListener('click', function(e){
   document.getElementById('login-wrapper').style.display = 'none';
   document.getElementById('signup-wrapper').style.display = 'block';
@@ -86,10 +85,10 @@ function getDataFromApi() {
 function renderGallery(allWebsites) {
   document.getElementById('auth-forms').style.display = 'none';
   document.getElementById('menu').style.display = 'block';
-  document.getElementById('logout').style.display = 'block';
   document.getElementById('gallery').style.display = 'block';
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
+  document.getElementById('logout').style.display = 'block';
   document.getElementById('gallery').innerHTML = '';
   document.getElementById('notification').innerHTML = '';
   for (let i = allWebsites.length - 1; i >= 0; i--) {
@@ -160,7 +159,7 @@ document.getElementById('add-link').addEventListener('click', function(e){
   document.getElementById('menu').style.display = 'none';
   document.getElementById('add-website').style.display = 'block';
   document.getElementById('website-detail').style.display = 'none';
-  document.getElementById('logout').style.display = 'none';
+  document.getElementById('logout').style.display = 'block';
   document.getElementById('url').value = '';
   document.getElementById('customTag').value = '';
   document.getElementById('notes').value = '';
@@ -220,8 +219,8 @@ function checkStatus(response) {
 function renderDetailScreen(i) {
   document.getElementById('menu').style.display = 'none';
   document.getElementById('add-website').style.display = 'none';
-  document.getElementById('logout').style.display = 'none';
   document.getElementById('website-detail').style.display = 'block';
+  document.getElementById('logout').style.display = 'block';
   document.getElementById('gallery').innerHTML = '';
   document.getElementById('website-detail').innerHTML = '';
   let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
@@ -255,9 +254,15 @@ function renderWebsiteEditor(i) {
           <legend>Edit tags:</legend>
           <div id='edit-tags' class='checkbox-wrapper'></div>
           <label for='custom-tag' class='label-margin'>Add a custom tag:</label>
-          <input type='text' id='edit-customTag' class='text-input' />
+          <div class="cursor">
+            <input type='text' id='edit-customTag' class='text-input' />
+            <i></i>
+          </div>
           <label for='notes' class='label-margin'>Edit notes:</label>
-          <input type='text' id='edit-notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' />
+          <div class="cursor">
+            <input type='text' id='edit-notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' />
+            <i></i>
+          </div>
         </div>
         <a onclick='editWebsite(${[i]})' class='submit'>Submit changes</a>
       </fieldset>
@@ -340,4 +345,5 @@ document.getElementById('logout').addEventListener('click', function(e){
   document.getElementById('add-website').style.display = 'none';
   document.getElementById('website-detail').style.display = 'none';
   document.getElementById('auth-forms').style.display = 'block';
+  document.getElementById('logout').style.display = 'none';
 });

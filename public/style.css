@@ -9,6 +9,7 @@ html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main
 body {
   display: grid;
   grid-template-columns: 300px auto;
+  grid-template-rows: auto 60px;
   background: url('https://i.imgur.com/wsFyz8e.jpg?1') no-repeat center center fixed;
   background-size: cover;
 }
@@ -17,6 +18,8 @@ body {
   position: relative;
   grid-column-start: 1;
   grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
   align-self: flex-start;
   margin: 26px;
   padding-bottom: 5px;
@@ -26,8 +29,21 @@ body {
 }
 
 main {
+  position: relative;
   grid-column-start: 2;
   grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+
+footer {
+  position: absolute;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  position: relative;
+  left: 0;
+  bottom: 0;
+  margin: 10px 10px 10px 15px;
 }
 
 #gallery {
@@ -56,7 +72,7 @@ main {
   max-width: 800px;
 }
 
-button {
+button, .submit {
   height: 40px;
   font-size: 22px;
   padding-left: 5px;
@@ -81,15 +97,6 @@ button:hover {
   font-size: 28px;
 }
 
-/*
-.border-top {
-  border-top: 2px black solid;
-}
-
-.border-bottom {
-  border-bottom: 2px black solid;
-}
-*/
 .p-text, #filters, .padding-div {
   font-size: 22px;
   padding: 10px;
@@ -97,6 +104,13 @@ button:hover {
 
 .p-text {
   padding-bottom: 0;
+}
+
+ul {
+  font-size: 20px;
+  padding-left: 30px;
+  list-style-type: square;
+  margin: 10px;
 }
 
 #filters {
@@ -116,18 +130,12 @@ button:hover {
   padding: 10px;
 }
 
-/*
 .submit {
   display: block;
-  height: 45px;
-  width: 97%;
-  border: 0;
-  border-top: 2px;
-  padding-top: 10px;
-  padding-left: 10px;
-  font-size: 25px;
-  border-color: black;
-  border-style: solid;
+  height: 33px;
+  width: 160px;
+  margin: 10px;
+  padding-top: 3px;
 }
 
 .submit:hover {
@@ -136,7 +144,6 @@ button:hover {
   background-color: black;
   font-weight: bold;
 }
-*/
 
 .delete:hover, #logout:hover {
   background-color: red;
@@ -223,19 +230,6 @@ input[type='checkbox']:checked {
 
 input::placeholder {
   font-size: 20px;
-  color: white;
-}
-
-footer {
-  position: relative;
-  width: 40px;
-  left: 0;
-  bottom: 0;
-  margin: 10px;
-}
-
-footer button {
-  height: 40px;
 }
 
 .cursor {
