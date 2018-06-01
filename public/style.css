@@ -1,4 +1,4 @@
-html, body, button, div, h1, h2, img, input, fieldset, form, label, legend, main, header, p, section {
+a, body, button, div, fieldset, footer, form, h1, h2, header, html, img, input, label, legend, li, main, p, section, ul {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -36,16 +36,6 @@ main {
   grid-row-end: 2;
 }
 
-footer {
-  position: absolute;
-  grid-row-start: 2;
-  grid-row-end: 3;
-  position: relative;
-  left: 0;
-  bottom: 0;
-  margin: 10px 10px 10px 15px;
-}
-
 #gallery {
   display: flex;
   padding: 13px;
@@ -72,14 +62,14 @@ footer {
   max-width: 800px;
 }
 
-button, .submit {
+button, .anchor-button {
   height: 40px;
   font-size: 22px;
   padding-left: 5px;
   padding-right: 5px;  
   margin: 10px;
   border: 2px black solid;
-  box-shadow: 4px 4px;
+  box-shadow: 4px 4px black;
 }
 
 button:hover {
@@ -87,7 +77,7 @@ button:hover {
   color: white;
   background-color: black;
   font-weight: bold;
-  transition: .2s ease;
+  box-shadow: none;
 }
 
 
@@ -114,7 +104,7 @@ ul {
 }
 
 #filters {
-  padding-top: 0;
+  padding-top: 5px;
 }
 
 #login-form {
@@ -130,19 +120,41 @@ ul {
   padding: 10px;
 }
 
-.submit {
+.anchor-button {
   display: block;
-  height: 33px;
-  width: 160px;
-  margin: 10px;
-  padding-top: 3px;
+  background-color: white;
+  color: black;
+  text-decoration: none;
+  width: 155px;
+  padding-top: 5px;
 }
 
-.submit:hover {
+.anchor-button:hover {
   cursor: pointer;
   color: white;
   background-color: black;
   font-weight: bold;
+  box-shadow: none;
+}
+
+footer {
+  position: absolute;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  position: relative;
+}
+
+#logout {
+  position: absolute;
+  margin: 26px;
+}
+
+footer .anchor-button {
+  float: right;
+  width: 80px;
+  margin: 26px;
 }
 
 .delete:hover, #logout:hover {
@@ -213,19 +225,13 @@ input[type='checkbox']:checked {
   width: 100%;
   font-size: 18px;
   padding-left: 10px;
-  border-bottom: 4px dotted;
+  border-bottom: 2px dashed;
 }
 
 .text-link {
   color: blue;
   text-decoration: underline;
   font-size: 22px;
-}
-
-#logout {
-  position: absolute;
-  bottom: 0;
-  margin-bottom: 15px;
 }
 
 input::placeholder {

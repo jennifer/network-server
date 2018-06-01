@@ -230,7 +230,7 @@ function renderDetailScreen(i) {
   $('#gallery').append(`
     <div class='website-detail'>
       <span title='Click to visit website'> 
-        <a href='${allWebsites[i].url}' target='_blank' >  
+        <a href='${allWebsites[i].url}' target='_blank'>  
           <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' alt='screenshot of website' class='detail-image website-image'/>
         </a>
       </span>
@@ -267,12 +267,12 @@ function renderWebsiteEditor(i) {
             <i></i>
           </div>
         </div>
-        <a onclick='editWebsite(${[i]})' class='submit'>Submit changes</a>
+        <a onclick='editWebsite(${[i]})' class='anchor-button'>Save changes</a>
       </fieldset>
     </form>
-    <button onclick='deleteWebsite(${[i]})' class='border-top delete'>Delete website</button>
+    <button onclick='deleteWebsite(${[i]})' class='delete'>Delete website</button>
     <p class='p-text'>or</p>
-    <button onclick='renderDetailScreen(${i})' class='border-top border-bottom'>Go back</button>
+    <button onclick='renderDetailScreen(${i})'>Go back</button>
   `);
   for (let t = 0; t < uniqueTags.length; t++) {
     $('#edit-tags').append(`

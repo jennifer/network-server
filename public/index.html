@@ -10,11 +10,11 @@
   <body>
       <div class='left-column'>
         <header>
-          <button id='gallery-link' class='border-bottom'>Gallery</button>
+          <button id='gallery-link' s>Gallery</button>
         </header>
         <p id='notification'></p>
         <section id='auth-forms'>
-          <p class='p-text'>Collect websites for design inspiration</p>
+          <p class='p-text'>Collect websites for design inspiration:</p>
           <ul>
             <li>Tag design elements</li>
             <li>Take notes</li>
@@ -26,7 +26,7 @@
                 <div class='padding-div'>
                   <label for='username'>Username:</label>
                   <div class="cursor">
-                    <input type='text' name='loginusername' required='' class='text-input' id='username' />
+                    <input type='text' name='loginusername` required='' class='text-input' id='username' />
                     <i></i>
                   </div>
                   <label for='password' class='label-margin'>Password:</label>
@@ -38,14 +38,14 @@
                 <button type='submit' class='border-top'>Login</button>
                 <p class='p-text'>or</p>
               </form>
-              <button type='submit' class='border-top border-bottom' id='signup-link'>Make an account</button>
+              <button type='submit' id='signup-link'>Make an account</button>
             </div>
           </div>
 
           <div id='signup-wrapper'>
             <div>
               <form id='signup-form'>
-                <div class='padding-div border-top'>
+                <div class='padding-div'>
                   <label for='signup-username'>Username:</label>
                   <div class="cursor">
                     <input type='text' name='username' required='' class='text-input' id='signup-username' />
@@ -57,7 +57,7 @@
                     <i></i>
                   </div>
                 </div>
-                <button type='submit' class='border-top'>Submit</button>
+                <button type='submit'>Submit</button>
               </form>
             </div>
           </div>
@@ -66,8 +66,9 @@
         <section id='menu'>
           <p class='p-text'>Check boxes to filter:</p>
           <form id='filters' class='checkbox-wrapper'></form>
+          <p class='p-text'>Click a website to expand and edit</p>
           <p class='p-text'>or</p>
-          <button id='add-link' class='border-top border-bottom'>Add a new website</button>
+          <button id='add-link'>Add a new website</button>
         </section>
 
         <section id='add-website'>
@@ -100,11 +101,11 @@
                   </div>
                 </div>
                 </div>
-              <button type='submit' class='border-top'>Submit website</button>
+              <button type='submit'>Add website</button>
             </fieldset>
           </form>
           <p class='p-text'>or</p>
-          <button type='submit' id='close-link' class='border-top border-bottom'>Go back</button>
+          <button type='submit' id='close-link'>Go back</button>
         </section> 
         <section id='website-detail'></section>
       </div>
@@ -114,6 +115,7 @@
       </main>
       <footer>
         <button id='logout'>Logout</button>
+        <a href='https://github.com/jennifer' class='anchor-button' target='_blank'>Github</a>
       </footer>
     <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
     <script type='text/javascript' src='app.js'></script>
