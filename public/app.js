@@ -242,9 +242,9 @@ function renderDetailScreen(i) {
         <p class='website-tags label-margin'>${tagDisplay}</p>
         <p class='website-notes label-margin'>${allWebsites[i].notes}</p>
       </div>
-      <button onclick='renderWebsiteEditor(${i})' class='border-top'>Edit website</button>
+      <button onclick='renderWebsiteEditor(${i})'>Edit website</button>
       <p class='p-text'>or</p>
-      <button onclick='renderGallery(allWebsites)' class='border-top border-bottom'>Go back</button>
+      <button onclick='renderGallery(allWebsites)'>Go back</button>
   `);
 };
 

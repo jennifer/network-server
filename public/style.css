@@ -116,6 +116,15 @@ ul {
   margin-top: 10px;
 }
 
+.website-detail {
+  max-width: 800px;
+  min-width: 250px;
+  background-color: white;
+  margin: 20px;
+  border: 4px black solid;
+  box-shadow: 10px 10px;
+}
+
 .detail-wrapper{
   padding: 10px;
 }
@@ -138,23 +147,22 @@ ul {
 }
 
 footer {
-  position: absolute;
+  position: relative;
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 2;
   grid-row-end: 3;
-  position: relative;
 }
 
 #logout {
   position: absolute;
-  margin: 26px;
+  margin: 0 23px 26px 26px;
 }
 
 footer .anchor-button {
   float: right;
   width: 80px;
-  margin: 26px;
+  margin: 0 26px 26px 13px;
 }
 
 .delete:hover, #logout:hover {
@@ -172,6 +180,10 @@ input[type='checkbox'] {
 
 input[type='checkbox']:checked {
   background: black;
+}
+
+input::placeholder {
+  font-size: 20px;
 }
 
 .overlay {
@@ -210,15 +222,6 @@ input[type='checkbox']:checked {
   font-size: 24px;
 }
 
-.website-detail {
-  max-width: 800px;
-  min-width: 250px;
-  background-color: white;
-  margin: 20px;
-  border: 4px black solid;
-  box-shadow: 10px 10px;
-}
-
 .text-input {
   display: block;
   height: 30px;
@@ -226,16 +229,6 @@ input[type='checkbox']:checked {
   font-size: 18px;
   padding-left: 10px;
   border-bottom: 2px dashed;
-}
-
-.text-link {
-  color: blue;
-  text-decoration: underline;
-  font-size: 22px;
-}
-
-input::placeholder {
-  font-size: 20px;
 }
 
 .cursor {
