@@ -3,12 +3,22 @@
 let allWebsites = [];
 let uniqueTags = [];
 
-document.getElementById('menu').style.display = 'none';
-document.getElementById('gallery').style.display = 'none';
-document.getElementById('add-website').style.display = 'none';
-document.getElementById('website-detail').style.display = 'none';
-document.getElementById('signup-wrapper').style.display = 'none';
-document.getElementById('logout').style.display = 'none';
+const gallery = document.getElementById('gallery');
+const menu = document.getElementById('menu');
+const addWebsite = document.getElementById('add-website');
+const websiteDetail = document.getElementById('website-detail');
+const signupWrapper = document.getElementById('signup-wrapper');
+const logoutButton = document.getElementById('logout');
+const notification = document.getElementById('notification');
+const authForms = document.getElementById('auth-forms');
+
+menu.style.display = 'none';
+gallery.style.display = 'none';
+addWebsite.style.display = 'none';
+websiteDetail.style.display = 'none';
+signupWrapper.style.display = 'none';
+logoutButton.style.display = 'none';
+
 document.getElementById('signup-link').addEventListener('click', function(e){
   document.getElementById('login-wrapper').style.display = 'none';
   document.getElementById('signup-wrapper').style.display = 'block';
@@ -16,7 +26,7 @@ document.getElementById('signup-link').addEventListener('click', function(e){
 
 document.getElementById('login-form').addEventListener('submit', function(e){
   e.preventDefault();
-  document.getElementById('notification').innerHTML = '';
+  notification.innerHTML = '';
   let user = {};
   user.username = document.getElementById('username').value;
   user.password = document.getElementById('password').value;
@@ -33,17 +43,17 @@ document.getElementById('login-form').addEventListener('submit', function(e){
     localStorage.setItem('username', user.username);
     console.log('Logged in');
     getDataFromApi();
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
+    user.username.value = '';
+    user.password.value = '';
   })
   .catch((err) => {
-    document.getElementById('notification').innerHTML = 'Login failed. Try again or click below to sign up';
+    notification.innerHTML = 'Login failed. Try again or click below to sign up';
   })
 });
 
 document.getElementById('signup-form').addEventListener('submit', function(e){
   e.preventDefault();
-  document.getElementById('notification').innerHTML = '';
+  notification.innerHTML = '';
   let user = {};
   user.username = document.getElementById('signup-username').value;
   user.password = document.getElementById('signup-password').value;
@@ -55,11 +65,11 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
     }
   })
   .then(res => res.json())
-  .then(response => document.getElementById('notification').innerHTML = response.message);
+  .then(response => notification.innerHTML = response.message);
 });
 
 function getDataFromApi() {
-  document.getElementById('gallery').innerHTML = '';
+  gallery.innerHTML = '';
   let token = localStorage.getItem('authToken');
   let username = localStorage.getItem('username');
   return fetch(`/websites/${username}`, {
@@ -83,14 +93,41 @@ function getDataFromApi() {
 };
 
 function renderGallery(allWebsites) {
-  document.getElementById('auth-forms').style.display = 'none';
-  document.getElementById('menu').style.display = 'block';
-  document.getElementById('gallery').style.display = 'block';
-  document.getElementById('add-website').style.display = 'none';
-  document.getElementById('website-detail').style.display = 'none';
-  document.getElementById('logout').style.display = 'block';
-  document.getElementById('gallery').innerHTML = '';
-  document.getElementById('notification').innerHTML = '';
+  authForms.style.display = 'none';
+  menu.style.display = 'block';
+  gallery.style.display = 'block';
+  addWebsite.style.display = 'none';
+  websiteDetail.style.display = 'none';
+  logoutButton.style.display = 'block';
+  gallery.innerHTML = '';
+  notification.innerHTML = '';
+
+/*
+  const eachWebsite = document.createElement('div');
+  eachWebsite.className = 'each-website';
+  eachWebsite.addEventListener('click', `renderDetailScreen(${[i]})`, false);
+
+  const img = document.createElement('img');
+  img.src = 'https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png';
+  img.className = 'website-image';
+  img.alt = 'screenshot of website';
+
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
+
+  const title = document.createElement('p');
+  title.className = 'text website-title';
+  const titleText = document.createTextNode(`${allWebsites[i].title}`);
+
+  const tags = document.createElement('p');
+  tags.className = 'text website-tags label-margin';
+  const tagsText = document.createTextNode(`${tagDisplay}`);
+
+  const notes = document.createElement('p');
+  notes.className = 'text website-notes label-margin';
+  const tagsText = document.createTextNode(`${allWebsites[i].notes}`);
+*/
+
   for (let i = allWebsites.length - 1; i >= 0; i--) {
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     let eachWebsite = `
@@ -131,8 +168,8 @@ function handleFilterClick() {
       clickedFilters.push(checkbox[i].value);
     }
   };
-  document.getElementById('gallery').innerHTML = '';
-  document.getElementById('notification').innerHTML = '';
+  gallery.innerHTML = '';
+  notification.innerHTML = '';
   for (let i = 0; i < allWebsites.length; i++) {
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     if (clickedFilters.every(val => (allWebsites[i].tags).indexOf(val) >= 0)) {
@@ -148,18 +185,18 @@ function handleFilterClick() {
       $('#gallery').append(eachWebsite);
     }
   };
-  if (document.getElementById('gallery').innerHTML === '') {
-    document.getElementById('notification').innerHTML = 'No results. Try deselecting a filter.'
+  if (gallery.innerHTML === '') {
+    notification.innerHTML = 'No results. Try deselecting a filter.'
   }
 };
 
 // Render checkboxes for new website
 document.getElementById('add-link').addEventListener('click', function(e){
   e.preventDefault();
-  document.getElementById('menu').style.display = 'none';
-  document.getElementById('add-website').style.display = 'block';
-  document.getElementById('website-detail').style.display = 'none';
-  document.getElementById('logout').style.display = 'block';
+  menu.style.display = 'none';
+  addWebsite.style.display = 'block';
+  websiteDetail.style.display = 'none';
+  logoutButton.style.display = 'block';
   document.getElementById('url').value = '';
   document.getElementById('customTag').value = '';
   document.getElementById('notes').value = '';
@@ -210,22 +247,22 @@ document.getElementById('new-website').addEventListener('submit', function(e){
 });
 
 function checkStatus(response) {
-  document.getElementById('notification').innerHTML = '';
+  notification.innerHTML = '';
   if (response.status >= 200 && response.status < 300) {
     return response
   } else {
     console.log(response);
-    document.getElementById('notification').innerHTML = response.message;
+    notification.innerHTML = response.message;
   }
 };
 
 function renderDetailScreen(i) {
-  document.getElementById('menu').style.display = 'none';
-  document.getElementById('add-website').style.display = 'none';
-  document.getElementById('website-detail').style.display = 'block';
-  document.getElementById('logout').style.display = 'block';
-  document.getElementById('gallery').innerHTML = '';
-  document.getElementById('website-detail').innerHTML = '';
+  menu.style.display = 'none';
+  addWebsite.style.display = 'none';
+  websiteDetail.style.display = 'block';
+  logoutButton.style.display = 'block';
+  gallery.innerHTML = '';
+  websiteDetail.innerHTML = '';
   let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
   $('#gallery').append(`
     <div class='website-detail'>
@@ -249,7 +286,7 @@ function renderDetailScreen(i) {
 };
 
 function renderWebsiteEditor(i) {
-  document.getElementById('website-detail').innerHTML = '';
+  websiteDetail.innerHTML = '';
   $('#website-detail').append(`
     <form>
       <fieldset>
@@ -344,14 +381,14 @@ document.getElementById('close-link').addEventListener('click', function(e){
   renderGallery(allWebsites)
 });
 
-document.getElementById('logout').addEventListener('click', function(e){
+logoutButton.addEventListener('click', function(e){
   e.preventDefault();
   localStorage.setItem('authToken', '');
   localStorage.setItem('username', '');
-  document.getElementById('menu').style.display = 'none';
-  document.getElementById('gallery').style.display = 'none';
-  document.getElementById('add-website').style.display = 'none';
-  document.getElementById('website-detail').style.display = 'none';
-  document.getElementById('auth-forms').style.display = 'block';
-  document.getElementById('logout').style.display = 'none';
+  menu.style.display = 'none';
+  gallery.style.display = 'none';
+  addWebsite.style.display = 'none';
+  websiteDetail.style.display = 'none';
+  authForms.style.display = 'block';
+  logoutButton.style.display = 'none';
 });
