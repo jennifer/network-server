@@ -34,6 +34,85 @@ router.get('/:username', jwtAuth, (req, res) => {
     });
 });
 
+/*
+// POST a new webiste
+const postWebsitePromise = new Promise((resolve, reject) => {
+  router.post('/', jwtAuth, (req, res) => {
+    // Check for required fields
+    const requiredFields = ['url'];
+    for (let i = 0; i < requiredFields.length; i++) {
+      const field = requiredFields[i];
+      if (!(field in req.body)) {
+        const message = `Missing \`${field}\` in request body`;
+        console.error(message);
+        return res.status(400).send(message);
+      }
+    };
+  })
+});
+
+const urlExistsPromise = new Promise((resolve, reject) => {
+  urlExists(req.body.url, function(err, exists) {
+    if (exists) {
+      resolve('Success!');
+    }
+    else {
+      reject('URL does not exist')
+    }
+  });
+});
+
+const urlTitlePromise = new Promise((resolve, reject) => {
+  let client = new nodeMetaInspector(req.body.url, { timeout: 5000 });
+  client.on('fetch', function() {
+    newWebsite = new Website(req.body);
+    req.body.title = client.title;
+    resolve('Success!');
+  });
+});
+
+const webshotPromise = new Promise((resolve, reject) => {
+  webshot(req.body.url, 'fullsize.png', function(err) {
+    resolve('Success!');
+  });
+});
+
+const cloudinaryPromise = new Promise((resolve, reject) => {
+  cloudinary.v2.uploader.upload('fullsize.png', {public_id: `${newWebsite._id}`},
+  function(error, result){
+    resolve('Success!');
+  })
+});
+
+const saveNewWebsite = new Promise((resolve, reject) => {
+  newWebsite.save()
+    .then(item => {
+      res.status(201).send('Website added');
+    })
+    .catch(err => {
+      res.status(500).send('Unable to save to database')
+    })
+});
+
+postWebsitePromise
+.then(function(result){
+  return urlExistsPromise
+})
+.then(function(result){
+  return urlTitlePromise
+})
+.then(function(result){
+  return webshotPromise;
+})
+.then(function(result){
+  return cloudinaryPromise;
+}).
+then(function(result){
+  return saveNewWebsite;
+});
+
+*/
+
 // POST a new webiste
 router.post('/', jwtAuth, (req, res) => {
   // Check for required fields
@@ -71,7 +150,8 @@ router.post('/', jwtAuth, (req, res) => {
           .catch(err => {
             res.status(500).send('Unable to save to database')
           })
-        })
+        });
+        
       });
 
       client.on('error', function(err) {
@@ -87,6 +167,7 @@ router.post('/', jwtAuth, (req, res) => {
     };
   });
 });
+
 
 // PUT edit existing tags 
 router.put('/:id', jwtAuth, (req, res) => {
