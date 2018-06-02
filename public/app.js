@@ -242,19 +242,11 @@ document.getElementById('new-website').addEventListener('submit', function(e){
       'Authorization': `Bearer ${token}`
     }
    })
-  //.then(getDataFromApi())
   .then(setTimeout(function(){getDataFromApi()},10000))
+  .catch((err) => {
+    notification.innerHTML = 'Unable to add website. Check that URL is valid and try again';
+  })
 });
-
-function checkStatus(response) {
-  notification.innerHTML = '';
-  if (response.status >= 200 && response.status < 300) {
-    return response
-  } else {
-    console.log(response);
-    notification.innerHTML = response.message;
-  }
-};
 
 function renderDetailScreen(i) {
   menu.style.display = 'none';
@@ -356,8 +348,10 @@ function editWebsite(i) {
       'Authorization': `Bearer ${token}`
     }
   })
-  .then(checkStatus)
   .then(getDataFromApi())
+  .catch((err) => {
+    notification.innerHTML = 'Unable to edit - try again.';
+  })
 };
 
 function deleteWebsite(i) {

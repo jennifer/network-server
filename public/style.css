@@ -166,8 +166,14 @@ footer .anchor-button {
 }
 
 .delete:hover, #logout:hover {
-  background-color: red;
+  background-color: #e60000;
   color: black;
+}
+
+#notification {
+  font-size: 22px;
+  color: #e60000;
+  margin: 0 10px 0 10px;
 }
 
 input[type='checkbox'] {
