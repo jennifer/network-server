@@ -41,10 +41,10 @@ document.getElementById('login-form').addEventListener('submit', function(e){
   .then((token) => {
     localStorage.setItem('authToken', token.authToken);
     localStorage.setItem('username', user.username);
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
     console.log('Logged in');
     getDataFromApi();
-    user.username.value = '';
-    user.password.value = '';
   })
   .catch((err) => {
     notification.innerHTML = 'Login failed. Try again or click below to sign up';
@@ -65,8 +65,35 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
     }
   })
   .then(res => res.json())
+  //.then(autoLogin(user))
   .then(response => notification.innerHTML = response.message);
 });
+
+/*
+function autoLogin(user) {
+  console.log('autoLogin ran');
+  console.log(user);
+  return fetch('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(user),
+    headers: {
+      'Content-Type': 'application/json'
+    } 
+  })
+  .then(res => res.json())
+  .then((token) => {
+    localStorage.setItem('authToken', token.authToken);
+    localStorage.setItem('username', user.username);
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    console.log('Logged in');
+    getDataFromApi();
+  })
+  .catch((err) => {
+    notification.innerHTML = 'Login failed. Try again or click below to sign up';
+  })
+};
+*/
 
 function getDataFromApi() {
   gallery.innerHTML = '';
@@ -92,6 +119,7 @@ function getDataFromApi() {
   })
 };
 
+
 function renderGallery(allWebsites) {
   authForms.style.display = 'none';
   menu.style.display = 'block';
@@ -101,33 +129,6 @@ function renderGallery(allWebsites) {
   logoutButton.style.display = 'block';
   gallery.innerHTML = '';
   notification.innerHTML = '';
-
-/*
-  const eachWebsite = document.createElement('div');
-  eachWebsite.className = 'each-website';
-  eachWebsite.addEventListener('click', `renderDetailScreen(${[i]})`, false);
-
-  const img = document.createElement('img');
-  img.src = 'https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png';
-  img.className = 'website-image';
-  img.alt = 'screenshot of website';
-
-  const overlay = document.createElement('div');
-  overlay.className = 'overlay';
-
-  const title = document.createElement('p');
-  title.className = 'text website-title';
-  const titleText = document.createTextNode(`${allWebsites[i].title}`);
-
-  const tags = document.createElement('p');
-  tags.className = 'text website-tags label-margin';
-  const tagsText = document.createTextNode(`${tagDisplay}`);
-
-  const notes = document.createElement('p');
-  notes.className = 'text website-notes label-margin';
-  const tagsText = document.createTextNode(`${allWebsites[i].notes}`);
-*/
-
   for (let i = allWebsites.length - 1; i >= 0; i--) {
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     let eachWebsite = `
@@ -144,7 +145,102 @@ function renderGallery(allWebsites) {
   }
 };
 
+/*
+function renderGallery(allWebsites) {
+  authForms.style.display = 'none';
+  menu.style.display = 'block';
+  gallery.style.display = 'block';
+  addWebsite.style.display = 'none';
+  websiteDetail.style.display = 'none';
+  logoutButton.style.display = 'block';
+  gallery.innerHTML = '';
+  notification.innerHTML = '';
+  
+  // Build plain JS dynamic website display
+  const eachWebsite = document.createElement('div');
+  eachWebsite.className = 'each-website';
+  eachWebsite.addEventListener('click', `renderDetailScreen(${[i]})`, false);
+
+  const img = document.createElement('img');
+  img.src = 'https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png';
+  img.className = 'website-image';
+  img.alt = 'screenshot of website';
+  eachWebsite.appendChild(img);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
+  eachWebsite.appendChild(overlay);
+
+  const title = document.createElement('p');
+  title.className = 'text website-title';
+  const titleText = document.createTextNode(`${allWebsites[i].title}`);
+  title.appendChild(titleText);
+  overlay.appendChild(title);
+
+  const tags = document.createElement('p');
+  tags.className = 'text website-tags label-margin';
+  const tagsText = document.createTextNode(`${tagDisplay}`);
+  tags.appendChild(tagsText);
+  overlay.appendChild(tags);
+
+  const notes = document.createElement('p');
+  notes.className = 'text website-notes label-margin';
+  const notesText = document.createTextNode(`${allWebsites[i].notes}`);
+  notes.appendChild(notesText);
+  overlay.appendChild(notes);
+
+  for (let i = allWebsites.length - 1; i >= 0; i--) {
+    let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
+    document.getElementById('gallery').appendChild(eachWebsite);
+  }
+};
+*/
+
+
 function renderMenu(data) {
+  if (allWebsites.length == 0) {
+    document.getElementById('empty-gallery').style.display = 'block';
+    document.getElementById('populated-gallery').style.display = 'none';
+  }
+  else {
+    document.getElementById('empty-gallery').style.display = 'none';
+    document.getElementById('populated-gallery').style.display = 'block';
+    let tagArr = ['color', 'font', 'images', 'layout'];
+    for (let i = 0; i < allWebsites.length; i++) {
+      tagArr.push.apply(tagArr, allWebsites[i].tags);
+    }
+    uniqueTags = ([...new Set(tagArr)]).sort();
+    document.getElementById('filters').innerHTML = '';
+    for (let i = 0; i < uniqueTags.length; i++) {
+      $('#filters').append(`
+        <div>
+          <input type='checkbox' value='${uniqueTags[i]}' class='checkbox' onclick='handleFilterClick()' />
+          <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
+          <br>
+        </div>
+      `);
+    };
+  }
+};
+
+/*
+// Build plain JS dynamic menu display
+function renderMenu(data) {
+  const eachFilter = document.createElement('div');
+  const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.value = `${uniqueTags[i]}`;
+    input.className = 'checkbox';
+    input.addEventListener('click', 'handleFilterClick()', false);
+  const label = document.createElement('label');
+    const labelText = document.createTextNode(`${uniqueTags[i]}`);
+    label.appendChild(labelText);
+    const labelFor = document.createAttribute('for');
+    labelFor.appendChild(labelText);
+    label.setAttributeNode(labelFor);
+  eachFilter.appendChild(input);
+  eachFilter.appendChild(label);
+
   let tagArr = ['color', 'font', 'images', 'layout'];
   for (let i = 0; i < allWebsites.length; i++) {
     tagArr.push.apply(tagArr, allWebsites[i].tags);
@@ -152,13 +248,10 @@ function renderMenu(data) {
   uniqueTags = ([...new Set(tagArr)]).sort();
   document.getElementById('filters').innerHTML = '';
   for (let i = 0; i < uniqueTags.length; i++) {
-    $('#filters').append(`
-      <input type='checkbox' value='${uniqueTags[i]}' class='checkbox' onclick='handleFilterClick()' />
-      <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
-      <br>
-    `);
-  };
+    document.getElementById('filters').appendChild(eachFilter);
+  }
 };
+*/
 
 function handleFilterClick() {
   let clickedFilters = [];
