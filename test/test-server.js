@@ -15,31 +15,12 @@ const { TEST_DATABASE_URL, JWT_SECRET } = require('../config');
 
 chai.use(chaiHttp);
 
-function tearDownDb() {
-  return new Promise((resolve, reject) => {
-    console.warn('Deleting database');
-    mongoose.connection.dropDatabase()
-      .then(result => resolve(result))
-      .catch(err => reject(err));
-  });
-}
-
-function seedWebsiteData() {
-  console.info('seeding website data');
-  const seedData = [];
-  for (let i = 1; i <= 10; i++) {
-    seedData.push({
-      userId: faker.random.number(),
-      url: faker.internet.url(),
-      title: faker.lorem.sentence(),
-      tags: faker.lorem.words(),
-      created: faker.date.past()
-    });
-  }
-  return Website.insertMany(seedData);
-};
-
 describe('website API resource', function () {
+  const username = 'exampleUser';
+  const password = 'examplePass';
+  const firstName = 'Example';
+  const lastName = 'User';
+
   before(function () {
     return runServer(TEST_DATABASE_URL);
   });
@@ -52,11 +33,6 @@ describe('website API resource', function () {
   after(function () {
     return closeServer();
   });
-
-  const username = 'exampleUser';
-  const password = 'examplePass';
-  const firstName = 'Example';
-  const lastName = 'User';
 
   const token = jwt.sign(
     {
@@ -73,12 +49,36 @@ describe('website API resource', function () {
       expiresIn: '7d'
     }
   );
+
+function tearDownDb() {
+return new Promise((resolve, reject) => {
+  console.warn('Deleting database');
+  mongoose.connection.dropDatabase()
+    .then(result => resolve(result))
+    .catch(err => reject(err));
+  });
+}
+
+function seedWebsiteData() {
+  console.info('seeding website data');
+  const seedData = [];
+  for (let i = 1; i <= 10; i++) {
+    seedData.push({
+      username: username,
+      url: faker.internet.url(),
+      title: faker.lorem.sentence(),
+      tags: faker.lorem.words(),
+      created: faker.date.past()
+    });
+  }
+  return Website.insertMany(seedData);
+};
  
   describe('GET endpoint', function () {
     it('should return all existing websites', function () {
       let res;
       return chai.request(app)
-        .get('/websites')
+        .get(`/websites/${username}`)
         .set('authorization', `Bearer ${token}`)
         .then(_res => {
           res = _res;
@@ -94,7 +94,7 @@ describe('website API resource', function () {
     it('should return websites with right fields', function () {
       let resSite;
       return chai.request(app)
-        .get('/websites')
+        .get(`/websites/${username}`)
         .set('authorization', `Bearer ${token}`)
         .then(function (res) {
           res.should.have.status(200);
@@ -103,7 +103,7 @@ describe('website API resource', function () {
           res.body.should.have.length.of.at.least(1);
           res.body.forEach(function (site) {
             site.should.be.a('object');
-            site.should.include.keys('userId', 'url', 'title', 'tags', 'created');
+            site.should.include.keys('username', 'url', 'title', 'tags', 'created');
           });
           resSite = res.body[0];
           return Website.findById(resSite._id);
@@ -121,9 +121,10 @@ describe('website API resource', function () {
     it('should add a new website', function () {
       this.timeout(15000);
       const newSite = {
-        userId: faker.random.number(),
-        url: faker.internet.url(),
+        username: username,
+        url: 'http://google.com',
         tags: faker.lorem.words(),
+        notes: faker.lorem.words(),
         created: faker.date.past()
       };
       return chai.request(app)
@@ -132,17 +133,7 @@ describe('website API resource', function () {
         .send(newSite)
         .then(function (res) {
           res.should.have.status(201);
-          res.should.be.json;
-          res.body.should.be.a('object');
-          res.body.should.include.keys('userId', 'url', 'tags', 'created');
-          res.body.url.should.equal(newSite.url);
-          res.body._id.should.not.be.null;
-          res.body.tags.should.equal(newSite.tags);
-          return Website.findById(res.body._id);
         })
-        .then(function (site) {
-          site.userId.should.equal(String(newSite.userId));
-        });
     });
   });
 
@@ -158,7 +149,7 @@ describe('website API resource', function () {
           updateData.id = site.id;
 
           return chai.request(app)
-            .put(`/websites/${site.id}`)
+            .put(`/websites/${site._id}`)
             .set('authorization', `Bearer ${token}`)
             .send(updateData);
         })
@@ -168,7 +159,7 @@ describe('website API resource', function () {
         })
         .then(site => {
           site.notes.should.equal(updateData.notes);
-          site.tags.should.equal(updateData.tags)
+          site.tags[0].should.equal(updateData.tags)
         })
       })
   });
@@ -181,12 +172,12 @@ describe('website API resource', function () {
         .then(_site => {
           site = _site;
           return chai.request(app)
-            .delete(`/websites/${site.id}`)
+            .delete(`/websites/${site._id}`)
             .set('authorization', `Bearer ${token}`)
         })
         .then(res => {
           res.should.have.status(204);
-          return Website.findById(site.id);
+          return Website.findById(site._id);
         })
         .then(_site => {
           should.not.exist(_site);
