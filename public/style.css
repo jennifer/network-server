@@ -6,10 +6,15 @@ a, body, button, div, fieldset, footer, form, h1, h2, header, html, img, input, 
   font-family: 'Gothic A1', sans-serif;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   display: grid;
+  min-height: 100%;
   grid-template-columns: 300px auto;
-  grid-template-rows: auto 60px;
+  grid-template-rows: 1fr auto;
   background: url('https://i.imgur.com/wsFyz8e.jpg?1') no-repeat center center fixed;
   background-size: cover;
 }
@@ -104,6 +109,12 @@ ul {
   margin: 10px;
 }
 
+.or {
+  font-size: 22px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 #filters {
   padding-top: 5px;
 }
@@ -115,6 +126,12 @@ ul {
 .label-margin {
   display: block;
   margin-top: 10px;
+}
+
+.filter-margin {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 5px;
 }
 
 .website-detail {
@@ -262,4 +279,48 @@ input::placeholder {
 @keyframes blink {
   from { opacity: 1; }
   to { opacity: 0; }
+}
+
+@media (max-width: 650px) {
+  body {
+    grid-template-columns: auto;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .left-column {
+    max-width: 400px;
+    min-width: 270px;
+    margin: 16px;
+    margin-bottom: 0px;
+  }
+
+  main {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
+  }
+
+  .each-website, .website-detail {
+    margin: 8px;
+  }
+
+  #gallery {
+    padding: 8px;
+    padding-right: 16px;
+  }
+
+  footer {
+    position: relative;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    height: 30px;
+    margin: 16px;
+  }
+
+  footer .anchor-button, #logout {
+    margin: 0px 0px 16px 0px;
+  }
 }

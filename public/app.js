@@ -65,11 +65,11 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
     }
   })
   .then(res => res.json())
-  //.then(autoLogin(user))
-  .then(response => notification.innerHTML = response.message);
+  .then(autoLogin)
+  .catch(response => notification.innerHTML = response.message);
 });
 
-/*
+
 function autoLogin(user) {
   console.log('autoLogin ran');
   console.log(user);
@@ -84,16 +84,17 @@ function autoLogin(user) {
   .then((token) => {
     localStorage.setItem('authToken', token.authToken);
     localStorage.setItem('username', user.username);
+    console.log(token);
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
     console.log('Logged in');
     getDataFromApi();
   })
   .catch((err) => {
-    notification.innerHTML = 'Login failed. Try again or click below to sign up';
+    notification.innerHTML = 'Login failed. Try again or click below to make an account.';
   })
 };
-*/
+
 
 function getDataFromApi() {
   gallery.innerHTML = '';
@@ -198,6 +199,14 @@ function renderGallery(allWebsites) {
 
 
 function renderMenu(data) {
+  for (let i = 0; i < allWebsites.length; i++) {
+    uniqueTags.push.apply(uniqueTags, allWebsites[i].tags);
+  }
+  console.log(uniqueTags);
+  uniqueTags = ([...new Set(uniqueTags)]).sort();
+  console.log(uniqueTags);
+
+
   if (allWebsites.length == 0) {
     document.getElementById('empty-gallery').style.display = 'block';
     document.getElementById('populated-gallery').style.display = 'none';
@@ -205,11 +214,6 @@ function renderMenu(data) {
   else {
     document.getElementById('empty-gallery').style.display = 'none';
     document.getElementById('populated-gallery').style.display = 'block';
-    let tagArr = ['color', 'font', 'images', 'layout'];
-    for (let i = 0; i < allWebsites.length; i++) {
-      tagArr.push.apply(tagArr, allWebsites[i].tags);
-    }
-    uniqueTags = ([...new Set(tagArr)]).sort();
     document.getElementById('filters').innerHTML = '';
     for (let i = 0; i < uniqueTags.length; i++) {
       $('#filters').append(`
@@ -294,10 +298,16 @@ document.getElementById('add-link').addEventListener('click', function(e){
   document.getElementById('custom-tag').value = '';
   document.getElementById('notes').value = '';
   document.getElementById('tag-checkboxes').innerHTML = '';
+  let tagArr = ['color', 'font', 'images', 'layout'];
   for (let i = 0; i < uniqueTags.length; i++) {
+    tagArr.push.apply(tagArr, [uniqueTags[i]]);
+  }
+  console.log(tagArr);
+  tagArr = ([...new Set(tagArr)]).sort();
+  for (let i = 0; i < tagArr.length; i++) {
     $('#tag-checkboxes').append(`
-      <input type='checkbox' value='${uniqueTags[i]}' id='new-${uniqueTags[i]}' class='checkbox' name='new-tags'  />
-      <label for='new-${uniqueTags[i]}'>${uniqueTags[i]}</label>
+      <input type='checkbox' value='${tagArr[i]}' id='new-${tagArr[i]}' class='checkbox' name='new-tags'  />
+      <label for='new-${tagArr[i]}'>${tagArr[i]}</label>
       <br>
   `)};
 });
@@ -365,7 +375,7 @@ function renderDetailScreen(i) {
         <p class='website-notes label-margin'>${allWebsites[i].notes}</p>
       </div>
       <button onclick='renderWebsiteEditor(${i})'>Edit website</button>
-      <p class='p-text'>or</p>
+      <p class='or'>or</p>
       <button onclick='renderGallery(allWebsites)'>Go back</button>
   `);
 };
@@ -393,7 +403,7 @@ function renderWebsiteEditor(i) {
       </fieldset>
     </form>
     <button onclick='deleteWebsite(${[i]})' class='delete'>Delete website</button>
-    <p class='p-text'>or</p>
+    <p class='or'>or</p>
     <button onclick='renderDetailScreen(${i})'>Go back</button>
   `);
   for (let t = 0; t < uniqueTags.length; t++) {
