@@ -9,12 +9,12 @@
   </head>
   <body>
       <div class='left-column'>
-        <header>
+        <header role='banner'>
           <button id='gallery-link' s>Gallery</button>
         </header>
         <p id='notification'></p>
-        <section id='auth-forms'>
-          <p class='p-text'>Collect websites for design inspiration:</p>
+        <section id='auth-forms' role='region'>
+          <h1 class='p-text'>Collect websites for design inspiration:</h1>
           <ul>
             <li>Tag design elements</li>
             <li>Take notes</li>
@@ -22,7 +22,7 @@
           </ul>
           <div id='login-wrapper'>
             <div>
-              <form id='login-form'>
+              <form id='login-form' role='form'>
                 <div class='padding-div'>
                   <label for='username'>Username:</label>
                   <div class="cursor">
@@ -44,7 +44,7 @@
 
           <div id='signup-wrapper'>
             <div>
-              <form id='signup-form'>
+              <form id='signup-form' role='form'>
                 <div class='padding-div'>
                   <label for='signup-username'>Username:</label>
                   <div class="cursor">
@@ -63,7 +63,7 @@
           </div>
         </section>
 
-        <section id='menu'>
+        <section id='menu' role='region'>
           <p id='empty-gallery' class='p-text'>Start by adding a website:</p>
           <div id='populated-gallery'>
             <p class='p-text'>Check boxes to filter:</p>
@@ -74,15 +74,15 @@
           <button id='add-link'>Add a new website</button>
         </section>
 
-        <section id='add-website'>
-          <form id='new-website' name='new-website'>
+        <section id='add-website' role='region'>
+          <form id='new-website' name='new-website' role='form'>
             <fieldset name='new-url'>
               <div class='padding-div'>
               <legend>
                 <label for='url-input'>Enter a URL:</label>
               </legend>
                 <div class="cursor">
-                  <input type='text' class='text-input' id='url' required='' />
+                  <input type='text' class='text-input' id='url-input' required='' />
                   <i></i>
                 </div>
                 <div>
@@ -92,7 +92,7 @@
                 <div>
                   <label for='custom-tag' class='label-margin'>Add a custom tag:</label>
                   <div class="cursor">
-                    <input type='text' id='customTag' class='text-input' name='tags' />
+                    <input type='text' id='custom-tag' class='text-input' name='tags' />
                     <i></i>
                   </div>
                 </div>
@@ -110,13 +110,13 @@
           <p class='p-text'>or</p>
           <button type='submit' id='close-link'>Go back</button>
         </section> 
-        <section id='website-detail'></section>
+        <section id='website-detail' role='region'></section>
       </div>
 
-      <main>
-        <section id='gallery'></section>
+      <main role='main'>
+        <section id='gallery' role='region'></section>
       </main>
-      <footer>
+      <footer role='contentinfo'>
         <button id='logout'>Logout</button>
         <a href='https://github.com/jennifer' class='anchor-button' target='_blank'>Github</a>
       </footer>

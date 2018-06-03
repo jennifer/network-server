@@ -214,8 +214,8 @@ function renderMenu(data) {
     for (let i = 0; i < uniqueTags.length; i++) {
       $('#filters').append(`
         <div>
-          <input type='checkbox' value='${uniqueTags[i]}' class='checkbox' onclick='handleFilterClick()' />
-          <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
+          <input type='checkbox' value='${uniqueTags[i]}' id='menu-${uniqueTags[i]}' class='checkbox' onclick='handleFilterClick()' />
+          <label for='menu-${uniqueTags[i]}'>${uniqueTags[i]}</label>
           <br>
         </div>
       `);
@@ -290,14 +290,14 @@ document.getElementById('add-link').addEventListener('click', function(e){
   addWebsite.style.display = 'block';
   websiteDetail.style.display = 'none';
   logoutButton.style.display = 'block';
-  document.getElementById('url').value = '';
-  document.getElementById('customTag').value = '';
+  document.getElementById('url-input').value = '';
+  document.getElementById('custom-tag').value = '';
   document.getElementById('notes').value = '';
   document.getElementById('tag-checkboxes').innerHTML = '';
   for (let i = 0; i < uniqueTags.length; i++) {
     $('#tag-checkboxes').append(`
-      <input type='checkbox' value='${uniqueTags[i]}' name='new-tags' class='checkbox' />
-      <label for='${uniqueTags[i]}'>${uniqueTags[i]}</label>
+      <input type='checkbox' value='${uniqueTags[i]}' id='new-${uniqueTags[i]}' class='checkbox' name='new-tags'  />
+      <label for='new-${uniqueTags[i]}'>${uniqueTags[i]}</label>
       <br>
   `)};
 });
@@ -307,7 +307,7 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   e.preventDefault();
   let newWebsite = {};
   newWebsite.username = localStorage.getItem('username');
-  newWebsite.url = document.getElementById('url').value;
+  newWebsite.url = document.getElementById('url-input').value;
   newWebsite.notes = document.getElementById('notes').value;
 
   let tags = [];
@@ -319,8 +319,8 @@ document.getElementById('new-website').addEventListener('submit', function(e){
     }
     console.log(tags);
   };
-  if (document.getElementById('customTag').value) {
-    tags.push(document.getElementById('customTag').value)
+  if (document.getElementById('custom-tag').value) {
+    tags.push(document.getElementById('custom-tag').value)
   };
   let newTags = ([...new Set(tags)]).sort();
   newWebsite.tags = newTags;
@@ -373,17 +373,17 @@ function renderDetailScreen(i) {
 function renderWebsiteEditor(i) {
   websiteDetail.innerHTML = '';
   $('#website-detail').append(`
-    <form>
+    <form role='form'>
       <fieldset>
         <div class='padding-div'>
           <legend>Edit tags:</legend>
           <div id='edit-tags' class='checkbox-wrapper'></div>
-          <label for='custom-tag' class='label-margin'>Add a custom tag:</label>
+          <label for='edit-custom-tag' class='label-margin'>Add a custom tag:</label>
           <div class="cursor">
-            <input type='text' id='edit-customTag' class='text-input' />
+            <input type='text' id='edit-custom-tag' class='text-input' />
             <i></i>
           </div>
-          <label for='notes' class='label-margin'>Edit notes:</label>
+          <label for='edit-notes' class='label-margin'>Edit notes:</label>
           <div class="cursor">
             <input type='text' id='edit-notes' class='text-input' name='notes' placeholder='${allWebsites[i].notes}' />
             <i></i>
@@ -398,12 +398,12 @@ function renderWebsiteEditor(i) {
   `);
   for (let t = 0; t < uniqueTags.length; t++) {
     $('#edit-tags').append(`
-      <input type='checkbox' id='${uniqueTags[t]}' value='${uniqueTags[t]}' name='edit-tags' class='checkbox' />
-      <label for='${uniqueTags[t]}'>${uniqueTags[t]}</label>
+      <input type='checkbox' id='edit-${uniqueTags[t]}' value='${uniqueTags[t]}' name='edit-tags' class='checkbox' />
+      <label for='edit-${uniqueTags[t]}'>${uniqueTags[t]}</label>
       <br>
     `);
     if ((`${allWebsites[i].tags}`).includes(`${uniqueTags[t]}`)) {
-      document.getElementById(`${uniqueTags[t]}`).checked = true
+      document.getElementById(`edit-${uniqueTags[t]}`).checked = true
     }
   }
 };
@@ -419,7 +419,7 @@ function editWebsite(i) {
       tags.push(checkbox[i].value)
     }
   };
-  let customTag = document.getElementById('edit-customTag').value;
+  let customTag = document.getElementById('edit-custom-tag').value;
   if (customTag) {
     tags.push(customTag)
   };
@@ -449,7 +449,7 @@ function editWebsite(i) {
 
 function deleteWebsite(i) {
   let token = localStorage.getItem('authToken');
-  fetch(`/websites/${allWebsites[i]._id}`, {
+  return fetch(`/websites/${allWebsites[i]._id}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`

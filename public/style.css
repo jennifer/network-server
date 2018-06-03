@@ -89,6 +89,7 @@ button:hover {
 
 .p-text, #filters, .padding-div {
   font-size: 22px;
+  font-weight: normal;
   padding: 10px;
 }
 
