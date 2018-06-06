@@ -24,7 +24,7 @@ document.getElementById('signup-link').addEventListener('click', function(e){
   document.getElementById('signup-wrapper').style.display = 'block';
 });
 
-document.getElementById('login-form').addEventListener('submit', function(e){
+document.getElementById('login-form').addEventListener('submit', function loginForm(e){
   e.preventDefault();
   notification.innerHTML = '';
   let user = {};
@@ -65,11 +65,11 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
     }
   })
   .then(res => res.json())
-  .then(autoLogin)
+  .then(loginForm())
   .catch(response => notification.innerHTML = response.message);
 });
 
-
+/*
 function autoLogin(user) {
   console.log('autoLogin ran');
   console.log(user);
@@ -94,7 +94,7 @@ function autoLogin(user) {
     notification.innerHTML = 'Login failed. Try again or click below to make an account.';
   })
 };
-
+*/
 
 function getDataFromApi() {
   gallery.innerHTML = '';
@@ -202,10 +202,7 @@ function renderMenu(data) {
   for (let i = 0; i < allWebsites.length; i++) {
     uniqueTags.push.apply(uniqueTags, allWebsites[i].tags);
   }
-  console.log(uniqueTags);
   uniqueTags = ([...new Set(uniqueTags)]).sort();
-  console.log(uniqueTags);
-
 
   if (allWebsites.length == 0) {
     document.getElementById('empty-gallery').style.display = 'block';
@@ -302,7 +299,6 @@ document.getElementById('add-link').addEventListener('click', function(e){
   for (let i = 0; i < uniqueTags.length; i++) {
     tagArr.push.apply(tagArr, [uniqueTags[i]]);
   }
-  console.log(tagArr);
   tagArr = ([...new Set(tagArr)]).sort();
   for (let i = 0; i < tagArr.length; i++) {
     $('#tag-checkboxes').append(`
@@ -321,13 +317,11 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   newWebsite.notes = document.getElementById('notes').value;
 
   let tags = [];
-  console.log(tags);
   let checkbox = document.getElementsByName('new-tags');
   for (let i = 0; i < checkbox.length; i++) {
     if (checkbox[i].checked) {
       tags.push(checkbox[i].value)
     }
-    console.log(tags);
   };
   if (document.getElementById('custom-tag').value) {
     tags.push(document.getElementById('custom-tag').value)
@@ -345,9 +339,14 @@ document.getElementById('new-website').addEventListener('submit', function(e){
       'Authorization': `Bearer ${token}`
     }
    })
-  .then(setTimeout(function(){getDataFromApi()},10000))
+  .then(setTimeout(function(){
+    document.getElementById('loader').style.display = 'block';
+    getDataFromApi();
+    document.getElementById('loader').style.display = 'none';
+  },10000))
   .catch((err) => {
-    notification.innerHTML = 'Unable to add website. Check that URL is valid and try again';
+    console.log(err)
+    //notification.innerHTML = 'Unable to add website. Check that URL is valid and try again';
   })
 });
 
