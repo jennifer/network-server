@@ -11,6 +11,7 @@ const signupWrapper = document.getElementById('signup-wrapper');
 const logoutButton = document.getElementById('logout');
 const notification = document.getElementById('notification');
 const authForms = document.getElementById('auth-forms');
+document.getElementById('loader').style.display = 'none';
 
 menu.style.display = 'none';
 gallery.style.display = 'none';
@@ -24,7 +25,7 @@ document.getElementById('signup-link').addEventListener('click', function(e){
   document.getElementById('signup-wrapper').style.display = 'block';
 });
 
-document.getElementById('login-form').addEventListener('submit', function loginForm(e){
+document.getElementById('login-form').addEventListener('submit', function(e){
   e.preventDefault();
   notification.innerHTML = '';
   let user = {};
@@ -54,6 +55,8 @@ document.getElementById('login-form').addEventListener('submit', function loginF
 document.getElementById('signup-form').addEventListener('submit', function(e){
   e.preventDefault();
   notification.innerHTML = '';
+  document.getElementById('signup-username').value = '';
+  document.getElementById('signup-password').value = '';
   let user = {};
   user.username = document.getElementById('signup-username').value;
   user.password = document.getElementById('signup-password').value;
@@ -65,36 +68,15 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
     }
   })
   .then(res => res.json())
-  .then(loginForm())
-  .catch(response => notification.innerHTML = response.message);
-});
-
-/*
-function autoLogin(user) {
-  console.log('autoLogin ran');
-  console.log(user);
-  return fetch('/api/auth/login', {
-    method: 'POST',
-    body: JSON.stringify(user),
-    headers: {
-      'Content-Type': 'application/json'
-    } 
-  })
-  .then(res => res.json())
-  .then((token) => {
-    localStorage.setItem('authToken', token.authToken);
-    localStorage.setItem('username', user.username);
-    console.log(token);
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-    console.log('Logged in');
-    getDataFromApi();
+  .then(function() {
+    document.getElementById('login-wrapper').style.display = 'block';
+    document.getElementById('signup-wrapper').style.display = 'none';
+    notification.innerHTML = 'Account created. Login below.';
   })
   .catch((err) => {
-    notification.innerHTML = 'Login failed. Try again or click below to make an account.';
+    notification.innerHTML = 'Signup failed. Try again.';
   })
-};
-*/
+})
 
 function getDataFromApi() {
   gallery.innerHTML = '';
@@ -146,58 +128,6 @@ function renderGallery(allWebsites) {
   }
 };
 
-/*
-function renderGallery(allWebsites) {
-  authForms.style.display = 'none';
-  menu.style.display = 'block';
-  gallery.style.display = 'block';
-  addWebsite.style.display = 'none';
-  websiteDetail.style.display = 'none';
-  logoutButton.style.display = 'block';
-  gallery.innerHTML = '';
-  notification.innerHTML = '';
-  
-  // Build plain JS dynamic website display
-  const eachWebsite = document.createElement('div');
-  eachWebsite.className = 'each-website';
-  eachWebsite.addEventListener('click', `renderDetailScreen(${[i]})`, false);
-
-  const img = document.createElement('img');
-  img.src = 'https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png';
-  img.className = 'website-image';
-  img.alt = 'screenshot of website';
-  eachWebsite.appendChild(img);
-
-  const overlay = document.createElement('div');
-  overlay.className = 'overlay';
-  eachWebsite.appendChild(overlay);
-
-  const title = document.createElement('p');
-  title.className = 'text website-title';
-  const titleText = document.createTextNode(`${allWebsites[i].title}`);
-  title.appendChild(titleText);
-  overlay.appendChild(title);
-
-  const tags = document.createElement('p');
-  tags.className = 'text website-tags label-margin';
-  const tagsText = document.createTextNode(`${tagDisplay}`);
-  tags.appendChild(tagsText);
-  overlay.appendChild(tags);
-
-  const notes = document.createElement('p');
-  notes.className = 'text website-notes label-margin';
-  const notesText = document.createTextNode(`${allWebsites[i].notes}`);
-  notes.appendChild(notesText);
-  overlay.appendChild(notes);
-
-  for (let i = allWebsites.length - 1; i >= 0; i--) {
-    let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
-    document.getElementById('gallery').appendChild(eachWebsite);
-  }
-};
-*/
-
-
 function renderMenu(data) {
   for (let i = 0; i < allWebsites.length; i++) {
     uniqueTags.push.apply(uniqueTags, allWebsites[i].tags);
@@ -223,36 +153,6 @@ function renderMenu(data) {
     };
   }
 };
-
-/*
-// Build plain JS dynamic menu display
-function renderMenu(data) {
-  const eachFilter = document.createElement('div');
-  const input = document.createElement('input');
-    input.type = 'checkbox';
-    input.value = `${uniqueTags[i]}`;
-    input.className = 'checkbox';
-    input.addEventListener('click', 'handleFilterClick()', false);
-  const label = document.createElement('label');
-    const labelText = document.createTextNode(`${uniqueTags[i]}`);
-    label.appendChild(labelText);
-    const labelFor = document.createAttribute('for');
-    labelFor.appendChild(labelText);
-    label.setAttributeNode(labelFor);
-  eachFilter.appendChild(input);
-  eachFilter.appendChild(label);
-
-  let tagArr = ['color', 'font', 'images', 'layout'];
-  for (let i = 0; i < allWebsites.length; i++) {
-    tagArr.push.apply(tagArr, allWebsites[i].tags);
-  }
-  uniqueTags = ([...new Set(tagArr)]).sort();
-  document.getElementById('filters').innerHTML = '';
-  for (let i = 0; i < uniqueTags.length; i++) {
-    document.getElementById('filters').appendChild(eachFilter);
-  }
-};
-*/
 
 function handleFilterClick() {
   let clickedFilters = [];
@@ -330,6 +230,7 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   newWebsite.tags = newTags;
 
   let token = localStorage.getItem('authToken');
+  document.getElementById('loader').style.display = 'block';
   return fetch('/websites', {
     method: 'POST',
     body: JSON.stringify(newWebsite),
@@ -340,7 +241,6 @@ document.getElementById('new-website').addEventListener('submit', function(e){
     }
    })
   .then(setTimeout(function(){
-    document.getElementById('loader').style.display = 'block';
     getDataFromApi();
     document.getElementById('loader').style.display = 'none';
   },10000))
