@@ -218,7 +218,6 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   newWebsite.username = localStorage.getItem('username');
   newWebsite.url = document.getElementById('url-input').value;
   newWebsite.notes = document.getElementById('notes').value;
-
   let tags = [];
   let checkbox = document.getElementsByName('new-tags');
   for (let i = 0; i < checkbox.length; i++) {
@@ -231,7 +230,6 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   };
   let newTags = ([...new Set(tags)]).sort();
   newWebsite.tags = newTags;
-
   let token = localStorage.getItem('authToken');
   document.getElementById('loader').style.display = 'block';
   return fetch('/websites', {
