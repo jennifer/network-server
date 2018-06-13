@@ -68,7 +68,7 @@ router.post('/', jwtAuth, (req, res) => {
           .then(item => {
             res.status(201).json({
               code: 201,
-              message: 'Website added!',
+              message: 'Adding website...',
               type: 'internal'
             });
           })
