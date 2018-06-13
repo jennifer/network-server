@@ -66,7 +66,11 @@ router.post('/', jwtAuth, (req, res) => {
 
           newWebsite.save()
           .then(item => {
-            res.status(201).send('Website added');
+            res.status(201).json({
+              code: 201,
+              message: 'Website added!',
+              type: 'internal'
+            });
           })
           .catch(err => {
             res.status(500).send('Unable to save to database')
@@ -121,11 +125,15 @@ router.delete('/:id', jwtAuth, (req, res) => {
   Website
     .findByIdAndRemove(req.params.id)
     .then(() => {
-      res.status(204).json({ message: 'Success' });
+      res.status(204).json({ 
+        message: 'Success'
+      });
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({
+        error: 'Internal server error'
+      });
     });
 });
 

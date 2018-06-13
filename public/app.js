@@ -248,7 +248,7 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   .then(setTimeout(function(){
     getDataFromApi();
     document.getElementById('loader').style.display = 'none';
-  },10000))
+  },7000))
 });
 
 
