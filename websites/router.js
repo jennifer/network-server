@@ -83,8 +83,11 @@ router.post('/', jwtAuth, (req, res) => {
 
       }
     else {
-      console.error(err);
-      res.status(500).send({status:500, message: 'URL does not exist', type:'internal'}); 
+      return res.status(500).json({
+        code: 500, 
+        message: 'Invalid URL. Check URL and try again.', 
+        type:'internal'
+      })
     };
   });
 });

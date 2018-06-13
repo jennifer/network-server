@@ -39,7 +39,7 @@ document.getElementById('login-form').addEventListener('submit', function(e){
     } 
   })
   .then(res => res.json())
-  .then((token) => {
+  .then(token => {
     localStorage.setItem('authToken', token.authToken);
     localStorage.setItem('username', user.username);
     document.getElementById('username').value = '';
@@ -67,9 +67,9 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
   })
   .then(res => res.json())
   .catch(error => console.error('Error:', error))
-  .then((res) => {
+  .then(res => {
     if (res.message) {
-      console.log(notification.innerHTML = res.message)
+      notification.innerHTML = res.message
     }
     else {
       notification.innerHTML = 'Account created! Log in below.';
@@ -243,15 +243,16 @@ document.getElementById('new-website').addEventListener('submit', function(e){
       'Authorization': `Bearer ${token}`
     }
    })
+  .then(res => res.json())
+  .then(res => {
+    notification.innerHTML = res.message
+  })
   .then(setTimeout(function(){
     getDataFromApi();
     document.getElementById('loader').style.display = 'none';
   },10000))
-  //.catch((err) => {
-  //  console.log(err)
-    //notification.innerHTML = 'Unable to add website. Check that URL is valid and try again';
-  //})
 });
+
 
 function renderDetailScreen(i) {
   menu.style.display = 'none';
