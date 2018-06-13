@@ -55,8 +55,6 @@ document.getElementById('login-form').addEventListener('submit', function(e){
 document.getElementById('signup-form').addEventListener('submit', function(e){
   e.preventDefault();
   notification.innerHTML = '';
-  document.getElementById('signup-username').value = '';
-  document.getElementById('signup-password').value = '';
   let user = {};
   user.username = document.getElementById('signup-username').value;
   user.password = document.getElementById('signup-password').value;
@@ -68,15 +66,20 @@ document.getElementById('signup-form').addEventListener('submit', function(e){
     }
   })
   .then(res => res.json())
+  .catch(error => console.error('Error:', error))
+  .then((res) => {
+    if (res.message) {
+      console.log(notification.innerHTML = res.message)
+    }
+    else {
+      notification.innerHTML = 'Account created! Log in below.';
+    }
+  })
   .then(function() {
     document.getElementById('login-wrapper').style.display = 'block';
     document.getElementById('signup-wrapper').style.display = 'none';
-    notification.innerHTML = 'Account created. Login below.';
   })
-  .catch((err) => {
-    notification.innerHTML = 'Signup failed. Try again.';
-  })
-})
+});
 
 function getDataFromApi() {
   gallery.innerHTML = '';
@@ -244,10 +247,10 @@ document.getElementById('new-website').addEventListener('submit', function(e){
     getDataFromApi();
     document.getElementById('loader').style.display = 'none';
   },10000))
-  .catch((err) => {
-    console.log(err)
+  //.catch((err) => {
+  //  console.log(err)
     //notification.innerHTML = 'Unable to add website. Check that URL is valid and try again';
-  })
+  //})
 });
 
 function renderDetailScreen(i) {
@@ -351,9 +354,6 @@ function editWebsite(i) {
     }
   })
   .then(getDataFromApi())
-  .catch((err) => {
-    notification.innerHTML = 'Unable to edit - try again.';
-  })
 };
 
 function deleteWebsite(i) {

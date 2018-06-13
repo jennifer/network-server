@@ -292,7 +292,7 @@ input::placeholder {
   left: 0;
   bottom: 0;
   right: 0;
-  border: 16px solid white;
+  border: 16px solid lightgray;
   border-top: 16px solid black;
   border-radius: 50%;
   width: 120px;
@@ -309,7 +309,6 @@ input::placeholder {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.3);
 }
 
 
