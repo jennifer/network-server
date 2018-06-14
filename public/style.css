@@ -86,6 +86,9 @@ button:hover {
   box-shadow: none;
 }
 
+.submit-button {
+  margin-left: 0;
+}
 
 #gallery-link {
   height: 60px;
