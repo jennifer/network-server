@@ -1,5 +1,7 @@
 # Gallery
 
+https://travis-ci.org/jennifer/gallery.svg?branch=master
+
 Collect websites for design inspiration. Submit a URL, tag the website's best features, and take notes. The Gallery app takes a screenshot of the website and displays it in an image gallery. Mouse over each image (or tap on a touchscreen) to display title, feature tags, and notes. Click an image to edit the entry or to visit the website. Need a design idea? Filter the collection by design features and get inspired.
 
 https://website-gallery.herokuapp.com/
