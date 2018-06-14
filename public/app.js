@@ -175,7 +175,8 @@ function handleFilterClick() {
         <img src='https://res.cloudinary.com/dgdn7zsw8/image/upload/v1526873950/${allWebsites[i]._id}.png' class='website-image' alt='screenshot of website' />
         <div class='overlay'>
           <h1 class='text website-title'>${allWebsites[i].title}</h1><br />
-          <h2 class='text website-tags'>${tagDisplay}</h2>
+          <h2 class='text website-tags'>${tagDisplay}</h2><br />
+          <p class='text website-notes label-margin'>${allWebsites[i].notes}</p>
         </div>
       </div>
     `;
