@@ -4,11 +4,11 @@ Collect websites for design inspiration. Submit a URL, tag the website's best el
 
 https://website-gallery.herokuapp.com/
 
-Username: demo / Password: password
+Username: demo | Password: password
 
 ## Motivation
 
-I often bookmark websites with unique and inspiring design elements. Over time, I collected dozens of bookmars that offered no visual preview of the website, and no context for why I had bookmarked it. I built this app to store my favorite websites - including an image, metadata, and notes for each - to use a source for design ideas in my own projects.
+I often bookmark websites with unique and inspiring design elements. Over time, I collected dozens of bookmarks that offered no visual preview of the website, and no context for why I had bookmarked it. I built the Gallery app to store my favorite websites - including an image, metadata tags, and notes for each - to use a source for design ideas in my own projects.
 
 ## Screenshots
 
@@ -22,7 +22,7 @@ I often bookmark websites with unique and inspiring design elements. Over time, 
 ![Gallery of website images on the right with website submission form on the left.](https://i.imgur.com/jXVUGE7.png)
 
 #### View a website
-![Large website image on the right with title, tags, and notes on the left.](https://i.imgur.com/tuFyfQ3.png)
+![Large website image on the right with title, tags, and notes on the left.](https://i.imgur.com/w0t1czo.png)
 
 #### Edit a website
 ![Large website image on the right with website editing form on the left.](https://i.imgur.com/28fvdoX.png)
@@ -30,9 +30,9 @@ I often bookmark websites with unique and inspiring design elements. Over time, 
 ## Technology
 
 ### Front End
+* JavaScript* 
 * HTML
 * CSS
-* JavaScript
 
 ### Back End
 * Node.js
@@ -41,13 +41,14 @@ I often bookmark websites with unique and inspiring design elements. Over time, 
 * Chai
 * Mongo
 * Mongoose
+* mLab
 * bcrypt.js
 * Passport
-* Heroku
+* Webshot
 * TravisCI
-* mLab
+* Heroku
 
 
 ## Author
 
-* **Jennifer Kerssen** - [jennifer](https://github.com/jennifer)
+[Jennifer Kerssen](https://github.com/jennifer)
