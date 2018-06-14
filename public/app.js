@@ -287,8 +287,10 @@ function renderWebsiteEditor(i) {
     <form role='form'>
       <fieldset>
         <div class='padding-div'>
-          <legend>Edit tags:</legend>
-          <div id='edit-tags' class='checkbox-wrapper'></div>
+          <fieldset>
+            <legend>Edit tags:</legend>
+            <div id='edit-tags' class='checkbox-wrapper'></div>
+          </fieldset>
           <label for='edit-custom-tag' class='label-margin'>Add a custom tag:</label>
           <div class="cursor">
             <input type='text' id='edit-custom-tag' class='text-input' />

@@ -5,124 +5,126 @@
     <meta name='viewport' content='width=device-width'>
     <title>Gallery</title>
     <link rel='stylesheet' type='text/css' href='style.css'>
-    <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
-    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+    <link href='https://fonts.googleapis.com/css?family=Gothic+A1' rel='stylesheet'>
+    <link rel='icon' type='image/png' href='favicon-32x32.png' sizes='32x32' />
+    <link rel='icon' type='image/png' href='favicon-16x16.png' sizes='16x16' />
   </head>
   <body>
-      <div class='left-column'>
-        <header role='banner'>
-          <button id='gallery-link' s>Gallery</button>
-        </header>
-        <p id='notification'></p>
-        <section id='auth-forms' role='region'>
-          <h1 class='p-text'>Collect websites for design inspiration:</h1>
-          <ul>
-            <li>Tag features</li>
-            <li>Take notes</li>
-            <li>Filter</li>
-          </ul>
-          <div id='login-wrapper'>
-            <div>
-              <form id='login-form' role='form'>
-                <div class='padding-div'>
-                  <label for='username'>Username:</label>
-                  <div class="cursor">
-                    <input type='text' name='loginusername' required='' class='text-input' id='username' />
-                    <i></i>
-                  </div>
-                  <label for='password' class='label-margin'>Password:</label>
-                  <div class="cursor">
-                    <input type='password' name='loginpassword' required='' class='text-input' id='password' />
-                    <i></i>
-                  </div>
-                </div>
-                <button type='submit' class='border-top'>Login</button>
-                <p class='or'>or</p>
-              </form>
-              <button type='submit' id='signup-link'>Make an account</button>
-            </div>
-          </div>
-
-          <div id='signup-wrapper'>
-            <div>
-              <form id='signup-form' role='form'>
-                <div class='padding-div'>
-                  <label for='signup-username'>Username:</label>
-                  <div class="cursor">
-                    <input type='text' name='username' required='' class='text-input' id='signup-username' />
-                    <i></i>
-                  </div>
-                  <label for='signup-password' class='label-margin'>Password:</label>
-                  <div class="cursor">
-                    <input type='password' name='password' required='' class='text-input' id='signup-password' />
-                    <i></i>
-                  </div>
-                </div>
-                <button type='submit'>Sign up</button>
-              </form>
-            </div>
-          </div>
-        </section>
-
-        <section id='menu' role='region'>
-          <p id='empty-gallery' class='p-text'>Start by adding a website:</p>
-          <div id='populated-gallery'>
-            <p class='p-text'>Check boxes to filter</p>
-            <form id='filters' class='checkbox-wrapper'></form>
-            <p class='p-text'>Click a website to expand and edit</p>
-            <p class='p-text'>or</p>
-          </div>
-          <button id='add-link'>Add a new website</button>
-        </section>
-
-        <section id='add-website' role='region'>
-          <form id='new-website' name='new-website' role='form'>
-            <fieldset name='new-url'>
+    <div class='left-column'>
+      <header role='banner'>
+        <button id='gallery-link' s>Gallery</button>
+      </header>
+      <p id='notification'></p>
+      <section id='auth-forms' role='region'>
+        <h1 class='p-text'>Collect websites for design inspiration</h1>
+        <ul>
+          <li>Tag features</li>
+          <li>Take notes</li>
+          <li>Filter</li>
+        </ul>
+        <div id='login-wrapper'>
+          <div>
+            <form id='login-form' role='form'>
               <div class='padding-div'>
+                <label for='username'>Username:</label>
+                <div class='cursor'>
+                  <input type='text' name='loginusername' required='' class='text-input' id='username' />
+                  <i></i>
+                </div>
+                <label for='password' class='label-margin'>Password:</label>
+                <div class='cursor'>
+                  <input type='password' name='loginpassword' required='' class='text-input' id='password' />
+                  <i></i>
+                </div>
+              </div>
+              <button type='submit' class='border-top'>Login</button>
+              <p class='or'>or</p>
+            </form>
+            <button type='submit' id='signup-link'>Make an account</button>
+          </div>
+        </div>
+
+        <div id='signup-wrapper'>
+          <div>
+            <form id='signup-form' role='form'>
+              <div class='padding-div'>
+                <label for='signup-username'>Username:</label>
+                <div class='cursor'>
+                  <input type='text' name='username' required='' class='text-input' id='signup-username' />
+                  <i></i>
+                </div>
+                <label for='signup-password' class='label-margin'>Password:</label>
+                <div class='cursor'>
+                  <input type='password' name='password' required='' class='text-input' id='signup-password' />
+                  <i></i>
+                </div>
+              </div>
+              <button type='submit'>Sign up</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id='menu' role='region'>
+        <p id='empty-gallery' class='p-text'>Start by adding a website:</p>
+        <div id='populated-gallery'>
+          <p class='p-text'>Check boxes to filter</p>
+          <form id='filters' class='checkbox-wrapper'></form>
+          <p class='p-text'>Click a website to expand and edit</p>
+          <p class='p-text'>or</p>
+        </div>
+        <button id='add-link'>Add a new website</button>
+      </section>
+
+      <section id='add-website' role='region'>
+        <form id='new-website' name='new-website' role='form'>
+          <div class='padding-div'>
+            <fieldset name='new-url'>
               <legend>
                 <label for='url-input'>Paste a URL:</label>
               </legend>
-                <div class="cursor">
-                  <input type='text' class='text-input' id='url-input' required='' />
+              <div class='cursor'>
+                <input type='text' class='text-input' id='url-input' required='' />
+                <i></i>
+              </div>
+              <fieldset>
+                <legend>
+                  <label for='tag-checkboxes' class='filter-margin'>Tag website elements:</label>
+                </legend>
+                <div id='tag-checkboxes'></div>
+              </fieldset>
+              <div>
+                <label for='custom-tag' class='label-margin'>Add a custom tag:</label>
+                <div class='cursor'>
+                  <input type='text' id='custom-tag' class='text-input' name='tags' />
                   <i></i>
                 </div>
-                <div>
-                  <label for='tag-checkboxes' class='filter-margin'>Tag website elements:</label>
+              </div>
+              <div>
+                <label for='notes' class='label-margin'>Add notes:</label>
+                <div class='cursor'>
+                  <input type='text' id='notes' class='text-input' name='notes' />
+                  <i></i>
                 </div>
-                <div id='tag-checkboxes'></div>
-                <div>
-                  <label for='custom-tag' class='label-margin'>Add a custom tag:</label>
-                  <div class="cursor">
-                    <input type='text' id='custom-tag' class='text-input' name='tags' />
-                    <i></i>
-                  </div>
-                </div>
-                <div>
-                  <label for='notes' class='label-margin'>Add notes:</label>
-                  <div class="cursor">
-                    <input type='text' id='notes' class='text-input' name='notes'/>
-                    <i></i>
-                  </div>
-                </div>
-                </div>
+              </div>
               <button type='submit'>Add website</button>
             </fieldset>
-          </form>
-          <p class='or'>or</p>
-          <button type='submit' id='close-link'>Go back</button>
-          <div id="loader"></div>
-        </section> 
-        <section id='website-detail' role='region'></section>
-      </div>
+          </div>
+        </form>
+        <p class='or'>or</p>
+        <button type='submit' id='close-link'>Go back</button>
+        <div id='loader'></div>
+      </section> 
+      <section id='website-detail' role='region'></section>
+    </div>
 
-      <main role='main'>
-        <section id='gallery' role='region'></section>
-      </main>
-      <footer role='contentinfo'>
-        <button id='logout'>Logout</button>
-        <a href='https://github.com/jennifer' class='anchor-button' target='_blank'>Github</a>
-      </footer>
+    <main role='main'>
+      <section id='gallery' role='region'></section>
+    </main>
+    <footer role='contentinfo'>
+      <button id='logout'>Logout</button>
+      <a href='https://github.com/jennifer' class='anchor-button' target='_blank'>Github</a>
+    </footer>
     <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
     <script type='text/javascript' src='app.js'></script>
   </body>

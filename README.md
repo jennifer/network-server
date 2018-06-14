@@ -1,14 +1,10 @@
 # Gallery
 
+Collect websites for design inspiration. Submit a URL, tag the website's best elements, and take notes. The Gallery app takes a screenshot of the website and displays it in an image gallery. Mouse over each image (or tap on a touchscreen) to display title, tags, and notes. Click an image to edit the entry or to visit the website. Need a design idea? Filter the collection by elements and get inspired.
+
 https://website-gallery.herokuapp.com/
 
-Demo account
-* Username: demo
-* Password: password
-
-## About
-
-Collect websites for design inspiration. Submit a URL, tag the website's best elements, and take notes. The Gallery app takes a screenshot of the website and displays it in an image gallery. Mouse over each image (or tap on a touchscreen) to display title, tags, and notes. Click an image to edit the entry or to visit the website. Need a design idea? Filter the collection by elements and get inspired.
+Username: demo / Password: password
 
 ## Motivation
 
@@ -16,19 +12,19 @@ I often bookmark websites with unique and inspiring design elements. Over time, 
 
 ## Screenshots
 
-####Login screen
+#### Login screen
 ![Oil painting background with login form on the left.](https://i.imgur.com/ytTg9ZB.jpg)
 
-####Website gallery
+#### Website gallery
 ![Gallery of website images on the right with filter form on the left.](https://i.imgur.com/sct6tEh.jpg)
 
-####Add a new website
+#### Add a new website
 ![Gallery of website images on the right with website submission form on the left.](https://i.imgur.com/jXVUGE7.png)
 
-####View a website
+#### View a website
 ![Large website image on the right with title, tags, and notes on the left.](https://i.imgur.com/tuFyfQ3.png)
 
-####Edit a website
+#### Edit a website
 ![Large website image on the right with website editing form on the left.](https://i.imgur.com/28fvdoX.png)
 
 ## Technology
