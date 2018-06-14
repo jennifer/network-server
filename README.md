@@ -30,7 +30,7 @@ I often bookmark websites with unique and inspiring design elements. Over time, 
 ## Technology
 
 ### Front End
-* JavaScript* 
+* JavaScript
 * HTML
 * CSS
 
