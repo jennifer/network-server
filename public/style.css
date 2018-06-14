@@ -245,6 +245,7 @@ input::placeholder {
 
 .website-title {
   font-size: 28px;
+  font-weight: normal;
 }
 
 .website-tags, .website-notes {
