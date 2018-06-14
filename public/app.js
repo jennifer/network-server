@@ -167,7 +167,7 @@ function handleFilterClick() {
   };
   gallery.innerHTML = '';
   notification.innerHTML = '';
-  for (let i = 0; i < allWebsites.length; i++) {
+  for (let i = allWebsites.length - 1; i >= 0; i--) {
     let tagDisplay = (allWebsites[i].tags).sort().join(' | ');
     if (clickedFilters.every(val => (allWebsites[i].tags).indexOf(val) >= 0)) {
       let eachWebsite = `
