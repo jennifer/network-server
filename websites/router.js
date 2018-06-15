@@ -46,6 +46,15 @@ router.post('/', jwtAuth, (req, res) => {
       return res.status(400).send(message);
     }
   };
+  /*
+  // Check for and add http://
+  let url = req.body.url;
+  let http = 'http://';
+    
+  if (url.includes(http) = false) {
+    req.body.url = 'http://' + req.body.url
+  };
+  */
   // Check that URL is valid
   urlExists(req.body.url, function(err, exists) {
     console.log(exists);

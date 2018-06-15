@@ -218,6 +218,9 @@ document.getElementById('new-website').addEventListener('submit', function(e){
   let newWebsite = {};
   newWebsite.username = localStorage.getItem('username');
   newWebsite.url = document.getElementById('url-input').value;
+  if (newWebsite.url.includes('https://') == false) {
+    newWebsite.url = 'https://' + newWebsite.url
+  };
   newWebsite.notes = document.getElementById('notes').value;
   let tags = [];
   let checkbox = document.getElementsByName('new-tags');
