@@ -25,8 +25,6 @@ router.get('/:username', jwtAuth, (req, res) => {
     .find({username:req.params.username})
     .then(websites => {
       res.json(websites);
-      //res.contentType(user.img.contentType);
-      //res.send(user.img.data);
     })
     .catch(err => {
       console.error(err);
@@ -46,15 +44,7 @@ router.post('/', jwtAuth, (req, res) => {
       return res.status(400).send(message);
     }
   };
-  /*
-  // Check for and add http://
-  let url = req.body.url;
-  let http = 'http://';
-    
-  if (url.includes(http) = false) {
-    req.body.url = 'http://' + req.body.url
-  };
-  */
+  
   // Check that URL is valid
   urlExists(req.body.url, function(err, exists) {
     console.log(exists);
@@ -104,7 +94,6 @@ router.post('/', jwtAuth, (req, res) => {
     };
   });
 });
-
 
 // PUT edit existing tags 
 router.put('/:id', jwtAuth, (req, res) => {
