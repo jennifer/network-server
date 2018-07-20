@@ -88,7 +88,7 @@ router.post('/', jwtAuth, (req, res) => {
     else {
       return res.status(500).json({
         code: 500, 
-        message: 'Invalid URL. Check URL and try again.', 
+        message: 'Invalid URL. Copy+paste URL for best results.', 
         type:'internal'
       })
     };
