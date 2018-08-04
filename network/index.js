@@ -1,5 +1,5 @@
 'use strict';
-const { Network } = require('./models');
+const { Company, Person } = require('./models');
 const { router } = require('./router');
 
-module.exports = { Network, router };
+module.exports = { Company, Person, router };
