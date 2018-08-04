@@ -19,14 +19,14 @@ const { PORT, DATABASE_URL } = require('./config');
 
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
-const { router: websiteRouter } = require('./websites');
+const { router: networkRouter } = require('./network');
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
-app.use('/websites/', websiteRouter);
+app.use('/network/', networkRouter);
 
 let server;
 

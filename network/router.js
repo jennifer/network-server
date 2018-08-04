@@ -3,25 +3,20 @@
 require('dotenv').load();
 
 const bodyParser = require('body-parser');
-const cloudinary = require('cloudinary');
 const express = require('express');
-const fs = require('fs');
 const mongoose = require('mongoose');
-const nodeMetaInspector = require('node-metainspector');
 const passport = require('passport');
-const urlExists = require('url-exists');
-const webshot = require('webshot');
 
 const config = require('../config');
 const router = express.Router();
 
-const { Website } = require('./models');
+const { Network } = require('./models');
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // GET all websites
 router.get('/:username', jwtAuth, (req, res) => {
-  Website
+  Network
     .find({username:req.params.username})
     .then(websites => {
       res.json(websites);
