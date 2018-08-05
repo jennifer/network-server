@@ -3,6 +3,7 @@
 require('dotenv').config();
 
 const bodyParser = require('body-parser'); 
+const cors = require('cors');
 const express = require('express')
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.Promise = global.Promise;
 
 const { PORT, DATABASE_URL } = require('./config');
+const { CLIENT_ORIGIN } = require('./config');
 
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
@@ -26,6 +28,11 @@ passport.use(jwtStrategy);
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
 app.use('/network/', networkRouter);
+app.use(
+    cors({
+        origin: CLIENT_ORIGIN
+    })
+);
 
 let server;
 

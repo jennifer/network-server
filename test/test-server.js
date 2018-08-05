@@ -9,13 +9,13 @@ const jwt = require('jsonwebtoken');
 const should = chai.should();
 const expect = chai.expect();
 
-const { Website } = require('../websites/models');
+const { Network } = require('../network/models');
 const { closeServer, runServer, app } = require('../server');
 const { TEST_DATABASE_URL, JWT_SECRET } = require('../config');
 
 chai.use(chaiHttp);
 
-describe('website API resource', function () {
+describe('network API resource', function () {
   const username = 'exampleUser';
   const password = 'examplePass';
   const firstName = 'Example';
@@ -25,7 +25,7 @@ describe('website API resource', function () {
     return runServer(TEST_DATABASE_URL);
   });
   beforeEach(function () {
-    return seedWebsiteData();
+    return seedNetworkData();
   });
   afterEach(function () {
     return tearDownDb();
@@ -50,17 +50,20 @@ describe('website API resource', function () {
     }
   );
 
-function tearDownDb() {
-return new Promise((resolve, reject) => {
-  console.warn('Deleting database');
-  mongoose.connection.dropDatabase()
-    .then(result => resolve(result))
-    .catch(err => reject(err));
-  });
-}
+  function tearDownDb() {
+  return new Promise((resolve, reject) => {
+    console.warn('Deleting database');
+    mongoose.connection.dropDatabase()
+      .then(result => resolve(result))
+      .catch(err => reject(err));
+    });
+  }
+});
 
-function seedWebsiteData() {
-  console.info('seeding website data');
+/*
+
+function seedNetworkData() {
+  console.info('seeding company data');
   const seedData = [];
   for (let i = 1; i <= 10; i++) {
     seedData.push({
@@ -71,30 +74,30 @@ function seedWebsiteData() {
       created: faker.date.past()
     });
   }
-  return Website.insertMany(seedData);
+  return Company.insertMany(seedData);
 };
  
   describe('GET endpoint', function () {
-    it('should return all existing websites', function () {
+    it('should return all existing companies', function () {
       let res;
       return chai.request(app)
-        .get(`/websites/${username}`)
+        .get(`/companies/${username}`)
         .set('authorization', `Bearer ${token}`)
         .then(_res => {
           res = _res;
           res.should.have.status(200);
           res.body.should.have.length.of.at.least(1);
-          return Website.count();
+          return Company.count();
         })
         .then(count => {
           res.body.should.have.lengthOf(count);
         });
     });
     
-    it('should return websites with right fields', function () {
+    it('should return companies with right fields', function () {
       let resSite;
       return chai.request(app)
-        .get(`/websites/${username}`)
+        .get(`/companies/${username}`)
         .set('authorization', `Bearer ${token}`)
         .then(function (res) {
           res.should.have.status(200);
@@ -106,7 +109,7 @@ function seedWebsiteData() {
             site.should.include.keys('username', 'url', 'title', 'tags', 'created');
           });
           resSite = res.body[0];
-          return Website.findById(resSite._id);
+          return Company.findById(resSite._id);
         })
         .then(site => {
           console.log("site", site);
@@ -118,9 +121,9 @@ function seedWebsiteData() {
   });
 
   describe('POST endpoint', function () {
-    it('should add a new website', function () {
+    it('should add a new company', function () {
       this.timeout(15000);
-      const newSite = {
+      const newCompany = {
         username: username,
         url: 'http://google.com',
         tags: faker.lorem.words(),
@@ -128,7 +131,7 @@ function seedWebsiteData() {
         created: faker.date.past()
       };
       return chai.request(app)
-        .post('/websites')
+        .post('/companies')
         .set('authorization', `Bearer ${token}`)
         .send(newSite)
         .then(function (res) {
@@ -155,7 +158,7 @@ function seedWebsiteData() {
         })
         .then(res => {
           res.should.have.status(204);
-          return Website.findById(updateData.id);
+          return Company.findById(updateData.id);
         })
         .then(site => {
           site.notes.should.equal(updateData.notes);
@@ -167,17 +170,17 @@ function seedWebsiteData() {
   describe('DELETE endpoint', function () {
       it('should delete a site by id', function () {
       let site;
-      return Website
+      return Company
         .findOne()
         .then(_site => {
           site = _site;
           return chai.request(app)
-            .delete(`/websites/${site._id}`)
+            .delete(`/companies/${site._id}`)
             .set('authorization', `Bearer ${token}`)
         })
         .then(res => {
           res.should.have.status(204);
-          return Website.findById(site._id);
+          return Company.findById(site._id);
         })
         .then(_site => {
           should.not.exist(_site);
@@ -185,3 +188,5 @@ function seedWebsiteData() {
     });
   });
 });
+
+*/
