@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const should = chai.should();
 const expect = chai.expect();
 
-const { Network } = require('../network/models');
+const { Company, Person } = require('../network/models');
 const { closeServer, runServer, app } = require('../server');
 const { TEST_DATABASE_URL, JWT_SECRET } = require('../config');
 
@@ -25,7 +25,10 @@ describe('network API resource', function () {
     return runServer(TEST_DATABASE_URL);
   });
   beforeEach(function () {
-    return seedNetworkData();
+    return seedCompanyData();
+  });
+  beforeEach(function () {
+    return seedPersonData();
   });
   afterEach(function () {
     return tearDownDb();
@@ -64,7 +67,7 @@ describe('network API resource', function () {
     const seedData = [];
     for (let i = 1; i <= 10; i++) {
       seedData.push({
-        username: username,
+        username:  faker.lorem.word(),
         name: faker.lorem.words(),
         url: faker.internet.url(),
         location: {
@@ -78,11 +81,35 @@ describe('network API resource', function () {
     return Company.insertMany(seedData);
   };
    
-  describe('GET companies endpoint', function () {
-    it('should return all existing companies', function () {
+  function seedPersonData() {
+    console.info('seeding person data');
+    const seedData = [];
+    for (let i = 1; i <= 10; i++) {
+      seedData.push({
+        username: faker.lorem.word(),
+        company_id: faker.lorem.word(),
+        status: faker.lorem.words(),
+        name: {
+          firstName: faker.name.firstName(),
+          lastName: faker.name.lastName(),
+        },
+        title: faker.lorem.words(),
+        url: faker.internet.url(),
+        contacts: {
+          date: faker.date.past(),
+          method: faker.lorem.words(),
+        },
+        notes: faker.lorem.sentences()
+      });
+    }
+    return Person.insertMany(seedData);
+  };
+
+  describe('GET people endpoint', function () {
+    it('should return all existing people', function () {
       let res;
       return chai.request(app)
-        .get(`/companies/${username}`)
+        .get(`/people/${username}`)
         .set('authorization', `Bearer ${token}`)
         .then(_res => {
           res = _res;
@@ -95,39 +122,41 @@ describe('network API resource', function () {
         });
     });
     
-    it('should return companies with right fields', function () {
-      let resCompany;
+    it('should return people with right fields', function () {
+      let resPerson;
       return chai.request(app)
-        .get(`/companies/${username}`)
+        .get(`/people/${username}`)
         .set('authorization', `Bearer ${token}`)
         .then(function (res) {
           res.should.have.status(200);
           res.should.be.json;
           res.body.should.be.a('array');
           res.body.should.have.length.of.at.least(1);
-          res.body.forEach(function(company) {
-            company.should.be.a('object');
-            company.should.include.keys('username', 'name', 'url', 'locationString', 'description', 'notes');
+          res.body.forEach(function(person) {
+            person.should.be.a('object');
+            person.should.include.keys('username', 'company_id', 'status', 'nameString', 'title', 'url', 'contacts', 'notes');
           });
-          resCompany = res.body[0];
-          return Company.findById(resCompany._id);
+          resPerson = res.body[0];
+          return Person.findById(resPerson._id);
         })
-        .then(company => {
-          console.log('company', company);
-          resCompany.username.should.equal(company.username);
-          resCompany.name.should.equal(company.name);
-          resCompany.url.should.equal(company.url);
-          resCompany.locationString.should.equal(company.locationString);
-          resCompany.description.should.equal(company.description);
-          resCompany.notes.should.equal(company.notes);
+        .then(person => {
+          console.log('person', person);
+          resPerson.username.should.equal(person.username);
+          resPerson.company_id.should.equal(person.company_id);
+          resPerson.status.should.equal(person.status);
+          resPerson.nameString.should.equal(person.nameString);
+          resPerson.title.should.equal(person.title);
+          resPerson.url.should.equal(person.url);
+          resPerson.contacts.should.equal(person.contacts);
+          resPerson.notes.should.equal(person.notes);
         });
     });
   });
 
   describe('POST endpoint', function () {
-    it('should add a new company', function () {
+    it('should add a new person', function () {
       this.timeout(15000);
-      const newCompany = {
+      const newPerson = {
         username: username,
         name: faker.lorem.words(),
         url: faker.internet.url(),

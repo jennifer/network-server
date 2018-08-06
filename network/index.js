@@ -1,4 +1,5 @@
 'use strict';
+
 const { Company, Person } = require('./models');
 const { router } = require('./router');
 
