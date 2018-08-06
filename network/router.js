@@ -14,12 +14,12 @@ const { Network } = require('./models');
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-// GET all websites
-router.get('/:username', jwtAuth, (req, res) => {
+// GET all company details
+router.get('companies/detail/:username', jwtAuth, (req, res) => {
   Network
     .find({username:req.params.username})
-    .then(websites => {
-      res.json(websites);
+    .then(companies => {
+      res.json(companies);
     })
     .catch(err => {
       console.error(err);
@@ -27,10 +27,9 @@ router.get('/:username', jwtAuth, (req, res) => {
     });
 });
 
-// POST a new webiste
-router.post('/', jwtAuth, (req, res) => {
-  // Check for required fields
-  const requiredFields = ['url'];
+// POST a new company
+router.post('/companies', jwtAuth, (req, res) => {
+  const requiredFields = ['name,', 'url', 'locationString'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -38,60 +37,29 @@ router.post('/', jwtAuth, (req, res) => {
       console.error(message);
       return res.status(400).send(message);
     }
-  };
-  
-  // Check that URL is valid
-  urlExists(req.body.url, function(err, exists) {
-    console.log(exists);
-    let newWebsite;
-    if (exists) {
+  }
 
-      // Get URL title
-      let client = new nodeMetaInspector(req.body.url, { timeout: 5000 });
-      client.on('fetch', function() {
-        req.body.title = client.title;
-        console.log('DB title: ' + req.body.title);
+  Network
+    .create({
+      name: req.body.name,
+      url: req.body.url,
+      location: {
+        city: req.body.city,
+        state: req.body.state
+      },
+      description: req.body.description,
+      notes: req.body.notes
+    })
+    .then(company => res.status(201).json(companies))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Something went wrong' });
+    });
 
-        // Get screenshot, save to cloud, POST new website
-        webshot(req.body.url, 'fullsize.png', function(err) {
-          newWebsite = new Website(req.body);
-          cloudinary.v2.uploader.upload('fullsize.png', {public_id: `${newWebsite._id}`},
-            function(error, result){console.log(result)});
-
-          newWebsite.save()
-          .then(item => {
-            res.status(201).json({
-              code: 201,
-              message: 'Adding website...',
-              type: 'internal'
-            });
-          })
-          .catch(err => {
-            res.status(500).send('Unable to save to database')
-          })
-        });
-        
-      });
-
-      client.on('error', function(err) {
-        console.log(err);
-        res.status(500).send('Unable to fetch URL title')
-      });
-      client.fetch();
-
-      }
-    else {
-      return res.status(500).json({
-        code: 500, 
-        message: 'Invalid URL. Copy+paste URL for best results.', 
-        type:'internal'
-      })
-    };
-  });
 });
 
-// PUT edit existing tags 
-router.put('/:id', jwtAuth, (req, res) => {
+// PUT edit a company
+router.put('companies/:id', jwtAuth, (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     res.status(400).json({
       error: 'Request path id and request body id values must match'
@@ -99,23 +67,23 @@ router.put('/:id', jwtAuth, (req, res) => {
   }
 
   const updated = {};
-  const updateableFields = ['tags', 'notes'];
+  const updateableFields = ['name', 'url', 'locationString', 'description', 'notes'];
   updateableFields.forEach(field => {
     if (field in req.body) {
       updated[field] = req.body[field];
     }
   });
 
-  Website
+  Network
     .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
-    .then(updatedWebsite => res.status(204).end())
+    .then(updatedCompany => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Something went wrong' }));
 });
 
 
 // DELETE a website
-router.delete('/:id', jwtAuth, (req, res) => {
-  Website
+router.delete('companies/:id', jwtAuth, (req, res) => {
+  Network
     .findByIdAndRemove(req.params.id)
     .then(() => {
       res.status(204).json({ 

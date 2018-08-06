@@ -15,6 +15,9 @@ const companySchema = mongoose.Schema({
   notes: String
 });
 
+companySchema.virtual('locationString').get(function() {
+  return `${this.location.city} ${this.location.state}`.trim();});
+
 const Company = mongoose.model('company', companySchema);
 
 

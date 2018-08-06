@@ -58,26 +58,27 @@ describe('network API resource', function () {
       .catch(err => reject(err));
     });
   }
-});
 
-/*
-
-function seedNetworkData() {
-  console.info('seeding company data');
-  const seedData = [];
-  for (let i = 1; i <= 10; i++) {
-    seedData.push({
-      username: username,
-      url: faker.internet.url(),
-      title: faker.lorem.sentence(),
-      tags: faker.lorem.words(),
-      created: faker.date.past()
-    });
-  }
-  return Company.insertMany(seedData);
-};
- 
-  describe('GET endpoint', function () {
+  function seedCompanyData() {
+    console.info('seeding company data');
+    const seedData = [];
+    for (let i = 1; i <= 10; i++) {
+      seedData.push({
+        username: username,
+        name: faker.lorem.words(),
+        url: faker.internet.url(),
+        location: {
+          city: faker.address.city(),
+          state: faker.address.state(),
+        },
+        description: faker.lorem.sentences(),
+        notes: faker.lorem.sentences()
+      });
+    }
+    return Company.insertMany(seedData);
+  };
+   
+  describe('GET companies endpoint', function () {
     it('should return all existing companies', function () {
       let res;
       return chai.request(app)
@@ -95,7 +96,7 @@ function seedNetworkData() {
     });
     
     it('should return companies with right fields', function () {
-      let resSite;
+      let resCompany;
       return chai.request(app)
         .get(`/companies/${username}`)
         .set('authorization', `Bearer ${token}`)
@@ -104,18 +105,21 @@ function seedNetworkData() {
           res.should.be.json;
           res.body.should.be.a('array');
           res.body.should.have.length.of.at.least(1);
-          res.body.forEach(function (site) {
-            site.should.be.a('object');
-            site.should.include.keys('username', 'url', 'title', 'tags', 'created');
+          res.body.forEach(function(company) {
+            company.should.be.a('object');
+            company.should.include.keys('username', 'name', 'url', 'locationString', 'description', 'notes');
           });
-          resSite = res.body[0];
-          return Company.findById(resSite._id);
+          resCompany = res.body[0];
+          return Company.findById(resCompany._id);
         })
-        .then(site => {
-          console.log("site", site);
-          resSite.url.should.equal(site.url);
-          resSite.title.should.equal(site.title);
-          resSite.created.should.equal(site.created.toISOString());
+        .then(company => {
+          console.log('company', company);
+          resCompany.username.should.equal(company.username);
+          resCompany.name.should.equal(company.name);
+          resCompany.url.should.equal(company.url);
+          resCompany.locationString.should.equal(company.locationString);
+          resCompany.description.should.equal(company.description);
+          resCompany.notes.should.equal(company.notes);
         });
     });
   });
@@ -125,15 +129,19 @@ function seedNetworkData() {
       this.timeout(15000);
       const newCompany = {
         username: username,
-        url: 'http://google.com',
-        tags: faker.lorem.words(),
-        notes: faker.lorem.words(),
-        created: faker.date.past()
+        name: faker.lorem.words(),
+        url: faker.internet.url(),
+        location: {
+          city: faker.address.city(),
+          state: faker.address.state(),
+        },
+        description: faker.lorem.sentences(),
+        notes: faker.lorem.sentences()
       };
       return chai.request(app)
         .post('/companies')
         .set('authorization', `Bearer ${token}`)
-        .send(newSite)
+        .send(newCompany)
         .then(function (res) {
           res.should.have.status(201);
         })
@@ -143,16 +151,16 @@ function seedNetworkData() {
   describe('PUT endpoint', function () {
     it('should update fields you send over', function () {
       const updateData = {
-        notes: faker.lorem.sentence(),
-        tags: faker.lorem.words()
+        description: faker.lorem.sentences(),
+        notes: faker.lorem.sentences()
       }
-      return Website
+      return Company
         .findOne()
-        .then(site => {
-          updateData.id = site.id;
+        .then(company => {
+          updateData.id = company.id;
 
           return chai.request(app)
-            .put(`/websites/${site._id}`)
+            .put(`/companies/${company._id}`)
             .set('authorization', `Bearer ${token}`)
             .send(updateData);
         })
@@ -160,33 +168,31 @@ function seedNetworkData() {
           res.should.have.status(204);
           return Company.findById(updateData.id);
         })
-        .then(site => {
-          site.notes.should.equal(updateData.notes);
-          site.tags[0].should.equal(updateData.tags)
+        .then(company => {
+          company.notes.should.equal(updateData.notes);
+          company.tags[0].should.equal(updateData.tags)
         })
       })
   });
 
   describe('DELETE endpoint', function () {
-      it('should delete a site by id', function () {
-      let site;
+      it('should delete a company by id', function () {
+      let company;
       return Company
         .findOne()
-        .then(_site => {
-          site = _site;
+        .then(_company => {
+          company = _company;
           return chai.request(app)
-            .delete(`/companies/${site._id}`)
+            .delete(`/companies/${company._id}`)
             .set('authorization', `Bearer ${token}`)
         })
         .then(res => {
           res.should.have.status(204);
-          return Company.findById(site._id);
+          return Company.findById(company._id);
         })
-        .then(_site => {
-          should.not.exist(_site);
+        .then(_company => {
+          should.not.exist(_company);
         });
     });
   });
 });
-
-*/
