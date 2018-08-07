@@ -104,8 +104,8 @@ router.delete('companies/:id', jwtAuth, (req, res) => {
 router.get('people/:username', jwtAuth, (req, res) => {
   Network
     .find({username:req.params.username})
-    .then(companies => {
-      res.json(companies);
+    .then(people => {
+      res.json(people);
     })
     .catch(err => {
       console.error(err);
@@ -113,9 +113,9 @@ router.get('people/:username', jwtAuth, (req, res) => {
     });
 });
 
-// POST a new company
+// POST a new person
 router.post('/people', jwtAuth, (req, res) => {
-  const requiredFields = ['name,', 'url', 'locationString'];
+  const requiredFields = ['company_id', 'status', 'nameString'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -126,16 +126,21 @@ router.post('/people', jwtAuth, (req, res) => {
   }
   Network
     .create({
-      name: req.body.name,
-      url: req.body.url,
-      location: {
-        city: req.body.city,
-        state: req.body.state
+      company_id: req.body.company_id,
+      status: req.body.status,
+      name: {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName
       },
-      description: req.body.description,
+      title: req.body.title,
+      url: req.body.url,
+      contacts: {
+        date: req.body.date,
+        method: req.body.method
+      },
       notes: req.body.notes
     })
-    .then(company => res.status(201).json(companies))
+    .then(person => res.status(201).json(people))
     .catch(err => {
       console.error(err);
       res.status(500).json({ error: 'Something went wrong' });
@@ -149,9 +154,8 @@ router.put('people/:id', jwtAuth, (req, res) => {
       error: 'Request path id and request body id values must match'
     });
   }
-
   const updated = {};
-  const updateableFields = ['name', 'url', 'locationString', 'description', 'notes'];
+  const updateableFields = ['status', 'firstName', 'lastName', 'title', 'url', 'date', 'method', 'notes'];
   updateableFields.forEach(field => {
     if (field in req.body) {
       updated[field] = req.body[field];
@@ -160,7 +164,7 @@ router.put('people/:id', jwtAuth, (req, res) => {
 
   Network
     .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
-    .then(updatedCompany => res.status(204).end())
+    .then(updatedPerson => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Something went wrong' }));
 });
 
