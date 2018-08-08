@@ -3,8 +3,8 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-
 const companySchema = mongoose.Schema({
+  username: { type: String, required: true },
   name: { type: String, required: true },
   url: { type: String, required: true, lowercase: true, trim: true },
   location: {
@@ -22,6 +22,7 @@ const Company = mongoose.model('company', companySchema);
 
 
 const personSchema = mongoose.Schema({
+  username: { type: String, required: true },
   company_id: { type: String, required: true },
   status: { type: Number, required: true },
   name: {

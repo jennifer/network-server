@@ -10,15 +10,15 @@ const passport = require('passport');
 const config = require('../config');
 const router = express.Router();
 
-const { Network } = require('./models');
+const { Company, Person } = require('./models');
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // Company endpoints
 
 // GET all company details
-router.get('companies/:username', jwtAuth, (req, res) => {
-  Network
+router.get('/companies/:username', jwtAuth, (req, res) => {
+  Company
     .find({username:req.params.username})
     .then(companies => {
       res.json(companies);
@@ -40,7 +40,7 @@ router.post('/companies', jwtAuth, (req, res) => {
       return res.status(400).send(message);
     }
   }
-  Network
+  Company
     .create({
       name: req.body.name,
       url: req.body.url,
@@ -74,7 +74,7 @@ router.put('companies/:id', jwtAuth, (req, res) => {
     }
   });
 
-  Network
+  Company
     .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
     .then(updatedCompany => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Something went wrong' }));
@@ -83,7 +83,7 @@ router.put('companies/:id', jwtAuth, (req, res) => {
 
 // DELETE a website
 router.delete('companies/:id', jwtAuth, (req, res) => {
-  Network
+  Company
     .findByIdAndRemove(req.params.id)
     .then(() => {
       res.status(204).json({ 
