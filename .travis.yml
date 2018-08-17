@@ -3,8 +3,7 @@ node_js: node
 services: mongodb
 deploy:
   provider: heroku
-  api_key:
-    secure: 
+  api_key: 9770f78f-8ac9-4e10-a145-0dc40aefbdaf
   app: secret-inlet-35294
   skip-cleanup: true
   on:
