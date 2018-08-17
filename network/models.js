@@ -31,10 +31,8 @@ const personSchema = mongoose.Schema({
   },
   title: String,
   url: { type: String, lowercase: true, trim: true },
-  contacts: {
-    date: [Date],
-    method: [String]
-  },
+  date: Date,
+  method: String,
   notes: String
 });
 

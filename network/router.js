@@ -31,7 +31,7 @@ router.get('/companies/:username', jwtAuth, (req, res) => {
 
 // POST a new company
 router.post('/companies', jwtAuth, (req, res) => {
-  const requiredFields = ['name,', 'url', 'locationString'];
+  const requiredFields = ['username', 'name', 'url', 'location'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -42,16 +42,17 @@ router.post('/companies', jwtAuth, (req, res) => {
   }
   Company
     .create({
+      username: req.body.username,
       name: req.body.name,
       url: req.body.url,
       location: {
-        city: req.body.city,
-        state: req.body.state
+        city: req.body.location.city,
+        state: req.body.location.state
       },
       description: req.body.description,
       notes: req.body.notes
     })
-    .then(company => res.status(201).json(companies))
+    .then(companies => res.status(201).json(companies))
     .catch(err => {
       console.error(err);
       res.status(500).json({ error: 'Something went wrong' });
@@ -59,7 +60,7 @@ router.post('/companies', jwtAuth, (req, res) => {
 });
 
 // PUT edit a company
-router.put('companies/:id', jwtAuth, (req, res) => {
+router.put('/companies/:id', jwtAuth, (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     res.status(400).json({
       error: 'Request path id and request body id values must match'
@@ -67,7 +68,7 @@ router.put('companies/:id', jwtAuth, (req, res) => {
   }
 
   const updated = {};
-  const updateableFields = ['name', 'url', 'locationString', 'description', 'notes'];
+  const updateableFields = ['name', 'url', 'location', 'description', 'notes'];
   updateableFields.forEach(field => {
     if (field in req.body) {
       updated[field] = req.body[field];
@@ -82,13 +83,11 @@ router.put('companies/:id', jwtAuth, (req, res) => {
 
 
 // DELETE a website
-router.delete('companies/:id', jwtAuth, (req, res) => {
+router.delete('/companies/:id', jwtAuth, (req, res) => {
   Company
     .findByIdAndRemove(req.params.id)
     .then(() => {
-      res.status(204).json({ 
-        message: 'Success'
-      });
+      res.status(204).end();
     })
     .catch(err => {
       console.error(err);
@@ -101,8 +100,8 @@ router.delete('companies/:id', jwtAuth, (req, res) => {
 // Person endpoints
 
 // GET all person details
-router.get('people/:username', jwtAuth, (req, res) => {
-  Network
+router.get('/people/:username', jwtAuth, (req, res) => {
+  Person
     .find({username:req.params.username})
     .then(people => {
       res.json(people);
@@ -115,7 +114,7 @@ router.get('people/:username', jwtAuth, (req, res) => {
 
 // POST a new person
 router.post('/people', jwtAuth, (req, res) => {
-  const requiredFields = ['company_id', 'status', 'nameString'];
+  const requiredFields = ['username', 'company_id', 'status', 'name'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -124,13 +123,14 @@ router.post('/people', jwtAuth, (req, res) => {
       return res.status(400).send(message);
     }
   }
-  Network
+  Person
     .create({
+      username: req.body.username,
       company_id: req.body.company_id,
       status: req.body.status,
       name: {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName
+        firstName: req.body.name.firstName,
+        lastName: req.body.name.lastName
       },
       title: req.body.title,
       url: req.body.url,
@@ -140,7 +140,7 @@ router.post('/people', jwtAuth, (req, res) => {
       },
       notes: req.body.notes
     })
-    .then(person => res.status(201).json(people))
+    .then(person => res.status(201).json(person))
     .catch(err => {
       console.error(err);
       res.status(500).json({ error: 'Something went wrong' });
@@ -148,7 +148,7 @@ router.post('/people', jwtAuth, (req, res) => {
 });
 
 // PUT edit a company
-router.put('people/:id', jwtAuth, (req, res) => {
+router.put('/people/:id', jwtAuth, (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     res.status(400).json({
       error: 'Request path id and request body id values must match'
@@ -162,7 +162,7 @@ router.put('people/:id', jwtAuth, (req, res) => {
     }
   });
 
-  Network
+  Person
     .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
     .then(updatedPerson => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Something went wrong' }));
@@ -170,8 +170,8 @@ router.put('people/:id', jwtAuth, (req, res) => {
 
 
 // DELETE a website
-router.delete('people/:id', jwtAuth, (req, res) => {
-  Network
+router.delete('/people/:id', jwtAuth, (req, res) => {
+  Person
     .findByIdAndRemove(req.params.id)
     .then(() => {
       res.status(204).json({ 
