@@ -25,12 +25,9 @@ const personSchema = mongoose.Schema({
   username: { type: String, required: true },
   company_id: { type: String, required: true },
   status: { type: Number, required: true },
-  name: {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true }
-  },
+  name: { type: String, required: true },
   title: String,
-  url: { type: String, lowercase: true, trim: true },
+  url: String,
   date: Date,
   method: String,
   notes: String
