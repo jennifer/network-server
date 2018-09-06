@@ -15,11 +15,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.Promise = global.Promise;
 
+// CORS
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  if (req.method === 'OPTIONS') {
+    return res.send(204);
+  }
   next();
 });
 
@@ -35,12 +38,7 @@ passport.use(jwtStrategy);
 
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
-app.use('/network/', networkRouter);
-app.use(
-    cors({
-        origin: CLIENT_ORIGIN
-    })
-);
+app.use('/api/companies/', networkRouter);
 
 let server;
 

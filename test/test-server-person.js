@@ -68,10 +68,7 @@ describe('network API resource', function () {
         username: user,
         company_id: faker.lorem.word(),
         status: faker.random.number(),
-        name: {
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName()
-        },
+        name: faker.name.firstName(),
         title: faker.lorem.words(),
         url: faker.internet.url(),
         date: faker.date.past(),
@@ -87,7 +84,7 @@ describe('network API resource', function () {
     it('should return all existing people', function () {
       let res;
       return chai.request(app)
-        .get(`/network/people/${user}`)
+        .get(`/people/${user}`)
         .set('authorization', `Bearer ${token}`)
         .then(_res => {
           res = _res;
@@ -103,7 +100,7 @@ describe('network API resource', function () {
     it('should return people with right fields', function () {
       let resPerson;
       return chai.request(app)
-        .get(`/network/people/${user}`)
+        .get(`/people/${user}`)
         .set('authorization', `Bearer ${token}`)
         .then(function (res) {
           res.should.have.status(200);
@@ -112,7 +109,7 @@ describe('network API resource', function () {
           res.body.should.have.length.of.at.least(1);
           res.body.forEach(function(person) {
             person.should.be.a('object');
-            person.should.include.keys('username', 'company_id', 'status', 'name', 'title', 'url', 'date', 'method', 'notes');
+            person.should.include.keys('username', 'company_id', 'status', 'personName', 'title', 'url', 'date', 'method', 'notes');
           });
           resPerson = res.body[0];
           return Person.findById(resPerson._id);
@@ -122,8 +119,7 @@ describe('network API resource', function () {
           resPerson.username.should.equal(person.username);
           resPerson.company_id.should.equal(person.company_id);
           resPerson.status.should.equal(person.status);
-          resPerson.name.firstName.should.equal(person.name.firstName);
-          resPerson.name.lastName.should.equal(person.name.lastName);
+          resPerson.personName.should.equal(person.personName);
           resPerson.title.should.equal(person.title);
           resPerson.url.should.equal(person.url);
           resPerson.method.should.equal(person.method);
@@ -138,10 +134,7 @@ describe('network API resource', function () {
         username: faker.lorem.word(),
         company_id: faker.lorem.word(),
         status: faker.random.number(),
-        name: {
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
-        },
+        personName: faker.name.firstName(),
         title: faker.lorem.words(),
         url: faker.internet.url(),
         date: faker.date.past(),
@@ -149,7 +142,7 @@ describe('network API resource', function () {
         notes: faker.lorem.sentences()
       };
       return chai.request(app)
-        .post('/network/people')
+        .post('/people')
         .set('authorization', `Bearer ${token}`)
         .send(newPerson)
         .then(function (res) {
@@ -172,7 +165,7 @@ describe('network API resource', function () {
           updateData.id = person.id;
 
           return chai.request(app)
-            .put(`/network/people/${person._id}`)
+            .put(`/people/${person._id}`)
             .set('authorization', `Bearer ${token}`)
             .send(updateData);
         })
@@ -196,7 +189,7 @@ describe('network API resource', function () {
         .then(_person => {
           person = _person;
           return chai.request(app)
-            .delete(`/network/people/${person._id}`)
+            .delete(`/people/${person._id}`)
             .set('authorization', `Bearer ${token}`)
         })
         .then(res => {

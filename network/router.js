@@ -17,7 +17,7 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 // Company endpoints
 
 // GET all company details
-router.get('/companies/:username', jwtAuth, (req, res) => {
+router.get('/:username', jwtAuth, (req, res) => {
   Company
     .find({username:req.params.username})
     .then(companies => {
@@ -30,8 +30,8 @@ router.get('/companies/:username', jwtAuth, (req, res) => {
 });
 
 // POST a new company
-router.post('/companies', jwtAuth, (req, res) => {
-  const requiredFields = ['username', 'name', 'url', 'location'];
+router.post('/', jwtAuth, (req, res) => {
+  const requiredFields = ['username', 'companyName', 'url', 'location'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -43,12 +43,9 @@ router.post('/companies', jwtAuth, (req, res) => {
   Company
     .create({
       username: req.body.username,
-      name: req.body.name,
+      companyName: req.body.companyName,
       url: req.body.url,
-      location: {
-        city: req.body.location.city,
-        state: req.body.location.state
-      },
+      location: req.body.location,
       description: req.body.description,
       notes: req.body.notes
     })
@@ -60,7 +57,7 @@ router.post('/companies', jwtAuth, (req, res) => {
 });
 
 // PUT edit a company
-router.put('/companies/:id', jwtAuth, (req, res) => {
+router.put('/:id', jwtAuth, (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     res.status(400).json({
       error: 'Request path id and request body id values must match'
@@ -68,7 +65,7 @@ router.put('/companies/:id', jwtAuth, (req, res) => {
   }
 
   const updated = {};
-  const updateableFields = ['name', 'url', 'location', 'description', 'notes'];
+  const updateableFields = ['companyName', 'url', 'location', 'description', 'notes'];
   updateableFields.forEach(field => {
     if (field in req.body) {
       updated[field] = req.body[field];
@@ -83,7 +80,7 @@ router.put('/companies/:id', jwtAuth, (req, res) => {
 
 
 // DELETE a website
-router.delete('/companies/:id', jwtAuth, (req, res) => {
+router.delete('/:id', jwtAuth, (req, res) => {
   Company
     .findByIdAndRemove(req.params.id)
     .then(() => {
@@ -114,7 +111,7 @@ router.get('/people/:username', jwtAuth, (req, res) => {
 
 // POST a new person
 router.post('/people', jwtAuth, (req, res) => {
-  const requiredFields = ['username', 'company_id', 'status', 'name'];
+  const requiredFields = ['companyName', 'company_id', 'status', 'name'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -155,7 +152,7 @@ router.put('/people/:id', jwtAuth, (req, res) => {
     });
   }
   const updated = {};
-  const updateableFields = ['status', 'firstName', 'lastName', 'title', 'url', 'date', 'method', 'notes'];
+  const updateableFields = ['status', 'personName', 'title', 'url', 'date', 'method', 'notes'];
   updateableFields.forEach(field => {
     if (field in req.body) {
       updated[field] = req.body[field];

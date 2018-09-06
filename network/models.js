@@ -5,18 +5,12 @@ mongoose.Promise = global.Promise;
 
 const companySchema = mongoose.Schema({
   username: { type: String, required: true },
-  name: { type: String, required: true },
+  companyName: { type: String, required: true },
   url: { type: String, required: true, lowercase: true, trim: true },
-  location: {
-    city: { type: String, required: true },
-    state: { type: String, required: true }
-  },
-  description: { type: String, required: true },
+  location: { type: String, required: true },
+  description: String,
   notes: String
 });
-
-companySchema.virtual('locationString').get(function() {
-  return `${this.location.city} ${this.location.state}`.trim();});
 
 const Company = mongoose.model('company', companySchema);
 

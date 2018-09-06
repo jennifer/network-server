@@ -66,12 +66,9 @@ describe('network API resource', function () {
     for (let i = 1; i <= 10; i++) {
       seedData.push({
         username: user,
-        name: faker.lorem.words(),
+        companyName: faker.lorem.words(),
         url: faker.internet.url(),
-        location: {
-          city: faker.address.city(),
-          state: faker.address.state()
-        },
+        location: faker.address.city(),
         description: faker.lorem.sentences(),
         notes: faker.lorem.sentences()
       });
@@ -85,7 +82,7 @@ describe('network API resource', function () {
     it('should return all existing companies', function () {
       let res;
       return chai.request(app)
-        .get(`/network/companies/${user}`)
+        .get(`/${user}`)
         .set('authorization', `Bearer ${token}`)
         .then(_res => {
           res = _res;
@@ -101,7 +98,7 @@ describe('network API resource', function () {
     it('should return companies with right fields', function () {
       let resCompany;
       return chai.request(app)
-        .get(`/network/companies/${user}`)
+        .get(`/${user}`)
         .set('authorization', `Bearer ${token}`)
         .then(function (res) {
           res.should.have.status(200);
@@ -110,7 +107,7 @@ describe('network API resource', function () {
           res.body.should.have.length.of.at.least(1);
           res.body.forEach(function(company) {
             company.should.be.a('object');
-            company.should.include.keys('username', 'name', 'url', 'location', 'description', 'notes');
+            company.should.include.keys('username', 'companyName', 'url', 'location', 'description', 'notes');
           });
           resCompany = res.body[0];
           return Company.findById(resCompany._id);
@@ -118,10 +115,9 @@ describe('network API resource', function () {
         .then(company => {
           console.log('company', company);
           resCompany.username.should.equal(company.username);
-          resCompany.name.should.equal(company.name);
+          resCompany.companyName.should.equal(company.companyName);
           resCompany.url.should.equal(company.url);
-          resCompany.location.city.should.equal(company.location.city);
-          resCompany.location.state.should.equal(company.location.state);
+          resCompany.location.should.equal(company.location);
           resCompany.description.should.equal(company.description);
           resCompany.notes.should.equal(company.notes);
         });
@@ -134,15 +130,12 @@ describe('network API resource', function () {
         username: user,
         name: faker.lorem.words(),
         url: faker.internet.url(),
-        location: {
-          city: faker.address.city(),
-          state: faker.address.state(),
-        },
+        location: faker.address.city(),
         description: faker.lorem.sentences(),
         notes: faker.lorem.sentences()
       };
       return chai.request(app)
-        .post('/network/companies')
+        .post('/')
         .set('authorization', `Bearer ${token}`)
         .send(newCompany)
         .then(function (res) {
@@ -163,7 +156,7 @@ describe('network API resource', function () {
           updateData.id = company.id;
 
           return chai.request(app)
-            .put(`/network/companies/${company._id}`)
+            .put(`/${company._id}`)
             .set('authorization', `Bearer ${token}`)
             .send(updateData);
         })
@@ -186,7 +179,7 @@ describe('network API resource', function () {
         .then(_company => {
           company = _company;
           return chai.request(app)
-            .delete(`/network/companies/${company._id}`)
+            .delete(`/${company._id}`)
             .set('authorization', `Bearer ${token}`)
         })
         .then(res => {
