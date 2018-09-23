@@ -6,12 +6,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express')
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 const passport = require('passport');
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('common'));
 
 mongoose.Promise = global.Promise;
 

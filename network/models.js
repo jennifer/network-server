@@ -17,13 +17,11 @@ const Company = mongoose.model('company', companySchema);
 
 const personSchema = mongoose.Schema({
   username: { type: String, required: true },
-  company_id: { type: String, required: true },
-  status: { type: Number, required: true },
+  companyId: { type: String, required: true },
+  status: { type: String, required: true },
   name: { type: String, required: true },
   title: String,
   url: String,
-  date: Date,
-  method: String,
   notes: String
 });
 

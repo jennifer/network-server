@@ -97,7 +97,7 @@ router.delete('/:id', jwtAuth, (req, res) => {
 // Person endpoints
 
 // GET all person details
-router.get('/people/:username', jwtAuth, (req, res) => {
+router.get('/person/:username', jwtAuth, (req, res) => {
   Person
     .find({username:req.params.username})
     .then(people => {
@@ -110,8 +110,8 @@ router.get('/people/:username', jwtAuth, (req, res) => {
 });
 
 // POST a new person
-router.post('/people', jwtAuth, (req, res) => {
-  const requiredFields = ['companyName', 'company_id', 'status', 'name'];
+router.post('/person', jwtAuth, (req, res) => {
+  const requiredFields = ['username', 'companyId', 'status', 'name'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -123,18 +123,11 @@ router.post('/people', jwtAuth, (req, res) => {
   Person
     .create({
       username: req.body.username,
-      company_id: req.body.company_id,
+      companyId: req.body.companyId,
       status: req.body.status,
-      name: {
-        firstName: req.body.name.firstName,
-        lastName: req.body.name.lastName
-      },
+      name: req.body.name,
       title: req.body.title,
       url: req.body.url,
-      contacts: {
-        date: req.body.date,
-        method: req.body.method
-      },
       notes: req.body.notes
     })
     .then(person => res.status(201).json(person))
@@ -144,15 +137,15 @@ router.post('/people', jwtAuth, (req, res) => {
   });
 });
 
-// PUT edit a company
-router.put('/people/:id', jwtAuth, (req, res) => {
+// PUT edit a person
+router.put('/person/:id', jwtAuth, (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     res.status(400).json({
       error: 'Request path id and request body id values must match'
     });
   }
   const updated = {};
-  const updateableFields = ['status', 'personName', 'title', 'url', 'date', 'method', 'notes'];
+  const updateableFields = ['status', 'personName', 'title', 'url', 'notes'];
   updateableFields.forEach(field => {
     if (field in req.body) {
       updated[field] = req.body[field];
@@ -166,8 +159,8 @@ router.put('/people/:id', jwtAuth, (req, res) => {
 });
 
 
-// DELETE a website
-router.delete('/people/:id', jwtAuth, (req, res) => {
+// DELETE a person
+router.delete('/person/:id', jwtAuth, (req, res) => {
   Person
     .findByIdAndRemove(req.params.id)
     .then(() => {

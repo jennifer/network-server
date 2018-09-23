@@ -71,8 +71,6 @@ describe('network API resource', function () {
         name: faker.name.firstName(),
         title: faker.lorem.words(),
         url: faker.internet.url(),
-        date: faker.date.past(),
-        method: faker.lorem.words(),
         notes: faker.lorem.sentences()
       });
     }
@@ -109,7 +107,7 @@ describe('network API resource', function () {
           res.body.should.have.length.of.at.least(1);
           res.body.forEach(function(person) {
             person.should.be.a('object');
-            person.should.include.keys('username', 'company_id', 'status', 'personName', 'title', 'url', 'date', 'method', 'notes');
+            person.should.include.keys('username', 'company_id', 'status', 'personName', 'title', 'url', 'notes');
           });
           resPerson = res.body[0];
           return Person.findById(resPerson._id);
@@ -122,7 +120,6 @@ describe('network API resource', function () {
           resPerson.personName.should.equal(person.personName);
           resPerson.title.should.equal(person.title);
           resPerson.url.should.equal(person.url);
-          resPerson.method.should.equal(person.method);
           resPerson.notes.should.equal(person.notes);
         });
     });
@@ -137,8 +134,6 @@ describe('network API resource', function () {
         personName: faker.name.firstName(),
         title: faker.lorem.words(),
         url: faker.internet.url(),
-        date: faker.date.past(),
-        method: faker.lorem.words(),
         notes: faker.lorem.sentences()
       };
       return chai.request(app)
@@ -156,7 +151,6 @@ describe('network API resource', function () {
       const updateData = {
         status: faker.random.number(),
         date: faker.date.past(),
-        method: faker.lorem.words(),
         notes: faker.lorem.sentences()
       }
       return Person
@@ -175,7 +169,6 @@ describe('network API resource', function () {
         })
         .then(person => {
           person.status.should.equal(updateData.status);
-          person.method.should.equal(updateData.method);
           person.notes.should.equal(updateData.notes);
         })
       })
