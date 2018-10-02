@@ -111,7 +111,7 @@ router.get('/person/:username', jwtAuth, (req, res) => {
 
 // POST a new person
 router.post('/person', jwtAuth, (req, res) => {
-  const requiredFields = ['username', 'companyId', 'status', 'name'];
+  const requiredFields = ['username', 'companyId', 'status', 'statusIndex', 'name'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -125,6 +125,7 @@ router.post('/person', jwtAuth, (req, res) => {
       username: req.body.username,
       companyId: req.body.companyId,
       status: req.body.status,
+      statusIndex: req.body.statusIndex,
       name: req.body.name,
       title: req.body.title,
       url: req.body.url,
@@ -145,7 +146,7 @@ router.put('/person/:id', jwtAuth, (req, res) => {
     });
   }
   const updated = {};
-  const updateableFields = ['status', 'personName', 'title', 'url', 'notes'];
+  const updateableFields = ['status', 'statusIndex', 'personName', 'title', 'url', 'notes'];
   updateableFields.forEach(field => {
     if (field in req.body) {
       updated[field] = req.body[field];

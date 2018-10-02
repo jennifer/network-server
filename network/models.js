@@ -19,6 +19,7 @@ const personSchema = mongoose.Schema({
   username: { type: String, required: true },
   companyId: { type: String, required: true },
   status: { type: String, required: true },
+  statusIndex: { type: Number, required: true },
   name: { type: String, required: true },
   title: String,
   url: String,
