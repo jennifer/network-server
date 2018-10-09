@@ -18,8 +18,6 @@ chai.use(chaiHttp);
 describe('network API resource', function () {
   const username = 'exampleUser';
   const password = 'examplePass';
-  const firstName = 'Example';
-  const lastName = 'User';
 
   before(function () {
     return runServer(TEST_DATABASE_URL);
@@ -37,9 +35,7 @@ describe('network API resource', function () {
   const token = jwt.sign(
     {
       user: {
-        username,
-        firstName,
-        lastName
+        username
       }
     },
     JWT_SECRET,
@@ -66,8 +62,9 @@ describe('network API resource', function () {
     for (let i = 1; i <= 10; i++) {
       seedData.push({
         username: user,
-        company_id: faker.lorem.word(),
-        status: faker.random.number(),
+        companyId: faker.lorem.word(),
+        status: faker.random.word(),
+        statusIndex: faker.random.number(),
         name: faker.name.firstName(),
         title: faker.lorem.words(),
         url: faker.internet.url(),
@@ -107,7 +104,7 @@ describe('network API resource', function () {
           res.body.should.have.length.of.at.least(1);
           res.body.forEach(function(person) {
             person.should.be.a('object');
-            person.should.include.keys('username', 'company_id', 'status', 'personName', 'title', 'url', 'notes');
+            person.should.include.keys('username', 'companyId', 'status', 'statusIndex', 'name', 'title', 'url', 'notes');
           });
           resPerson = res.body[0];
           return Person.findById(resPerson._id);
@@ -115,9 +112,10 @@ describe('network API resource', function () {
         .then(person => {
           console.log('person', person);
           resPerson.username.should.equal(person.username);
-          resPerson.company_id.should.equal(person.company_id);
+          resPerson.companyId.should.equal(person.companyId);
           resPerson.status.should.equal(person.status);
-          resPerson.personName.should.equal(person.personName);
+          resPerson.statusIndex.should.equal(person.statusIndex);
+          resPerson.name.should.equal(person.name);
           resPerson.title.should.equal(person.title);
           resPerson.url.should.equal(person.url);
           resPerson.notes.should.equal(person.notes);
@@ -128,10 +126,11 @@ describe('network API resource', function () {
   describe('POST endpoint', function () {
     it('should add a new person', function () {
       const newPerson = {
-        username: faker.lorem.word(),
-        company_id: faker.lorem.word(),
-        status: faker.random.number(),
-        personName: faker.name.firstName(),
+        username: user,
+        companyId: faker.lorem.word(),
+        status: faker.random.word(),
+        statusIndex: faker.random.number(),
+        name: faker.name.firstName(),
         title: faker.lorem.words(),
         url: faker.internet.url(),
         notes: faker.lorem.sentences()
@@ -149,8 +148,8 @@ describe('network API resource', function () {
   describe('PUT endpoint', function () {
     it('should update fields you send over', function () {
       const updateData = {
-        status: faker.random.number(),
-        date: faker.date.past(),
+        status: faker.random.word(),
+        statusIndex: faker.random.number(),
         notes: faker.lorem.sentences()
       }
       return Person

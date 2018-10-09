@@ -18,8 +18,6 @@ chai.use(chaiHttp);
 describe('network API resource', function () {
   const username = 'exampleUser';
   const password = 'examplePass';
-  const firstName = 'Example';
-  const lastName = 'User';
 
   before(function () {
     return runServer(TEST_DATABASE_URL);
@@ -37,9 +35,7 @@ describe('network API resource', function () {
   const token = jwt.sign(
     {
       user: {
-        username,
-        firstName,
-        lastName
+        username
       }
     },
     JWT_SECRET,
@@ -128,7 +124,7 @@ describe('network API resource', function () {
     it('should add a new company', function () {
       const newCompany = {
         username: user,
-        name: faker.lorem.words(),
+        companyName: faker.lorem.words(),
         url: faker.internet.url(),
         location: faker.address.city(),
         description: faker.lorem.sentences(),

@@ -26,9 +26,6 @@ const personSchema = mongoose.Schema({
   notes: String
 });
 
-personSchema.virtual('nameString').get(function() {
-  return `${this.name.firstName} ${this.name.lastName}`.trim();});
-
 const Person = mongoose.model('person', personSchema);
 
 
