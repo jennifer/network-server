@@ -78,7 +78,7 @@ describe('network API resource', function () {
     it('should return all existing companies', function () {
       let res;
       return chai.request(app)
-        .get(`/${user}`)
+        .get(`/api/companies/${user}`)
         .set('authorization', `Bearer ${token}`)
         .then(_res => {
           res = _res;
@@ -94,7 +94,7 @@ describe('network API resource', function () {
     it('should return companies with right fields', function () {
       let resCompany;
       return chai.request(app)
-        .get(`/${user}`)
+        .get(`/api/companies/${user}`)
         .set('authorization', `Bearer ${token}`)
         .then(function (res) {
           res.should.have.status(200);
@@ -131,7 +131,7 @@ describe('network API resource', function () {
         notes: faker.lorem.sentences()
       };
       return chai.request(app)
-        .post('/')
+        .post('/api/companies/')
         .set('authorization', `Bearer ${token}`)
         .send(newCompany)
         .then(function (res) {
@@ -152,7 +152,7 @@ describe('network API resource', function () {
           updateData.id = company.id;
 
           return chai.request(app)
-            .put(`/${company._id}`)
+            .put(`/api/companies/${company._id}`)
             .set('authorization', `Bearer ${token}`)
             .send(updateData);
         })
@@ -175,7 +175,7 @@ describe('network API resource', function () {
         .then(_company => {
           company = _company;
           return chai.request(app)
-            .delete(`/${company._id}`)
+            .delete(`/api/companies/${company._id}`)
             .set('authorization', `Bearer ${token}`)
         })
         .then(res => {

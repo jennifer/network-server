@@ -75,11 +75,11 @@ describe('network API resource', function () {
   };
   // Person endpoint tests
 
-  describe('GET people endpoint', function () {
-    it('should return all existing people', function () {
+  describe('GET person endpoint', function () {
+    it('should return all existing person', function () {
       let res;
       return chai.request(app)
-        .get(`/people/${user}`)
+        .get(`/api/companies/person/${user}`)
         .set('authorization', `Bearer ${token}`)
         .then(_res => {
           res = _res;
@@ -92,10 +92,10 @@ describe('network API resource', function () {
         });
     });
     
-    it('should return people with right fields', function () {
+    it('should return person with right fields', function () {
       let resPerson;
       return chai.request(app)
-        .get(`/people/${user}`)
+        .get(`/api/companies/person/${user}`)
         .set('authorization', `Bearer ${token}`)
         .then(function (res) {
           res.should.have.status(200);
@@ -136,7 +136,7 @@ describe('network API resource', function () {
         notes: faker.lorem.sentences()
       };
       return chai.request(app)
-        .post('/people')
+        .post('/api/companies/person')
         .set('authorization', `Bearer ${token}`)
         .send(newPerson)
         .then(function (res) {
@@ -158,7 +158,7 @@ describe('network API resource', function () {
           updateData.id = person.id;
 
           return chai.request(app)
-            .put(`/people/${person._id}`)
+            .put(`/api/companies/person/${person._id}`)
             .set('authorization', `Bearer ${token}`)
             .send(updateData);
         })
@@ -181,7 +181,7 @@ describe('network API resource', function () {
         .then(_person => {
           person = _person;
           return chai.request(app)
-            .delete(`/people/${person._id}`)
+            .delete(`/api/companies/person/${person._id}`)
             .set('authorization', `Bearer ${token}`)
         })
         .then(res => {
