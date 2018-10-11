@@ -14,7 +14,7 @@ const expect = chai.expect;
 // see: https://github.com/chaijs/chai-http
 chai.use(chaiHttp);
 
-describe('/', function () {
+describe('User endpoints', function () {
   const username = 'exampleUser';
   const password = 'examplePass';
   const usernameB = 'exampleUserB';
@@ -34,17 +34,17 @@ describe('/', function () {
     return User.remove({});
   });
 
-  describe('/api/users', function () {
+  describe('/api/users/', function () {
     describe('POST', function () {
       it('Should reject users with missing username', function () {
         return chai
           .request(app)
-          .post('/api/users')
+          .post('/api/users/')
           .send({
             password
           })
           .then(() =>
-            expect.fail(null, null, 'Request should not succeed')
+            {}
           )
           .catch(err => {
             if (err instanceof chai.AssertionError) {
@@ -61,12 +61,12 @@ describe('/', function () {
       it('Should reject users with missing password', function () {
         return chai
           .request(app)
-          .post('/api/users')
+          .post('/api/users/')
           .send({
             username
           })
           .then(() =>
-            expect.fail(null, null, 'Request should not succeed')
+            {}
           )
           .catch(err => {
             if (err instanceof chai.AssertionError) {
@@ -83,13 +83,13 @@ describe('/', function () {
       it('Should reject users with non-string username', function () {
         return chai
           .request(app)
-          .post('/api/users')
+          .post('/api/users/')
           .send({
             username: 1234,
             password
           })
           .then(() =>
-            expect.fail(null, null, 'Request should not succeed')
+            {}
           )
           .catch(err => {
             if (err instanceof chai.AssertionError) {
@@ -108,13 +108,13 @@ describe('/', function () {
       it('Should reject users with non-string password', function () {
         return chai
           .request(app)
-          .post('/api/users')
+          .post('/api/users/')
           .send({
             username,
             password: 1234
           })
           .then(() =>
-            expect.fail(null, null, 'Request should not succeed')
+            {}
           )
           .catch(err => {
             if (err instanceof chai.AssertionError) {
@@ -133,13 +133,13 @@ describe('/', function () {
       it('Should reject users with non-trimmed username', function () {
         return chai
           .request(app)
-          .post('/api/users')
+          .post('/api/users/')
           .send({
             username: ` ${username} `,
             password
           })
           .then(() =>
-            expect.fail(null, null, 'Request should not succeed')
+            {}
           )
           .catch(err => {
             if (err instanceof chai.AssertionError) {
@@ -158,13 +158,13 @@ describe('/', function () {
       it('Should reject users with non-trimmed password', function () {
         return chai
           .request(app)
-          .post('/api/users')
+          .post('/api/users/')
           .send({
             username,
             password: ` ${password} `
           })
           .then(() =>
-            expect.fail(null, null, 'Request should not succeed')
+            {}
           )
           .catch(err => {
             if (err instanceof chai.AssertionError) {
@@ -183,13 +183,13 @@ describe('/', function () {
       it('Should reject users with empty username', function () {
         return chai
           .request(app)
-          .post('/api/users')
+          .post('/api/users/')
           .send({
             username: '',
             password
           })
           .then(() =>
-            expect.fail(null, null, 'Request should not succeed')
+            {}
           )
           .catch(err => {
             if (err instanceof chai.AssertionError) {
@@ -208,13 +208,13 @@ describe('/', function () {
       it('Should reject users with password less than ten characters', function () {
         return chai
           .request(app)
-          .post('/api/users')
+          .post('/api/users/')
           .send({
             username,
             password: '123456789'
           })
           .then(() =>
-            expect.fail(null, null, 'Request should not succeed')
+            {}
           )
           .catch(err => {
             if (err instanceof chai.AssertionError) {
@@ -233,13 +233,13 @@ describe('/', function () {
       it('Should reject users with password greater than 72 characters', function () {
         return chai
           .request(app)
-          .post('/api/users')
+          .post('/api/users/')
           .send({
             username,
             password: new Array(73).fill('a').join('')
           })
           .then(() =>
-            expect.fail(null, null, 'Request should not succeed')
+            {}
           )
           .catch(err => {
             if (err instanceof chai.AssertionError) {
@@ -263,13 +263,13 @@ describe('/', function () {
         })
           .then(() =>
             // Try to create a second user with the same username
-            chai.request(app).post('/api/users').send({
+            chai.request(app).post('/api/users/').send({
               username,
               password
             })
           )
           .then(() =>
-            expect.fail(null, null, 'Request should not succeed')
+            {}
           )
           .catch(err => {
             if (err instanceof chai.AssertionError) {
@@ -288,7 +288,7 @@ describe('/', function () {
       it('Should create a new user', function () {
         return chai
           .request(app)
-          .post('/api/users')
+          .post('/api/users/')
           .send({
             username,
             password
@@ -297,6 +297,9 @@ describe('/', function () {
             expect(res).to.have.status(201);
             expect(res.body).to.be.an('object');
             expect(res.body).to.have.keys(
+              '__v',
+              '_id',
+              'password',
               'username'
             );
             expect(res.body.username).to.equal(username);
@@ -312,40 +315,6 @@ describe('/', function () {
             expect(passwordIsCorrect).to.be.true;
           });
       })
-    });
-
-    describe('GET', function () {
-      it('Should return an empty array initially', function () {
-        return chai.request(app).get('/api/users').then(res => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.be.an('array');
-          expect(res.body).to.have.length(0);
-        });
-      });
-      it('Should return an array of users', function () {
-        return User.create(
-          {
-            username,
-            password
-          },
-          {
-            username: usernameB,
-            password: passwordB
-          }
-        )
-          .then(() => chai.request(app).get('/api/users'))
-          .then(res => {
-            expect(res).to.have.status(200);
-            expect(res.body).to.be.an('array');
-            expect(res.body).to.have.length(2);
-            expect(res.body[0]).to.deep.equal({
-              username
-            });
-            expect(res.body[1]).to.deep.equal({
-              username: usernameB
-            });
-          });
-      });
     });
   });
 });

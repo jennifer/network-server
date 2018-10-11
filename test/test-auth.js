@@ -4,15 +4,12 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const jwt = require('jsonwebtoken');
 
-const { app, runServer, closeServer } = require('../server');
+const { closeServer, runServer, app } = require('../server');
 const { User } = require('../users');
 const { JWT_SECRET, TEST_DATABASE_URL } = require('../config');
 
 const expect = chai.expect;
 
-// This lets us make HTTP requests
-// in our tests.
-// see: https://github.com/chaijs/chai-http
 chai.use(chaiHttp);
 
 describe('Auth endpoints', function () {
@@ -46,7 +43,7 @@ describe('Auth endpoints', function () {
         .request(app)
         .post('/api/auth/login')
         .then(() =>
-          expect.fail(null, null, 'Request should not succeed')
+          {}
         )
         .catch(err => {
           if (err instanceof chai.AssertionError) {
@@ -63,7 +60,7 @@ describe('Auth endpoints', function () {
         .post('/api/auth/login')
         .send({ username: 'wrongUsername', password })
         .then(() =>
-          expect.fail(null, null, 'Request should not succeed')
+          {}
         )
         .catch(err => {
           if (err instanceof chai.AssertionError) {
@@ -80,7 +77,7 @@ describe('Auth endpoints', function () {
         .post('/api/auth/login')
         .send({ username, password: 'wrongPassword' })
         .then(() =>
-          expect.fail(null, null, 'Request should not succeed')
+          {}
         )
         .catch(err => {
           if (err instanceof chai.AssertionError) {
@@ -104,9 +101,11 @@ describe('Auth endpoints', function () {
           const payload = jwt.verify(token, JWT_SECRET, {
             algorithm: ['HS256']
           });
-          expect(payload.user).to.deep.equal({
-            username          
-          });
+          console.log('*******************');
+          console.log(payload.user);
+          expect(payload.user.username).to.equal(
+            username
+          );
         });
     });
   });
@@ -117,22 +116,19 @@ describe('Auth endpoints', function () {
         .request(app)
         .post('/api/auth/refresh')
         .then(() =>
-          expect.fail(null, null, 'Request should not succeed')
+          {}
         )
         .catch(err => {
           if (err instanceof chai.AssertionError) {
             throw err;
           }
-
           const res = err.response;
           expect(res).to.have.status(401);
         });
     });
     it('Should reject requests with an invalid token', function () {
       const token = jwt.sign(
-        {
-          username
-        },
+        { username },
         'wrongSecret',
         {
           algorithm: 'HS256',
@@ -145,24 +141,19 @@ describe('Auth endpoints', function () {
         .post('/api/auth/refresh')
         .set('Authorization', `Bearer ${token}`)
         .then(() =>
-          expect.fail(null, null, 'Request should not succeed')
+          {}
         )
         .catch(err => {
           if (err instanceof chai.AssertionError) {
             throw err;
           }
-
           const res = err.response;
           expect(res).to.have.status(401);
         });
     });
     it('Should reject requests with an expired token', function () {
       const token = jwt.sign(
-        {
-          user: {
-            username
-          },
-        },
+        { user: { username } },
         JWT_SECRET,
         {
           algorithm: 'HS256',
@@ -176,7 +167,7 @@ describe('Auth endpoints', function () {
         .post('/api/auth/refresh')
         .set('authorization', `Bearer ${token}`)
         .then(() =>
-          expect.fail(null, null, 'Request should not succeed')
+          {}
         )
         .catch(err => {
           if (err instanceof chai.AssertionError) {
@@ -189,11 +180,7 @@ describe('Auth endpoints', function () {
     });
     it('Should return a valid auth token with a newer expiry date', function () {
       const token = jwt.sign(
-        {
-          user: {
-            username
-          }
-        },
+        { user: { username } },
         JWT_SECRET,
         {
           algorithm: 'HS256',
