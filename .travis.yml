@@ -7,4 +7,4 @@ deploy:
   app: secret-inlet-35294
   skip-cleanup: true
   on:
-    repo: jennifer/network-server
+    repo: jennifer/referred-server
