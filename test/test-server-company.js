@@ -9,13 +9,13 @@ const jwt = require('jsonwebtoken');
 const should = chai.should();
 const expect = chai.expect();
 
-const { Company } = require('../network/models');
+const { Company } = require('../referred/models');
 const { closeServer, runServer, app } = require('../server');
 const { TEST_DATABASE_URL, JWT_SECRET } = require('../config');
 
 chai.use(chaiHttp);
 
-describe('network API resource', function () {
+describe('referred API resource', function () {
   const username = 'exampleUser';
   const password = 'examplePass';
 

@@ -33,14 +33,14 @@ const { CLIENT_ORIGIN } = require('./config');
 
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
-const { router: networkRouter } = require('./network');
+const { router: referredRouter } = require('./referred');
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
-app.use('/api/companies/', networkRouter);
+app.use('/api/companies/', referredRouter);
 
 let server;
 
