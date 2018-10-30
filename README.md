@@ -1,6 +1,6 @@
 # Referred.
 
-[![Build Status](https://travis-ci.org/jennifer/referred-client.svg?branch=master)](https://travis-ci.org/jennifer/referred-client)
+[![Build Status](https://travis-ci.org/jennifer/referred-server.svg?branch=master)](https://travis-ci.org/jennifer/referred-server)
 
 A fullstack JavaScript+React application that helps job-seekers track their professional network. Users add target companies, identify contact people, and track networking milestones, including:
 * Initiating one-on-one contact
@@ -13,77 +13,10 @@ And ultimately, getting referred!
 
 - [Live Demo](https://referred-app.herokuapp.com/)
 
-## Motivation
+## Client
 
-As a job-seeker, I wanted to build an app that fellow job-seekers and I could use to track my own professional networking. As an introvert, I wanted a project that would help me learn about networking, break it down into simple milestones, and get excited to meet new people.
-
-## Requirements
-* Do something interesting or useful
-* Be a fullstack app using HTML, CSS, React, Node, Express, and Mongoose
-* Client and API should be deployed separately and stored in separate GitHub repos. 
-* Client- and server-side code should be tested use TravisCI for continuous integration and deployment.
-* App should be responsive, and should work just as well on mobile devices as it does on desktop devices.
-* Code should be high quality, error free, commented as necessary, and clean.
-* Styling on the client should be polished.
-* Use vanilla CSS for styling capstones. Frameworks like Bootstrap are not permitted. 
-* Have a comprehensive README file.
-* Have a landing page that explains what the app does and how to get started, and the pages required to deliver functionality.
-* Deploy a live, publicly-accessible version of the app.
-* A demo user account and indicate on the landing page how to use it.
-
-## Built With
 Client and API were deployed separately and stored in separate GitHub repos.* 
 - [Referred Client Repo](https://github.com/jennifer/referred-client)
-
-### Front End
-* JavaScript [ES6 & JSX]
-* React
-* HTML
-* CSS [Flexbox & Grid]
-* Enzyme
-
-### Back End
-* Node.js
-* Express
-* Mongo
-* Mongoose
-* JWT Authentication
-* bcryptjs
-* Passport
-* Mocha
-* Chai
-
-### DevOps
-* Heroku
-* TravisCI
-* mLab
-
-## Screenshots
-
-Title Page:
-
-![Title Page](https://i.imgur.com/oolPOy4.jpg)
-
-Dashboard:
-
-![Dashboard](https://i.imgur.com/JY1LZPT.jpg)
-
-Company Detail:
-
-![Company Detail](https://i.imgur.com/1ERq0ZQ.jpg)
-
-Person Detail:
-
-![Person Detail](https://i.imgur.com/YEEBQEY.jpg)
-
-Person Form:
-
-![Person Form](https://i.imgur.com/OuwpfdQ.jpg)
-
-Person Edit:
-
-![Edit Person](https://i.imgur.com/eAFAIQm.jpg)
-
 
 ## Using the API
 
